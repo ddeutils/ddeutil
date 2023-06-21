@@ -23,7 +23,7 @@ repos:
 #     rev:  v3.9.0
 #     hooks:
 #         -   id: reorder-python-imports
-#             args: ["--application-directories", "dup_util"]
+#             args: ["--application-directories", "deutil"]
 #             additional_dependencies: ["setuptools>60.9"]
 # -   repo: https://github.com/pycqa/isort
 #     rev:  5.12.0

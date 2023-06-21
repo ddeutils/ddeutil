@@ -1,3 +1,8 @@
-# Data Utility Package: Utilities
+# Data _Utility_ Package
 
-Data Utility Package with the utility objects
+The **Data Utility** package with the utility objects
+
+## Overviews
+
+This package implement with _src-layout_ structure and use `setuptools` for build
+this package to **PyPI**.

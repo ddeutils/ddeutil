@@ -1,13 +1,5 @@
-[build-system]
-requires = [
-    "hatchling>=1.8.0",
-    # This plug-in support for py-version >= 3.9
-    # "hatch-semver",
-]
-build-backend = "hatchling.build"
-
 [project]
-name = "dup-util"
+name = "deutil"
 description = "The utility objects for the data engine package"
 readme = "README.md"
 requires-python = ">=3.8.10"
@@ -34,14 +26,14 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
-    "python-dateutil>=2.8.2,<3.0.0",
-    "packaging>=23.1,<24",
+#    "python-dateutil>=2.8.2,<3.0.0",
+#    "packaging>=23.1,<24",
 ]
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/korawica/dup-util/"
-"Source Code" = "https://github.com/korawica/dup-util/"
+Homepage = "https://github.com/korawica/deutil/"
+"Source Code" = "https://github.com/korawica/deutil/"
 
 [project.optional-dependencies]
 test = [
@@ -59,9 +51,16 @@ dev = [
     "bump2version>=1.0.1"
 ]
 
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "deutil.__version__"}
+
 # TODO: Implement cli for use on cmd
 # [project.scripts]
-# dutil = "dup_util.cli:main"
+# deutil = "deutil.cli:main"
 
 [tool.coverage.run]
 branch = true
@@ -69,13 +68,13 @@ concurrency = ["thread", "multiprocessing"]
 parallel = true
 context = '${CONTEXT}'
 source = [
-    "dup_util",
+    "deutil",
 ]
 omit = [
     "tests/perfs/",
     "scripts/",
-    "dup_util/__about__.py",
-    "dup_util/utils.py",
+    "deutil/__about__.py",
+    "deutil/utils.py",
 ]
 relative_files = true
 
@@ -87,11 +86,6 @@ exclude_lines = [
     "raise NotImplementedError",
 ]
 
-[tool.hatch.version]
-scheme = "standard"
-source = "code"
-path = "dup_util/__about__.py"
-
 [tool.hatch.build.targets.sdist]
 exclude = [
     "/.github",
@@ -101,7 +95,7 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["dup_util"]
+packages = ["deutil"]
 
 [tool.pytest.ini_options]
 console_output_style = "count"
@@ -113,7 +107,7 @@ filterwarnings = ["error"]
 
 [tool.mypy]
 python_version = "3.8"
-files = ["dup_util"]
+files = ["deutil"]
 show_error_codes = true
 pretty = true
 strict = true
@@ -121,7 +115,7 @@ strict = true
 warn_unreachable = true
 
 [[tool.mypy.overrides]]
-module = "dup_util.utils"
+module = "deutil.utils"
 warn_unused_ignores = false
 ignore_missing_imports = true
 
@@ -177,6 +171,3 @@ exclude = [
 
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]
-
-[tool.ruff.isort]
-known-third-party = ["pydantic"]
