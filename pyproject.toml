@@ -2,21 +2,16 @@
 name = "deutil"
 description = "The utility objects for the data engine package"
 readme = "README.md"
-requires-python = ">=3.8.10"
 license = "MIT"
-keywords = [
-    'data',
-    'utility',
-]
-authors = [
-    { name = "korawica", email = "korawich.anu@gmail.com" },
-]
+authors = [{ name = "korawica", email = "korawich.anu@gmail.com" }]
+keywords = ['data', 'utility']
 classifiers = [
     "Topic :: Utilities",
     "Natural Language :: English",
     "Development Status :: 3 - Alpha",
     #"Development Status :: 4 - Beta",
     #"Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
@@ -25,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
+requires-python = ">=3.8.10"
 dependencies = [
 #    "python-dateutil>=2.8.2,<3.0.0",
 #    "packaging>=23.1,<24",
@@ -65,37 +61,22 @@ version = {attr = "deutil.__version__"}
 [tool.coverage.run]
 branch = true
 concurrency = ["thread", "multiprocessing"]
-parallel = true
-context = '${CONTEXT}'
-source = [
-    "deutil",
-]
+source = ["deutil", "tests"]
 omit = [
-    "tests/perfs/",
+    "*/perfs/",
     "scripts/",
-    "deutil/__about__.py",
-    "deutil/utils.py",
 ]
 relative_files = true
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
 
 [tool.coverage.report]
 exclude_lines = [
     "no cov",
-    "if __name__ == __main__:",
     "if TYPE_CHECKING:",
     "raise NotImplementedError",
 ]
-
-[tool.hatch.build.targets.sdist]
-exclude = [
-    "/.github",
-    "/docs",
-    "/scripts",
-    "/.pre-commit-config.yaml",
-]
-
-[tool.hatch.build.targets.wheel]
-packages = ["deutil"]
 
 [tool.pytest.ini_options]
 console_output_style = "count"
