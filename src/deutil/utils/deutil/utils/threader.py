@@ -61,7 +61,7 @@ class LearnSemaphore:
 def _async_raise(tid, exc_type):
     """Raises an exception in the threads with id tid"""
     if not inspect.isclass(exc_type):
-        raise TypeError("Only types can be raised (not instances)")
+        raise TypeError("Only core can be raised (not instances)")
     res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
         ctypes.c_long(tid), ctypes.py_object(exc_type)
     )

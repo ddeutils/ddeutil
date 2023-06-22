@@ -2,7 +2,7 @@ import logging
 import unittest
 from typing import List
 
-import src.deutil.types.convert as convert
+import src.deutil.core.deutil.core.convert as convert
 
 
 class ConvertTestCase(unittest.TestCase):

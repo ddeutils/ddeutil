@@ -1,8 +1,8 @@
 [project]
 name = "deutil"
 description = "The utility objects for the data engine package"
-readme = "README.md"
-license = "MIT"
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {text = "MIT"}
 authors = [{ name = "korawica", email = "korawich.anu@gmail.com" }]
 keywords = ['data', 'utility']
 classifiers = [
@@ -41,18 +41,44 @@ test = [
 #    "perfplot",
 ]
 dev = [
-    "hatch>=1.6.0",
+    "deutil[test]",
     "ruff>=0.0.138",
     "pre-commit>=2.17.0",
     "bump2version>=1.0.1"
 ]
 
 [build-system]
-requires = ["setuptools"]
+requires = [
+    "setuptools>=68.0",
+    "setuptools-scm",
+]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
 version = {attr = "deutil.__version__"}
+
+# TODO: docs: https://github.com/netinvent/ofunctions/tree/master/ofunctions
+
+#[tool.setuptools]
+#package-dir = {"" = "src"}  # Require for ``pip install -e .``
+#package-dir = {}
+#packages = [
+#    "deutil",
+#    "deutil.models",
+##    "deutil.types",
+##    "deutil.utils",
+#]
+
+#[tool.setuptools.package-dir]
+#"deutil" = "src"
+#"deutil.models" = 'src/deutil/models'
+
+#[tool.setuptools.packages.find]
+#where = ["src"]
+
+[tool.setuptools.packages]
+find = {where = ["src"], namespaces = false}
+
 
 # TODO: Implement cli for use on cmd
 # [project.scripts]

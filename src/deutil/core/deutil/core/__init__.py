@@ -60,7 +60,7 @@ def isinstance_check(check: typing.Any, instance):
         if Ellipsis in _dict or (origin is not tuple):
             return all(isinstance_check(i, _dict[0]) for i in iter(check))
         try:
-            from src.deutil.types.merge_split import zip_equal
+            from src.deutil.core.deutil.core.merge_split import zip_equal
 
             return all(
                 isinstance_check(i[0], i[1]) for i in zip_equal(check, _dict)

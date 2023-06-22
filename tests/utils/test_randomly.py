@@ -3,7 +3,7 @@ import os
 import unittest
 from unittest.mock import patch
 
-import src.deutil.utils.randomly as randomly
+import src.deutil.utils.deutil.utils.randomly as randomly
 
 
 def fake_remove(path, *a, **k):
