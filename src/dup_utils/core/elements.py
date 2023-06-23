@@ -5,7 +5,7 @@ from collections.abc import Mapping, Set
 from numbers import Number
 from typing import Any, Optional
 
-from src.dup_utils.core.merge_split import split_default
+from src.dup_utils.core.base.merge_split import split
 
 ZERO_DEPTH_BASES = (str, bytes, Number, range, bytearray)
 
@@ -72,7 +72,7 @@ def hasdot(search: str, content: dict) -> bool:
         >>> hasdot('item.value.key', {'data': {'value': 2}})
         False
     """
-    _search, _else = split_default(search, ".", maxsplit=1)
+    _search, _else = split(search, ".", maxsplit=1)
     if _search in content and isinstance(content, dict):
         if not _else:
             return True
@@ -102,7 +102,7 @@ def getdot(search: str, content: dict, *args, **kwargs) -> Any:
 
     """
     _ignore: bool = kwargs.get("ignore", False)
-    _search, _else = split_default(search, ".", maxsplit=1)
+    _search, _else = split(search, ".", maxsplit=1)
     if _search in content and isinstance(content, dict):
         if not _else:
             return content[_search]
@@ -128,7 +128,7 @@ def setdot(search: str, content: dict, value: Any, **kwargs) -> dict:
         {'data': {'value': 1}}
     """
     _ignore: bool = kwargs.get("ignore", False)
-    _search, _else = split_default(search, ".", maxsplit=1)
+    _search, _else = split(search, ".", maxsplit=1)
     if _search in content and isinstance(content, dict):
         if not _else:
             content[_search] = value

@@ -1,11 +1,20 @@
 import ast
-from math import ceil
 from typing import (
     Any,
     Optional,
     Tuple,
     Union,
 )
+
+StringTrue: Tuple[str, ...] = (
+    "yes",
+    "true",
+    "t",
+    "1",
+    "y",
+    "1.0",
+)
+StringFalse: Tuple[str, ...] = ("no", "false", "f", "0", "n", "0.0")
 
 
 def is_int(value: Any) -> bool:
@@ -44,13 +53,23 @@ def is_int(value: Any) -> bool:
 
 
 def can_int(value: Any) -> bool:
+    """
+    .. usage:
+        >>> can_int('0.0')
+        True
+        >>> can_int('-1.0')
+        True
+    """
     try:
         return float(str(value)).is_integer()
     except (TypeError, ValueError):
         return False
 
 
-def str2bool(value: Optional[str] = None, force_raise: bool = True) -> bool:
+def str2bool(
+    value: Optional[str] = None,
+    force_raise: bool = True,
+) -> bool:
     """
     :usage:
         >>> str2bool('yes')
@@ -62,16 +81,19 @@ def str2bool(value: Optional[str] = None, force_raise: bool = True) -> bool:
     value = value or ""
     if not value:
         return False
-    elif value.lower() in {"yes", "true", "t", "1", "y", "1.0"}:
+    elif value.lower() in StringTrue:
         return True
-    elif value.lower() in {"no", "false", "f", "0", "n", "0.0"}:
+    elif value.lower() in StringFalse:
         return False
     if force_raise:
         raise ValueError(f"value {value!r} does not convert to boolean type")
     return False
 
 
-def str2list(value: Optional[str] = None, force_raise: bool = True) -> list:
+def str2list(
+    value: Optional[str] = None,
+    force_raise: bool = True,
+) -> list:
     """
     :usage:
         >>> str2list('["a", "b", "c"]')
@@ -129,21 +151,40 @@ def str2dict(value: Optional[str] = None, force_raise: bool = True) -> dict:
 
 def str2int_float(
     value: Optional[str] = None,
+    force_raise: bool = False,
 ) -> Union[int, float]:
     """
     :usage:
         >>> str2int_float('+3')
         3
 
+        >>> str2int_float('-5.00')
+        -5.0
+
         >>> str2int_float('-3.01')
         -3.01
+
+        >>> str2int_float('[1]')
+        0
+
+        >>> str2int_float('x0', force_raise=True)
+        Traceback (most recent call last):
+        ...
+        ValueError: can not convert string value 'x0' to int or float
     """
     if value is None or value == "":
         return 0
     try:
         return int(value)
     except ValueError:
-        return float(value)
+        try:
+            return float(value)
+        except ValueError as err:
+            if not force_raise:
+                return 0
+            raise ValueError(
+                f"can not convert string value {value!r} to int or float"
+            ) from err
 
 
 def must_list(value: Optional[Union[str, list]] = None) -> list:
@@ -155,6 +196,17 @@ def must_list(value: Optional[Union[str, list]] = None) -> list:
 def must_bool(
     value: Optional[Union[str, int, bool]] = None, force_raise: bool = False
 ) -> bool:
+    """
+    .. usage::
+        >>> must_bool('1')
+        True
+
+        >>> must_bool(0)
+        False
+
+        >>> must_bool("[1, 2, 'foo']")
+        False
+    """
     if value:
         return (
             value
@@ -207,31 +259,12 @@ def revert_args(*args, **kwargs) -> Tuple[tuple, dict]:
 
 def str2args(value: Optional[str]) -> Tuple[tuple, dict]:
     """Convert arguments string to args and kwargs
-    :usage:
+    .. usage::
         >>> str2args("'value', 1, name='demo'")
         (('value', 1), {'name': 'demo'})
 
+        >>> str2args("'value', 1, '[1, 3, \\"foo\\"]'")
+        (('value', 1, '[1, 3, "foo"]'), {})
+
     """
     return eval(f"revert_args({value})")
-
-
-def round_up(number: float, decimals):
-    assert isinstance(number, float)
-    assert isinstance(decimals, int)
-    assert decimals >= 0
-    if decimals == 0:
-        return ceil(number)
-    factor = 10**decimals
-    return ceil(number * factor) / factor
-
-
-def remove_pad(value: str) -> str:
-    """Remove zero padding of string
-    :usage:
-        >>> remove_pad('000')
-        '0'
-
-        >>> remove_pad('0123')
-        '123'
-    """
-    return _last_char if (_last_char := value[-1]) == "0" else value.lstrip("0")

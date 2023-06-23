@@ -9,21 +9,26 @@ from functools import (
 )
 from itertools import zip_longest
 from typing import (
+    AnyStr,
     Dict,
     Optional,
     Union,
 )
 
-# try:
-#     import pandas as pd
-# except ImportError as err:
-#     raise ImportError(
-#         "``split_iterable`` function want to use pandas package that does"
-#         "not install on your interpreter."
-#     ) from err
-
 
 def zip_equal(*iterables):
+    """
+    >>> list(zip_equal((1, 2, 3, 4, ), ('a', 'b', 'c', 'd', )))
+    [(1, 'a'), (2, 'b'), (3, 'c'), (4, 'd')]
+
+    >>> next(zip_equal((1, 2, 3, 4, ), ('a', 'b', 'c', )))
+    (1, 'a')
+
+    >>> list(zip_equal((1, 2, 3, 4, ), ('a', 'b', 'c', )))
+    Traceback (most recent call last):
+    ...
+    ValueError: Iterables have different lengths
+    """
     sentinel = object()
     for combo in zip_longest(*iterables, fillvalue=sentinel):
         if sentinel in combo:
@@ -162,44 +167,43 @@ def split_str(strings, sep: str = r"\s+"):
     """
     warning: does not yet work if sep is a lookahead like `(?=b)`
     usage:
-        >> split_str('.......A...b...c....', sep='...')
-        <generator object split_str.<locals>.<genexpr> at 0x7fe8530fb5e8>
-
-        >> list(split_str('A,b,c.', sep=','))
+        >>> list(split_str('A,b,c.', sep=','))
         ['A', 'b', 'c.']
 
-        >> list(split_str(',,A,b,c.,', sep=','))
+        >>> list(split_str(',,A,b,c.,', sep=','))
         ['', '', 'A', 'b', 'c.', '']
 
-        >> list(split_str('.......A...b...c....', '...'))
+        >>> list(split_str('.......A...b...c....', '...'))
         ['', '', '.A', 'b', 'c', '.']
 
-        >> list(split_str('   A  b  c. '))
+        >>> list(split_str('   A  b  c. '))
         ['', 'A', 'b', 'c.', '']
     """
     if not sep:
         return iter(strings)
-    # return (
-    #     _.group(1)
-    #     for _ in re.finditer(f'(?:^|{sep})((?:(?!{sep}).)*)', string)
-    # )
+    sep = sep.replace(".", "\\.")
     # alternatively, more verbosely:
     regex = f"(?:^|{sep})((?:(?!{sep}).)*)"
     for match in re.finditer(regex, strings):
         yield match.group(1)
 
 
-def isplit(source, sep=None, regex=False):
-    """generator version of str.split()
+def isplit(source: AnyStr, sep=None, regex=False):
+    """Generator of ``str.split()`` method.
+
     :param source: source string (unicode or bytes)
     :param sep: separator to split on.
     :param regex: if True, will treat sep as regular expression.
+
     :returns:
         generator yielding elements of string.
 
-    usage:
-        >> print list(isplit("abcb","b"))
-        ['a','c','']
+    .. usage::
+        >>> list(isplit("abcb", "b"))
+        ['a', 'c', '']
+
+        >>> next(isplit("foo bar"))
+        'foo'
     """
     if sep is None:
         # mimic default python behavior
@@ -231,49 +235,21 @@ def isplit(source, sep=None, regex=False):
             start = idx + sep_size
 
 
-# def split_iterable(iterable, chunk_size=None, generator_flag: bool = True):
-#     """
-#     Split an iterable into mini batch with batch length of batch_number
-#     supports batch of a pandas dataframe
-#     usage:
-#         >> for i in split_iterable([1,2,3,4,5], chunk_size=2):
-#         >>    print(i)
-#         [1, 2]
-#         [3, 4]
-#         [5]
-#
-#         for idx, mini_data in split_iterable(batch(df, chunk_size=10)):
-#             print(idx)
-#             print(mini_data)
-#     """
-#
-#     chunk_size: int = chunk_size or 25000
-#     num_chunks = math.ceil(len(iterable) / chunk_size)
-#     if generator_flag:
-#         for _ in range(num_chunks):
-#             if isinstance(iterable, pd.DataFrame):
-#                 yield iterable.iloc[_ * chunk_size:(_ + 1) * chunk_size]
-#             else:
-#                 yield iterable[_ * chunk_size:(_ + 1) * chunk_size]
-#     else:
-#         _chunks: list = []
-#         for _ in range(num_chunks):
-#             if isinstance(iterable, pd.DataFrame):
-#                 _chunks.append(iterable.iloc[_ * chunk_size:(_ + 1) * chunk_size])
-#             else:
-#                 _chunks.append(iterable[_ * chunk_size:(_ + 1) * chunk_size])
-#         return _chunks
-
-
-def split_default(source: str, sep: str = None, maxsplit: int = -1):
+def split(
+    source: str,
+    sep: str = None,
+    maxsplit: int = -1,
+    mustsplit: bool = True,
+):
     """
-    :usage:
-        >>> split_default('asd|fasd', '|', maxsplit=2)
+    .. usage::
+        >>> split('asd|fasd', '|', maxsplit=2)
         ['asd', 'fasd', None]
-        >>> split_default('data', '.', maxsplit=1)
+
+        >>> split('data', '.', maxsplit=1)
         ['data', None]
     """
-    if maxsplit == -1:
+    if maxsplit == -1 or not mustsplit:
         return source.split(sep, maxsplit)
     _old: list = source.split(sep, maxsplit)
     _result: list = [None] * ((maxsplit + 1) - len(_old))
@@ -281,22 +257,26 @@ def split_default(source: str, sep: str = None, maxsplit: int = -1):
     return _old
 
 
-def rsplit_default(source: str, sep: str = None, maxsplit: int = -1):
+def rsplit(
+    source: str,
+    sep: str = None,
+    maxsplit: int = -1,
+    mustsplit: bool = True,
+):
     """
-    :usage:
-        >>> rsplit_default('asd|fasd', '|', maxsplit=2)
-        [None, 'asd', 'fasd']
+    .. usage::
+        >>> rsplit('asd|foo', '|', maxsplit=2)
+        [None, 'asd', 'foo']
+
+        >>> rsplit('foo bar', maxsplit=1)
+        ['foo', 'bar']
+
+        >>> rsplit('foo bar', maxsplit=2, mustsplit=False)
+        ['foo', 'bar']
     """
-    if maxsplit == -1:
-        return source.rsplit(sep, maxsplit)
+    if maxsplit == -1 or not mustsplit:
+        return source.rsplit(sep, maxsplit=maxsplit)
     _old: list = source.rsplit(sep, maxsplit)
     _result: list = [None] * ((maxsplit + 1) - len(_old))
     _result.extend(_old)
     return _result
-
-
-# def chunks(dataframe: pd.DataFrame, n: int):
-#     """Yield successive n-sized chunks from dataframe.
-#     """
-#     for i in range(0, len(dataframe), n):
-#         yield dataframe.iloc[i:i+n]
