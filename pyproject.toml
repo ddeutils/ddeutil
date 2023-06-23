@@ -38,7 +38,7 @@ test = [
     "mypy>=0.982",
     "types-python-dateutil",
     "memory_profiler>=0.61.0",
-#    "perfplot",
+    "perfplot>=0.10.2",
 ]
 dev = [
     "dup_utils[test]",
@@ -55,7 +55,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
-version = {attr = "dup_utils.__version__"}
+version = {attr = "dup_utils.core.__about__.__version__"}
 
 # TODO: docs: https://github.com/netinvent/ofunctions/tree/master/ofunctions
 [tool.setuptools.packages.find]
@@ -74,9 +74,6 @@ omit = [
     "scripts/",
 ]
 relative_files = true
-
-[tool.coverage.paths]
-source = ["src", "*/site-packages"]
 
 [tool.coverage.report]
 exclude_lines = [

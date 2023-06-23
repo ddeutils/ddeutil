@@ -1,67 +1,71 @@
-import logging
 import unittest
-from typing import Any, Dict, List, Literal, Tuple
+from typing import List
 
 import src.dup_utils.core.base.check_convert as cc
 
-TestCaseMap = Literal["value", "respec"]
-
 
 class CheckTestCase(unittest.TestCase):
-    def test_check_int(self):
-        map_value_respect: Tuple[Dict[TestCaseMap, Any], ...] = (
-            {"value": 1, "respec": True},
-            {"value": -1, "respec": True},
-            {"value": 1.0, "respec": True},
-            {"value": -1.0, "respec": True},
-            {"value": "0", "respec": True},
-            {"value": "0.", "respec": False},
-            {"value": "0.0", "respec": False},
-            {"value": "1", "respec": True},
-            {"value": "-1", "respec": True},
-            {"value": "+1", "respec": True},
-            {"value": "1.0", "respec": False},
-            {"value": "-1.0", "respec": False},
-            {"value": "+1.0", "respec": False},
-            {"value": "06", "respec": True},
-            {"value": "abc 123", "respec": False},
-            {"value": 1.1, "respec": True},
-            {"value": -1.1, "respec": True},
-            {"value": "1.1", "respec": False},
-            {"value": "-1.1", "respec": False},
-            {"value": "+1.1", "respec": False},
-            {"value": "1.1.1", "respec": False},
-            {"value": "1.1.0", "respec": False},
-            {"value": "1.0.1", "respec": False},
-            {"value": "1.0.0", "respec": False},
-            {"value": "1.0.", "respec": False},
-            {"value": "1..0", "respec": False},
-            {"value": "1..", "respec": False},
-            {"value": "0.0.", "respec": False},
-            {"value": "0..0", "respec": False},
-            {"value": "0..", "respec": False},
-            {"value": "one", "respec": False},
-            {"value": object(), "respec": False},
-            {"value": (1, 2, 3), "respec": False},
-            {"value": [1, 2, 3], "respec": False},
-            {"value": {"one": "two"}, "respec": False},
-            {"value": "0", "respec": True},
-            {"value": "0.", "respec": False},
-            {"value": ".0", "respec": False},
-            {"value": ".01", "respec": False},
+    def setUp(self) -> None:
+        ...
+
+    def test_is_int(self):
+        map_value_respect = (
+            (1, True),
+            (-1, True),
+            (1.0, False),
+            (-1.0, False),
+            ("0", True),
+            ("1", True),
+            ("-1", True),
+            ("+1", True),
+            ("06", True),
+            ("abc 123", False),
+            (1.1, False),
+            (-1.1, False),
+            ("1.1", False),
+            ("-1.1", False),
+            ("+1.1", False),
+            ("1.1.1", False),
+            ("1.1.0", False),
+            ("1.0.1", False),
+            ("1.0.0", False),
+            ("1.0.", False),
+            ("1..0", False),
+            ("1..", False),
+            ("0.0.", False),
+            ("0..0", False),
+            ("0..", False),
+            ("one", False),
+            (object(), False),
+            ((1, 2, 3), False),
+            ([1, 2, 3], False),
+            ({"one": "two"}, False),
+            ("0.", False),
+            (".0", False),
+            (".01", False),
         )
-        for value in map_value_respect:
-            self.assertEqual(value["respec"], cc.check_int(value["value"]))
+        for values in map_value_respect:
+            _respec, _value = values[1], values[0]
+            self.assertEqual(_respec, cc.is_int(_value))
+
+    def test_can_int(self):
+        map_value_respect = (
+            (1, True),
+            (-1, True),
+            (1.0, True),
+            (-1.0, True),
+            ("0.", True),
+            ("0.0", True),
+            ("1.0", True),
+            ("-1.0", True),
+            ("+1.0", True),
+        )
+        for values in map_value_respect:
+            _respec, _value = values[1], values[0]
+            self.assertEqual(_respec, cc.can_int(_value))
 
 
 class ConvertTestCase(unittest.TestCase):
-    logger = logging.getLogger(__name__)
-    logging.basicConfig(
-        format="%(asctime)s %(module)s %(levelname)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        level=logging.INFO,
-    )
-
     def setUp(self) -> None:
         self.str_true_lists: List[str] = [
             "true",
@@ -86,12 +90,12 @@ class ConvertTestCase(unittest.TestCase):
             "X",
         ]
 
-    def test_convert_to_bool(self):
+    def test_convert_str2bool(self):
         for _string in self.str_true_lists:
-            self.assertTrue(cc.convert_str_to_bool(_string))
+            self.assertTrue(cc.str2bool(_string))
 
         for _string in self.str_false_lists:
-            self.assertFalse(cc.convert_str_to_bool(_string))
+            self.assertFalse(cc.str2bool(_string))
 
         for _string in self.str_raise_lists:
-            self.assertRaises(ValueError, cc.convert_str_to_bool, _string)
+            self.assertRaises(ValueError, cc.str2bool, _string)

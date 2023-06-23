@@ -8,50 +8,59 @@ from typing import (
 )
 
 
-def check_int(value: Any) -> int:
-    """Check string that able to be integer
-    docs: https://stackoverflow.com/questions/1265665/how-can-i-check-if-a-string-represents-an-int-without-using-try-except
-    :usage:
-        >>> check_int('')
+def is_int(value: Any) -> bool:
+    """Check value that able to be integer of float
+
+    .. docs::
+        https://stackoverflow.com/questions/1265665/how-can-i-check-if-a-string-represents-an-int-without-using-try-except
+
+    .. usage::
+        >>> is_int('')
         False
-        >>> check_int('-3')
-        True
-        >>> check_int('-123.4')
+        >>> is_int('0.0')
         False
-        >>> check_int('543')
+        >>> is_int('-3')
         True
-        >>> check_int('0')
+        >>> is_int('-123.4')
+        False
+        >>> is_int('543')
         True
+        >>> is_int('0')
+        True
+        >>> is_int('-')
+        False
     """
-    if isinstance(
-        value,
-        (
-            int,
-            float,
-        ),
-    ):
+    if isinstance(value, int):
         return True
-    elif not value:
+    _value = str(value)
+    if not value:
         return False
-    # ``str.isdigit()`` or ``str.isdecimal()``
-    value = str(value).strip()
+    # ``str.isdigit()`` or ``str.isdecimal()`` or ``str.isnumeric()``
     return (
-        value[1:].isdecimal() if value[0] in {"-", "+"} else value.isdecimal()
+        _value[1:].isdecimal()
+        if _value[0] in {"-", "+"}
+        else _value.isdecimal()
     )
 
 
-def convert_str_to_bool(
-    value: Optional[str] = None, force_raise: bool = True
-) -> bool:
+def can_int(value: Any) -> bool:
+    try:
+        return float(str(value)).is_integer()
+    except (TypeError, ValueError):
+        return False
+
+
+def str2bool(value: Optional[str] = None, force_raise: bool = True) -> bool:
     """
     :usage:
-        >>> convert_str_to_bool('yes')
+        >>> str2bool('yes')
         True
 
-        >>> convert_str_to_bool('false')
+        >>> str2bool('false')
         False
     """
-    if value is None or value == "":
+    value = value or ""
+    if not value:
         return False
     elif value.lower() in {"yes", "true", "t", "1", "y", "1.0"}:
         return True
@@ -62,18 +71,16 @@ def convert_str_to_bool(
     return False
 
 
-def convert_str_to_list(
-    value: Optional[str] = None, force_raise: bool = True
-) -> list:
+def str2list(value: Optional[str] = None, force_raise: bool = True) -> list:
     """
     :usage:
-        >>> convert_str_to_list('["a", "b", "c"]')
+        >>> str2list('["a", "b", "c"]')
         ['a', 'b', 'c']
 
-        >>> convert_str_to_list('["d""]', force_raise=False)
+        >>> str2list('["d""]', force_raise=False)
         ['["d""]']
 
-        >>> convert_str_to_list('["d""]')
+        >>> str2list('["d""]')
         Traceback (most recent call last):
         ...
         ValueError: can not convert string value '["d""]' to list object
@@ -92,18 +99,16 @@ def convert_str_to_list(
     return [value]
 
 
-def convert_str_to_dict(
-    value: Optional[str] = None, force_raise: bool = True
-) -> dict:
+def str2dict(value: Optional[str] = None, force_raise: bool = True) -> dict:
     """
     :usage:
-        >>> convert_str_to_dict('{"a": 1, "b": 2, "c": 3}')
+        >>> str2dict('{"a": 1, "b": 2, "c": 3}')
         {'a': 1, 'b': 2, 'c': 3}
 
-        >>> convert_str_to_dict('{"d""}', force_raise=False)
+        >>> str2dict('{"d""}', force_raise=False)
         {1: '{"d""}'}
 
-        >>> convert_str_to_dict('{"d""}')
+        >>> str2dict('{"d""}')
         Traceback (most recent call last):
         ...
         ValueError: can not convert string value '{"d""}' to dict object
@@ -122,15 +127,15 @@ def convert_str_to_dict(
     return {1: value}
 
 
-def convert_str_to_int_or_float(
+def str2int_float(
     value: Optional[str] = None,
 ) -> Union[int, float]:
     """
     :usage:
-        >>> convert_str_to_int_or_float('+3')
+        >>> str2int_float('+3')
         3
 
-        >>> convert_str_to_int_or_float('-3.01')
+        >>> str2int_float('-3.01')
         -3.01
     """
     if value is None or value == "":
@@ -143,7 +148,7 @@ def convert_str_to_int_or_float(
 
 def must_list(value: Optional[Union[str, list]] = None) -> list:
     if value:
-        return convert_str_to_list(value) if isinstance(value, str) else value
+        return str2list(value) if isinstance(value, str) else value
     return []
 
 
@@ -154,56 +159,56 @@ def must_bool(
         return (
             value
             if isinstance(value, bool)
-            else convert_str_to_bool(str(value), force_raise=force_raise)
+            else str2bool(str(value), force_raise=force_raise)
         )
     return False
 
 
-def convert_str(value: str) -> Any:
+def str2any(value: str) -> Any:
     """Convert string value to real type.
     :usage:
-        >>> convert_str('1245')
+        >>> str2any('1245')
         1245
-        >>> convert_str('[1, 2, 3]')
+        >>> str2any('"string"')
+        'string'
+        >>> str2any('[1, 2, 3]')
         [1, 2, 3]
-        >>> convert_str('1245.123')
+        >>> str2any('{"key": "value"}')
+        {'key': 'value'}
+        >>> str2any('1245.123')
         '1245.123'
+        >>> str2any('True')
+        True
     """
-    if value.startswith(
-        (
-            '"',
-            "'",
-        )
-    ) and value.endswith(
-        (
-            '"',
-            "'",
-        )
-    ):
-        return value.strip('"') if value.startswith('"') else value.strip("'")
+    if value.startswith(('"', "'")) and value.endswith(('"', "'")):
+        return value.strip("\"'")
     elif value.isdecimal():
-        return convert_str_to_int_or_float(value)
+        return str2int_float(value)
     elif value.startswith("[") and value.endswith("]"):
-        return convert_str_to_list(value)
+        return str2list(value)
     elif value.startswith("{") and value.endswith("}"):
-        return convert_str_to_dict(value)
+        return str2dict(value)
     elif value in {
         "True",
         "False",
     }:
-        return convert_str_to_bool(value)
+        return str2bool(value)
     return value
 
 
 def revert_args(*args, **kwargs) -> Tuple[tuple, dict]:
-    """Return arguments and key-word arguments."""
+    """Return arguments and key-word arguments.
+    .. usage::
+        >>> revert_args('value', 1, name='demo', _dict={'k1': 'v1', 'k2': 'v2'})
+        (('value', 1), {'name': 'demo', '_dict': {'k1': 'v1', 'k2': 'v2'}})
+    """
     return args, kwargs
 
 
-def arguments(value: Optional[str]) -> Tuple[tuple, dict]:
+def str2args(value: Optional[str]) -> Tuple[tuple, dict]:
     """Convert arguments string to args and kwargs
     :usage:
-        >>> arguments("'value', 1, name='demo'")
+        >>> str2args("'value', 1, name='demo'")
         (('value', 1), {'name': 'demo'})
 
     """
@@ -230,11 +235,3 @@ def remove_pad(value: str) -> str:
         '123'
     """
     return _last_char if (_last_char := value[-1]) == "0" else value.lstrip("0")
-
-
-if __name__ == "__main__":
-    print(
-        eval(
-            "revert_args('value', 1, name='demo', _dict={'k1': 'v1', 'k2': 'v2'})"
-        )
-    )

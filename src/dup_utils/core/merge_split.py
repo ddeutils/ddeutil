@@ -179,7 +179,10 @@ def split_str(strings, sep: str = r"\s+"):
     """
     if not sep:
         return iter(strings)
-    # return (_.group(1) for _ in re.finditer(f'(?:^|{sep})((?:(?!{sep}).)*)', string))
+    # return (
+    #     _.group(1)
+    #     for _ in re.finditer(f'(?:^|{sep})((?:(?!{sep}).)*)', string)
+    # )
     # alternatively, more verbosely:
     regex = f"(?:^|{sep})((?:(?!{sep}).)*)"
     for match in re.finditer(regex, strings):
