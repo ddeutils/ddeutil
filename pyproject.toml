@@ -1,5 +1,5 @@
 [project]
-name = "deutil"
+name = "dup_utils"
 description = "The utility objects for the data engine package"
 readme = {file = "README.md", content-type = "text/markdown"}
 license = {text = "MIT"}
@@ -28,12 +28,12 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/korawica/deutil/"
-"Source Code" = "https://github.com/korawica/deutil/"
+Homepage = "https://github.com/korawica/dup_utils/"
+"Source Code" = "https://github.com/korawica/dup_utils/"
 
 [project.optional-dependencies]
 test = [
-    "pytest>=7.1.3",
+    "pytest>=7.3.2",
     "coverage[toml]>=7.0.0",
     "mypy>=0.982",
     "types-python-dateutil",
@@ -41,9 +41,9 @@ test = [
 #    "perfplot",
 ]
 dev = [
-    "deutil[test]",
+    "dup_utils[test]",
     "ruff>=0.0.138",
-    "pre-commit>=2.17.0",
+    "pre-commit>=3.3.3",
     "bump2version>=1.0.1"
 ]
 
@@ -55,39 +55,20 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
-version = {attr = "deutil.__version__"}
+version = {attr = "dup_utils.__version__"}
 
 # TODO: docs: https://github.com/netinvent/ofunctions/tree/master/ofunctions
-
-#[tool.setuptools]
-#package-dir = {"" = "src"}  # Require for ``pip install -e .``
-#package-dir = {}
-#packages = [
-#    "deutil",
-#    "deutil.models",
-##    "deutil.types",
-##    "deutil.utils",
-#]
-
-#[tool.setuptools.package-dir]
-#"deutil" = "src"
-#"deutil.models" = 'src/deutil/models'
-
-#[tool.setuptools.packages.find]
-#where = ["src"]
-
-[tool.setuptools.packages]
-find = {where = ["src"], namespaces = false}
-
+[tool.setuptools.packages.find]
+where = ["src"]
 
 # TODO: Implement cli for use on cmd
 # [project.scripts]
-# deutil = "deutil.cli:main"
+# dup_utils = "dup_utils.cli:main"
 
 [tool.coverage.run]
 branch = true
 concurrency = ["thread", "multiprocessing"]
-source = ["deutil", "tests"]
+source = ["dup_utils", "tests"]
 omit = [
     "*/perfs/",
     "scripts/",
@@ -114,15 +95,15 @@ filterwarnings = ["error"]
 
 [tool.mypy]
 python_version = "3.8"
-files = ["deutil"]
+files = ["dup_utils"]
 show_error_codes = true
 pretty = true
 strict = true
-#local_partial_types = true
+local_partial_types = true
 warn_unreachable = true
 
 [[tool.mypy.overrides]]
-module = "deutil.utils"
+module = "dup_utils.utils"
 warn_unused_ignores = false
 ignore_missing_imports = true
 

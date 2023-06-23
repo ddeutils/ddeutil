@@ -8,8 +8,9 @@ from typing import (
 )
 
 
-def check_int(value: str):
-    """
+def check_int(value: Any) -> int:
+    """Check string that able to be integer
+    docs: https://stackoverflow.com/questions/1265665/how-can-i-check-if-a-string-represents-an-int-without-using-try-except
     :usage:
         >>> check_int('')
         False
@@ -19,9 +20,21 @@ def check_int(value: str):
         False
         >>> check_int('543')
         True
+        >>> check_int('0')
+        True
     """
-    if not value:
+    if isinstance(
+        value,
+        (
+            int,
+            float,
+        ),
+    ):
+        return True
+    elif not value:
         return False
+    # ``str.isdigit()`` or ``str.isdecimal()``
+    value = str(value).strip()
     return (
         value[1:].isdecimal() if value[0] in {"-", "+"} else value.isdecimal()
     )

@@ -1,8 +1,11 @@
-# Data _Utility_ Package
+# Data Utility Packages: _Core_
 
-The **Data Utility** package with the utility objects
+**Type**: `DUP` | **Tag**: `Data` `Utility` `Core`
+
+The **Data Utility Core** package with the utility objects that was created with
+sub-package namespace, `dup_utils`, for independent installation.
 
 ## Overviews
 
-This package implement with _src-layout_ structure and use `setuptools` for build
-this package to **PyPI**.
+This package implement with _src-layout_ structure and use `setuptools` for package
+building to **PyPI**.

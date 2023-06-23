@@ -1,5 +1,6 @@
-import depdesign.utils.type.merge_split as merge
 import perfplot
+
+import src.dup_utils.core.merge_split as merge
 
 
 class MergePerfTest:

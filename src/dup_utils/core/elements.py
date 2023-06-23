@@ -5,7 +5,7 @@ from collections.abc import Mapping, Set
 from numbers import Number
 from typing import Any, Optional
 
-from src.deutil.core import split_default
+from src.dup_utils.core.merge_split import split_default
 
 ZERO_DEPTH_BASES = (str, bytes, Number, range, bytearray)
 

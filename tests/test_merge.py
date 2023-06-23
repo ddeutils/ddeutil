@@ -2,7 +2,7 @@ import logging
 import unittest
 from typing import List
 
-import src.deutil.core.deutil.core.merge_split as merge
+import src.dup_utils.core.merge_split as merge
 
 
 class MergeTestCase(unittest.TestCase):
