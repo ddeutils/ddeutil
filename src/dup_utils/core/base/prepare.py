@@ -2,6 +2,14 @@ from math import ceil
 
 
 def round_up(number: float, decimals):
+    """
+    .. usage::
+        >>> round_up(1.00406, 2)
+        1.01
+
+        >>> round_up(1.00001, 1)
+        1.1
+    """
     assert isinstance(number, float)
     assert isinstance(decimals, int)
     assert decimals >= 0
