@@ -25,8 +25,8 @@ def checksum(value: Any) -> str:
 
 
 def hash_all(
-    input_value: Any,
-    exclude_keys: Optional[set] = None,
+    value: Any,
+    exclude: Optional[set] = None,
 ):
     """Hash values in dictionary
 
@@ -34,24 +34,24 @@ def hash_all(
         >>> hash_all({'foo': 'bar'})
         {'foo': '37b51d194a7513e45b56f6524f2d51f2'}
     """
-    _exclude_keys: set = exclude_keys or set()
-    if isinstance(input_value, dict):
+    _exclude_keys: set = exclude or set()
+    if isinstance(value, dict):
         return {
             k: hash_all(v) if k not in _exclude_keys else v
-            for k, v in input_value.items()
+            for k, v in value.items()
         }
-    elif isinstance(input_value, (list, tuple)):
-        return type(input_value)([hash_all(i) for i in input_value])
-    elif isinstance(input_value, bool):
-        return input_value
-    elif isinstance(input_value, (int, float)):
-        input_value = str(input_value)
-    elif input_value is None:
-        return input_value
-    return hashlib.md5(input_value.encode("utf-8")).hexdigest()
+    elif isinstance(value, (list, tuple)):
+        return type(value)([hash_all(i) for i in value])
+    elif isinstance(value, bool):
+        return value
+    elif isinstance(value, (int, float)):
+        value = str(value)
+    elif value is None:
+        return value
+    return hashlib.md5(value.encode("utf-8")).hexdigest()
 
 
-def hash_str(input_value: str, num_length: int = 8) -> str:
+def hash_str(value: str, length: int = 8) -> str:
     """Hash str input to number with SHA256 algorithm
     more algoritm be md5, sha1, sha224, sha256, sha384, sha512
     :usage:
@@ -64,12 +64,10 @@ def hash_str(input_value: str, num_length: int = 8) -> str:
     _algorithm: str = "sha256"
     return str(
         int(
-            getattr(hashlib, _algorithm)(
-                input_value.encode("utf-8")
-            ).hexdigest(),
+            getattr(hashlib, _algorithm)(value.encode("utf-8")).hexdigest(),
             16,
         )
-    )[-num_length:]
+    )[-length:]
 
 
 def hash_str_by_salt(value):
@@ -144,19 +142,19 @@ def tokenize(*args, **kwargs):
         ).hexdigest()
 
 
-def freeze(content: Any):
-    """Freeze the content to immutable
+def freeze(value: Any):
+    """Freeze the value to immutable
     .. usage::
         >>> freeze({'foo': 'bar'})
         frozenset({('foo', 'bar')})
     """
-    if isinstance(content, dict):
-        return frozenset((key, freeze(value)) for key, value in content.items())
-    elif isinstance(content, list):
-        return tuple(freeze(value) for value in content)
-    elif isinstance(content, set):
-        return frozenset(freeze(value) for value in content)
-    return content
+    if isinstance(value, dict):
+        return frozenset((key, freeze(value)) for key, value in value.items())
+    elif isinstance(value, list):
+        return tuple(freeze(value) for value in value)
+    elif isinstance(value, set):
+        return frozenset(freeze(value) for value in value)
+    return value
 
 
 def freeze_args(func):

@@ -23,6 +23,8 @@ classifiers = [
 requires-python = ">=3.8.10"
 dependencies = [
     "ujson==5.8.0,<6.0.0",
+    'backports.zoneinfo>=0.2.1; python_version == "3.8"',
+    "tzdata>=2023.3",
 ]
 dynamic = ["version"]
 

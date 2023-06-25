@@ -1,4 +1,3 @@
-import importlib
 import sys
 from collections import deque
 from collections.abc import Mapping, Set
@@ -10,39 +9,7 @@ from src.dup_utils.core.base.merge_split import split
 ZERO_DEPTH_BASES = (str, bytes, Number, range, bytearray)
 
 
-def cached_import(module_path, class_name):
-    modules = sys.modules
-    if (
-        module_path not in modules
-        or getattr(modules[module_path], "__spec__", None) is not None
-        and getattr(modules[module_path].__spec__, "_initializing", False)
-    ):
-        importlib.import_module(module_path)
-    return getattr(modules[module_path], class_name)
-
-
-def import_string(dotted_path):
-    """Import a dotted module path and return the attribute/class designated by
-    the last name in the path. Raise ImportError if the import failed.
-    """
-    try:
-        module_path, class_name = dotted_path.rsplit(".", 1)
-    except ValueError as err:
-        raise ImportError(
-            f"{dotted_path} doesn't look like a module path"
-        ) from err
-
-    try:
-        return cached_import(module_path, class_name)
-    except AttributeError as err:
-        raise ImportError(
-            f'Module "{module_path}" does not define a "{class_name}" attribute/class'
-        ) from err
-
-
-def only_one(
-    check_list: list, match_list: list, default: bool = True
-) -> Optional[str]:
+def only_one(check: list, value: list, default: bool = True) -> Optional[str]:
     """Get only one element in check list that exists in match list
     :usage:
         >>> only_one(['a', 'b'], ['a', 'b', 'c'])
@@ -52,11 +19,11 @@ def only_one(
         >>> only_one(['a', 'b'], ['c', 'e', 'f'], default=False)
 
     """
-    if len(exist := set(check_list).intersection(set(match_list))) == 1:
+    if len(exist := set(check).intersection(set(value))) == 1:
         return list(exist)[0]
     return next(
-        (_ for _ in match_list if _ in check_list),
-        (match_list[0] if default else None),
+        (_ for _ in value if _ in check),
+        (value[0] if default else None),
     )
 
 
@@ -76,12 +43,17 @@ def hasdot(search: str, content: dict) -> bool:
     if _search in content and isinstance(content, dict):
         if not _else:
             return True
-        if isinstance((result := content[_search]), dict):
+        elif isinstance((result := content[_search]), dict):
             return hasdot(_else, result)
     return False
 
 
-def getdot(search: str, content: dict, *args, **kwargs) -> Any:
+def getdot(
+    search: str,
+    content: dict,
+    *args,
+    **kwargs,
+) -> Any:
     """
     :usage:
         >>> getdot('data.value', {'data': {'value': 1}})
@@ -97,7 +69,10 @@ def getdot(search: str, content: dict, *args, **kwargs) -> Any:
 
         >>> getdot('data.value', {'data': {'key': 1}}, None)
 
-        >>> getdot('data.value.getter', {'data': {'value': {'getter': 'success', 'put': 'fail'}}})
+        >>> getdot(
+        ...     'data.value.getter',
+        ...     {'data': {'value': {'getter': 'success', 'put': 'fail'}}},
+        ... )
         'success'
 
     """
@@ -144,15 +119,7 @@ def setdot(search: str, content: dict, value: Any, **kwargs) -> dict:
     raise ValueError(f"{_search} does not exists in {content}")
 
 
-def get_lines_count(string):
-    # TODO: Windows strings
-    count = string.count("\n")
-    if string[-1] != "\n":
-        count += 1
-    return count
-
-
-def getsize(obj_0) -> int:
+def size(value: Any) -> int:
     """Recursively iterate to sum size of object & members.
 
     Empty
@@ -178,21 +145,21 @@ def getsize(obj_0) -> int:
         if obj_id in _seen_ids:
             return 0
         _seen_ids.add(obj_id)
-        size = sys.getsizeof(obj)
+        _size = sys.getsizeof(obj)
         if isinstance(obj, ZERO_DEPTH_BASES):
             # bypass remaining control flow and return
             pass
         elif isinstance(obj, (tuple, list, Set, deque)):
-            size += sum(inner(i) for i in obj)
+            _size += sum(inner(i) for i in obj)
         elif isinstance(obj, Mapping) or hasattr(obj, "items"):
-            size += sum(inner(k) + inner(v) for k, v in obj.items())
+            _size += sum(inner(k) + inner(v) for k, v in obj.items())
         # Check for custom object instances - may subclass above too
         if hasattr(obj, "__dict__"):
-            size += inner(vars(obj))
+            _size += inner(vars(obj))
         if hasattr(obj, "__slots__"):  # can have __slots__ with __dict__
-            size += sum(
+            _size += sum(
                 inner(getattr(obj, s)) for s in obj.__slots__ if hasattr(obj, s)
             )
-        return size
+        return _size
 
-    return inner(obj_0)
+    return inner(value)

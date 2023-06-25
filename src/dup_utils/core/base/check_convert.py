@@ -74,7 +74,6 @@ def str2bool(
     :usage:
         >>> str2bool('yes')
         True
-
         >>> str2bool('false')
         False
     """
@@ -98,10 +97,8 @@ def str2list(
     :usage:
         >>> str2list('["a", "b", "c"]')
         ['a', 'b', 'c']
-
         >>> str2list('["d""]', force_raise=False)
         ['["d""]']
-
         >>> str2list('["d""]')
         Traceback (most recent call last):
         ...
@@ -126,10 +123,8 @@ def str2dict(value: Optional[str] = None, force_raise: bool = True) -> dict:
     :usage:
         >>> str2dict('{"a": 1, "b": 2, "c": 3}')
         {'a': 1, 'b': 2, 'c': 3}
-
         >>> str2dict('{"d""}', force_raise=False)
         {1: '{"d""}'}
-
         >>> str2dict('{"d""}')
         Traceback (most recent call last):
         ...
@@ -157,16 +152,12 @@ def str2int_float(
     :usage:
         >>> str2int_float('+3')
         3
-
         >>> str2int_float('-5.00')
         -5.0
-
         >>> str2int_float('-3.01')
         -3.01
-
         >>> str2int_float('[1]')
         0
-
         >>> str2int_float('x0', force_raise=True)
         Traceback (most recent call last):
         ...
@@ -200,10 +191,8 @@ def must_bool(
     .. usage::
         >>> must_bool('1')
         True
-
         >>> must_bool(0)
         False
-
         >>> must_bool("[1, 2, 'foo']")
         False
     """
