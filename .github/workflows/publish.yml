@@ -1,11 +1,11 @@
 name: publish
 
 on:
-#  release:
-#    types:
-#      - prereleased
-#      - released
   workflow_dispatch:
+  release:
+    types:
+      - prereleased
+#      - released
 
 permissions:
   contents: read
