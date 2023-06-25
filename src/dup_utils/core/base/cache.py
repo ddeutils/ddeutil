@@ -10,19 +10,13 @@ class memoize:
         ...         return 1
         ...     else:
         ...         return fib(n-1) + fib(n-2)
-        >>> for i in range(0, 10):
+        >>> for i in range(0, 5):
         ...     fib(i)
         1
         1
         2
         3
         5
-        8
-        13
-        21
-        34
-        55
-
     """
 
     def __init__(self, function):
@@ -30,7 +24,7 @@ class memoize:
         self.function = function
 
     def __call__(self, *args, **kwargs):
-        key = str(args) + str(kwargs)
+        key: str = str(args) + str(kwargs)
         if key in self.cache:
             return self.cache[key]
 

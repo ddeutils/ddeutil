@@ -1,5 +1,8 @@
+import importlib
 import operator
+import sys
 import typing
+from collections.abc import Callable
 
 from .check_convert import (
     can_int,
@@ -16,6 +19,17 @@ from .check_convert import (
     str2int_float,
     str2list,
 )
+from .hash import (
+    checksum,
+    freeze,
+    freeze_args,
+    hash_all,
+    hash_pwd,
+    hash_str,
+    hash_str_by_salt,
+    is_same_pwd,
+    tokenize,
+)
 from .merge_split import (
     merge_dict,
     merge_list,
@@ -25,10 +39,11 @@ from .prepare import (
     round_up,
 )
 
-concat: callable = "".join
+concat: typing.Callable[[typing.Any], str] = "".join
 
 
 def operate(x):
+    """"""
     return getattr(operator, x)
 
 
@@ -37,7 +52,15 @@ def is_generic(t: type):
     return hasattr(t, "__origin__")
 
 
-def isinstance_check(check: typing.Any, instance):
+def not_generic(check: typing.Any, instance):
+    if instance is typing.NoReturn:
+        return check is None
+    elif instance is typing.Any:
+        return True
+    return isinstance(check, instance)
+
+
+def isinstance_check(check: typing.Any, instance) -> bool:
     """Return True if check data is instance.
     :usage:
         >>> import typing
@@ -55,11 +78,7 @@ def isinstance_check(check: typing.Any, instance):
         >>> assert isinstance_check([1, [1, 2, 3]], typing.List[typing.Union[typing.List[int], int]])
     """
     if not is_generic(instance):
-        if instance is typing.NoReturn:
-            return check is None
-        elif instance is typing.Any:
-            return True
-        return isinstance(check, instance)
+        return not_generic(check, instance)
 
     origin = typing.get_origin(instance)
     if origin == typing.Union:
@@ -91,4 +110,36 @@ def isinstance_check(check: typing.Any, instance):
             )
         except ValueError:
             return False
-    return True
+    elif origin is Callable:
+        return callable(check)
+    raise NotImplementedError("It can not check typing instance of this pair.")
+
+
+def cached_import(module_path, class_name):
+    modules = sys.modules
+    if (
+        module_path not in modules
+        or getattr(modules[module_path], "__spec__", None) is not None
+        and getattr(modules[module_path].__spec__, "_initializing", False)
+    ):
+        importlib.import_module(module_path)
+    return getattr(modules[module_path], class_name)
+
+
+def import_string(dotted_path):
+    """Import a dotted module path and return the attribute/class designated by
+    the last name in the path. Raise ImportError if the import failed.
+    """
+    try:
+        module_path, class_name = dotted_path.rsplit(".", 1)
+    except ValueError as err:
+        raise ImportError(
+            f"{dotted_path} doesn't look like a module path"
+        ) from err
+
+    try:
+        return cached_import(module_path, class_name)
+    except AttributeError as err:
+        raise ImportError(
+            f'Module "{module_path}" does not define a "{class_name}" attribute/class'
+        ) from err

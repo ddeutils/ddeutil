@@ -1,3 +1,26 @@
+"""
+:example:
+    >>> from queue import PriorityQueue as BuiltInPriorityQueue
+    >>>
+    >>> q = BuiltInPriorityQueue()
+    >>>
+    >>> q.put((4, 'Read'))
+    >>> q.put((2, 'Play'))
+    >>> q.put((5, 'Write'))
+    >>> q.put((1, 'Code'))
+    >>> q.put((3, 'Study'))
+    >>>
+    >>> while not q.empty():
+    ...     next_item = q.get()
+    ...     print(next_item)
+    (1, 'Code')
+    (2, 'Play')
+    (3, 'Study')
+    (4, 'Read')
+    (5, 'Write')
+"""
+
+
 class PriorityQueue:
     """
     :usage:

@@ -1,16 +1,26 @@
 import re
 from collections import defaultdict
 from functools import partial
-from typing import Any, Iterable, List, Optional, Union
+from typing import (
+    Any,
+    Iterable,
+    List,
+    Optional,
+    Union,
+)
 
 
-def ordered(obj: Any):
-    """Order an object."""
-    if isinstance(obj, dict):
-        return sorted((k, ordered(v)) for k, v in obj.items())
-    elif isinstance(obj, list):
-        return sorted(ordered(x) for x in obj)
-    return obj
+def ordered(value: Any):
+    """Order an object by ``sorted``.
+    .. usage::
+        >>> ordered([[11], [2], [4, 1]])
+        [[1, 4], [2], [11]]
+    """
+    if isinstance(value, dict):
+        return sorted((k, ordered(v)) for k, v in value.items())
+    elif isinstance(value, list):
+        return sorted(ordered(x) for x in value)
+    return value
 
 
 def sort_list_by_priority(

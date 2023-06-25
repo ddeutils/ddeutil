@@ -1,11 +1,13 @@
 import calendar
 import datetime
 import enum
-from functools import partial
 from typing import Dict, Optional, Union
 
-import pendulum
-import pytz
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    from backports.zoneinfo import ZoneInfo
+
 from dateutil import relativedelta
 
 LOCAL_TZ: str = "Asia/Bangkok"
@@ -49,16 +51,9 @@ class DatetimeDim(enum.IntEnum):
     YEAR = 6
 
 
-def now(mode: Optional[str] = None, _tz: Optional[str] = None):
-    _mode: str = mode or "pendulum"
+def now(_tz: Optional[str] = None):
     _tz: str = _tz or LOCAL_TZ
-    switcher: dict = {
-        "pendulum": partial(lambda: pendulum.now(tz=_tz)),
-    }
-    func = switcher.get(
-        _mode, lambda: datetime.datetime.now(pytz.timezone(_tz))
-    )
-    return func()
+    return datetime.datetime.now(ZoneInfo(_tz))
 
 
 def get_date(fmt: str) -> Union[datetime.datetime, datetime.date, str]:

@@ -2,7 +2,7 @@ import logging
 import unittest
 from typing import List
 
-import src.dup_utils.core.elements as element
+import src.dup_utils.core.base.elements as element
 
 
 class ConvertTestCase(unittest.TestCase):
