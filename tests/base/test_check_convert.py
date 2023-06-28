@@ -1,7 +1,8 @@
 import unittest
 from typing import List
 
-import src.dup_utils.core.base.check_convert as cc
+import src.dup_utils.core.base.checker as ck
+import src.dup_utils.core.base.convert as cc
 
 
 class CheckTestCase(unittest.TestCase):
@@ -46,7 +47,7 @@ class CheckTestCase(unittest.TestCase):
         )
         for values in map_value_respect:
             _respec, _value = values[1], values[0]
-            self.assertEqual(_respec, cc.is_int(_value))
+            self.assertEqual(_respec, ck.is_int(_value))
 
     def test_can_int(self):
         map_value_respect = (
@@ -62,7 +63,7 @@ class CheckTestCase(unittest.TestCase):
         )
         for values in map_value_respect:
             _respec, _value = values[1], values[0]
-            self.assertEqual(_respec, cc.can_int(_value))
+            self.assertEqual(_respec, ck.can_int(_value))
 
 
 class ConvertTestCase(unittest.TestCase):
@@ -86,8 +87,9 @@ class ConvertTestCase(unittest.TestCase):
             "No",
         ]
         self.str_raise_lists: List[str] = [
-            "x",
-            "X",
+            # "x",
+            # "X",
+            "Nop",
         ]
 
     def test_convert_str2bool(self):

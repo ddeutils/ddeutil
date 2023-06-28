@@ -6,64 +6,12 @@ from typing import (
     Union,
 )
 
-StringTrue: Tuple[str, ...] = (
-    "yes",
-    "true",
-    "t",
-    "1",
-    "y",
-    "1.0",
+import ujson
+
+from src.dup_utils.core.base.checker import (
+    StringFalseLower,
+    StringTrueLower,
 )
-StringFalse: Tuple[str, ...] = ("no", "false", "f", "0", "n", "0.0")
-
-
-def is_int(value: Any) -> bool:
-    """Check value that able to be integer of float
-
-    .. docs::
-        https://stackoverflow.com/questions/1265665/how-can-i-check-if-a-string-represents-an-int-without-using-try-except
-
-    .. usage::
-        >>> is_int('')
-        False
-        >>> is_int('0.0')
-        False
-        >>> is_int('-3')
-        True
-        >>> is_int('-123.4')
-        False
-        >>> is_int('543')
-        True
-        >>> is_int('0')
-        True
-        >>> is_int('-')
-        False
-    """
-    if isinstance(value, int):
-        return True
-    _value = str(value)
-    if not value:
-        return False
-    # ``str.isdigit()`` or ``str.isdecimal()`` or ``str.isnumeric()``
-    return (
-        _value[1:].isdecimal()
-        if _value[0] in {"-", "+"}
-        else _value.isdecimal()
-    )
-
-
-def can_int(value: Any) -> bool:
-    """
-    .. usage:
-        >>> can_int('0.0')
-        True
-        >>> can_int('-1.0')
-        True
-    """
-    try:
-        return float(str(value)).is_integer()
-    except (TypeError, ValueError):
-        return False
 
 
 def str2bool(
@@ -76,13 +24,15 @@ def str2bool(
         True
         >>> str2bool('false')
         False
+        >>> str2bool('0')
+        False
     """
     value = value or ""
     if not value:
         return False
-    elif value.lower() in StringTrue:
+    elif value.lower() in StringTrueLower:
         return True
-    elif value.lower() in StringFalse:
+    elif value.lower() in StringFalseLower:
         return False
     if force_raise:
         raise ValueError(f"value {value!r} does not convert to boolean type")
@@ -108,13 +58,14 @@ def str2list(
         return []
     if value.startswith("[") and value.endswith("]"):
         try:
-            return ast.literal_eval(value)
-        except SyntaxError as err:
-            if not force_raise:
-                return [value]
-            raise ValueError(
-                f"can not convert string value {value!r} to list object"
-            ) from err
+            # ISSUE: When we talk about performance
+            # - ast.literal_eval(value) handler error SyntaxError (slower)
+            return ujson.loads(value)
+        except ujson.JSONDecodeError as err:
+            if force_raise:
+                raise ValueError(
+                    f"can not convert string value {value!r} to list object"
+                ) from err
     return [value]
 
 
