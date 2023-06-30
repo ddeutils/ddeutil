@@ -5,6 +5,7 @@ import subprocess
 import sys
 from dataclasses import InitVar, dataclass
 from datetime import date, datetime
+from pathlib import Path
 from typing import List, Optional, Tuple
 
 import click
@@ -131,33 +132,30 @@ class CommitLog:
 
 
 def validate_for_warning(
-    lines: List[str], multilines: bool = False
+    lines: List[str],
 ) -> List[str]:
     subject: str = lines[0]
     results: List[str] = []
+
     # RULE 02: Limit the subject line to 50 characters
     if len(subject) <= 20 or len(subject) > 50:
         results.append(
             "There should be between 21 and 50 characters in the commit title."
         )
-    if len(lines) > 1 or multilines:
-        if len(lines) <= 2:
-            results.append(
-                "There should at least 3 lines in your commit message."
-            )
+    if len(lines) <= 2:
+        results.append("There should at least 3 lines in your commit message.")
 
-        # RULE 01: Separate subject from body with a blank line
-        if lines[1].strip() != "":
-            results.append(
-                "There should be an empty line between "
-                "the commit title and body."
-            )
+    # RULE 01: Separate subject from body with a blank line
+    if lines[1].strip() != "":
+        results.append(
+            "There should be an empty line between "
+            "the commit title and body."
+        )
     return results
 
 
 def validate_commit_msg(
     lines: List[str],
-    multilines: bool = False,
 ) -> Tuple[List[str], LV]:
     if not lines:
         return (
@@ -165,22 +163,21 @@ def validate_commit_msg(
             LV.ERROR,
         )
 
-    rs = validate_for_warning(lines, multilines)
+    rs = validate_for_warning(lines)
     if rs:
         return rs, LV.WARNING
 
-    if multilines:
-        has_story_id: bool = False
-        for line in lines[1:]:
-            # RULE 06: Wrap the body at 72 characters
-            if len(line) > 72:
-                rs.append("The commit body should wrap at 72 characters.")
+    has_story_id: bool = False
+    for line in lines[1:]:
+        # RULE 06: Wrap the body at 72 characters
+        if len(line) > 72:
+            rs.append("The commit body should wrap at 72 characters.")
 
-            if line.startswith("["):
-                has_story_id = True
+        if line.startswith("["):
+            has_story_id = True
 
-        if not has_story_id:
-            rs.append("Please add a Story ID in the commit message.")
+    if not has_story_id:
+        rs.append("Please add a Story ID in the commit message.")
 
     if not rs:
         return (
@@ -248,34 +245,41 @@ def get_commit_logs() -> List:
     return msgs
 
 
-def get_latest_commit(file: Optional[str] = None) -> List[str]:
-    if not file:
-        file = ".git/COMMIT_EDITMSG"
-    with open(file, encoding="utf-8") as f_msg:
-        raw_msg = f_msg.readlines()
-    lines = [msg for msg in raw_msg if not msg.strip().startswith("#")]
-    rss, level = validate_commit_msg(lines)
-    if level == LV.OK:
-        print(make_color(rss[0], level))
-        with open(file, mode="w", encoding="utf-8") as file:
-            file.write("\n".join(lines))
+def get_latest_commit(
+    file: Optional[str] = None,
+    edit: bool = False,
+    output_file: bool = False,
+) -> List[str]:
+    if file:
+        with Path(file).open(encoding="utf-8") as f_msg:
+            raw_msg = f_msg.read().splitlines()
     else:
-        for rs in rss:
-            print(make_color(rs, level))
-    return lines
-
-
-def get_commit_message() -> List[str]:
-    raw_msg = (
-        subprocess.check_output(
-            ["git", "log", "HEAD^..HEAD", "--pretty=format:%s"]
+        raw_msg = (
+            subprocess.check_output(
+                ["git", "log", "HEAD^..HEAD", "--pretty=format:%B"]
+            )
+            .decode("ascii")
+            .strip()
+            .splitlines()
         )
-        .decode("ascii")
-        .strip()
-        .split("\n")
-    )
-    lines = [msg for msg in raw_msg if not msg.strip().startswith("#")]
-    print(validate_commit_msg(lines))
+    lines: List[str] = [
+        msg for msg in raw_msg if not msg.strip().startswith("#")
+    ]
+    if lines[-1] != "":
+        lines += [""]  # Add end-of-file line
+
+    rss, level = validate_commit_msg(lines)
+    for rs in rss:
+        print(make_color(rs, level))
+    if level not in (LV.OK, LV.WARNING):
+        sys.exit(1)
+
+    if edit:
+        lines[0] = CommitMsg(content=lines[0]).content
+
+    if file and output_file:
+        with Path(file).open(mode="w", encoding="utf-8") as f_msg:
+            f_msg.write("\n".join(lines))
     return lines
 
 
@@ -311,10 +315,14 @@ def cml():
 @cli_git.command()
 @click.option("-f", "--file", type=click.STRING, default=None)
 @click.option("-l", "--latest", is_flag=True)
-def cmm(latest: bool, file: Optional[str]):
-    if latest or file:
-        sys.exit("\n".join(get_latest_commit(file)))
-    sys.exit("\n".join(get_commit_message()))
+@click.option("-e", "--edit", is_flag=True)
+@click.option("-o", "--output-file", is_flag=True)
+def cmm(latest: bool, file: Optional[str], edit: bool, output_file: bool):
+    if latest and not file:
+        file = ".git/COMMIT_EDITMSG"
+    sys.exit(
+        "\n".join(get_latest_commit(file, edit, output_file)),
+    )
 
 
 @cli_git.command()
