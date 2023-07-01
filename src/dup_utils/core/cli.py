@@ -6,6 +6,7 @@ from pathlib import Path
 import click
 
 from .scripts.git import cli_git
+from .scripts.version import cli_vs
 
 
 @click.group()
@@ -29,6 +30,7 @@ def say():
 
 def main() -> None:
     cli.add_command(cli_git)
+    cli.add_command(cli_vs)
     cli.main()
 
 

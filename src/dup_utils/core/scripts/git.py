@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 import subprocess
 import sys
@@ -65,9 +66,9 @@ COMMIT_PREFIX = (
 
 COMMIT_PREFIX_TYPE = (
     ("Features", ":clipboard:"),  # 📋
-    ("Fix Bugs", ":hammer_and_wrench:"),  # 🛠️
-    ("Documents", ":bookmark_tabs:"),  # 📑
     ("Code Changes", ":black_nib:"),  # ✒️
+    ("Documents", ":bookmark_tabs:"),  # 📑
+    ("Fix Bugs", ":hammer_and_wrench:"),  # 🛠️
     ("Build & Workflow", ":package:"),  # 📦
 )
 
@@ -77,17 +78,22 @@ class CommitMsg:
     content: InitVar[str]
     mtype: InitVar[str] = None
 
+    def __str__(self):
+        return f"{self.mtype}: {self.content}"
+
     def __post_init__(self, content: str, mtype: str):
         self.content: str = self.__prepare_msg(content)
         if not mtype:
             self.mtype: str = self.__gen_msg_type()
 
     def __gen_msg_type(self) -> str:
-        prefix: str = self.content.split(":", maxsplit=1)[0]
-        return next(
-            (cp[1] for cp in COMMIT_PREFIX if prefix == cp[0]),
-            "Code Changes",
-        )
+        if s := re.search(r"^:\w+:\s(?P<prefix>\w+):", self.content):
+            prefix: str = s.groupdict()["prefix"]
+            return next(
+                (cp[1] for cp in COMMIT_PREFIX if prefix == cp[0]),
+                "Code Changes",
+            )
+        return "Code Changes"
 
     @property
     def mtype_icon(self):
@@ -213,12 +219,12 @@ def get_latest_tag(default: bool = True) -> Optional[str]:
         return None
 
 
-def get_commit_logs() -> List:
-    """"""
+def get_commit_logs() -> List[CommitLog]:
     tag2head: str = (
         f"{tag}..HEAD" if (tag := get_latest_tag(default=False)) else "HEAD"
     )
-    msgs = (
+    msgs: List[CommitLog] = []
+    for _ in (
         subprocess.check_output(
             [
                 "git",
@@ -230,11 +236,10 @@ def get_commit_logs() -> List:
         )
         .decode("ascii")
         .strip()
-        .split("\n")
-    )
-    for _ in msgs:
-        _s = _.split("|")
-        print(
+        .splitlines()
+    ):
+        _s: List[str] = _.split("|")
+        msgs.append(
             CommitLog(
                 hash=_s[0],
                 date=datetime.strptime(_s[1], "%Y-%m-%d"),
@@ -243,6 +248,13 @@ def get_commit_logs() -> List:
             )
         )
     return msgs
+
+
+def merge2latest_commit(no_verify: bool = False):
+    subprocess.run(
+        ["git", "commit", "--amend", "--no-edit", "-a"]
+        + (["--no-verify"] if no_verify else [])
+    )
 
 
 def get_latest_commit(
@@ -278,8 +290,8 @@ def get_latest_commit(
         lines[0] = CommitMsg(content=lines[0]).content
 
     if file and output_file:
-        with Path(file).open(mode="w", encoding="utf-8") as f_msg:
-            f_msg.write("\n".join(lines))
+        with Path(file).open(mode="w", encoding="utf-8", newline="") as f_msg:
+            f_msg.write(f"{os.linesep}".join(lines))
     return lines
 
 
@@ -309,7 +321,9 @@ def ltn():
 @cli_git.command()
 def cml():
     """Commit log from latest tag"""
-    sys.exit("\n".join(get_commit_logs()))
+    sys.exit(
+        "\n".join(str(x) for x in get_commit_logs()),
+    )
 
 
 @cli_git.command()
@@ -326,9 +340,16 @@ def cmm(latest: bool, file: Optional[str], edit: bool, output_file: bool):
 
 
 @cli_git.command()
-def cmp():
+@click.option("--no-verify", is_flag=True)
+def cmp(no_verify: bool):
     """Commit to the latest commit with same message"""
-    subprocess.run(["git", "commit", "--amend", "--no-fix"])
+    merge2latest_commit(no_verify=no_verify)
+
+
+@cli_git.command()
+def revert_cm():
+    """Revert the latest commit on local"""
+    subprocess.run(["git", "reset", "HEAD^"])
 
 
 if __name__ == "__main__":
