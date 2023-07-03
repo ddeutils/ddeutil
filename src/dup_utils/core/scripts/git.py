@@ -352,5 +352,27 @@ def revert_cm():
     subprocess.run(["git", "reset", "HEAD^"])
 
 
+@cli_git.command()
+def clear_local():
+    subprocess.run(
+        ["git", "checkout", "main"],
+        stderr=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+    )
+    subprocess.run(
+        ["git", "remote", "update", "origin", "--prune"],
+        stdout=subprocess.DEVNULL,
+    )
+    branches = (
+        subprocess.check_output(["git", "branch", "-vv"])
+        .decode("ascii")
+        .strip()
+        .splitlines()
+    )
+    for branch in branches:
+        if ": gone]" in branch:
+            subprocess.run(["git", "branch", "-d", branch.strip().split()[0]])
+
+
 if __name__ == "__main__":
     cli_git.main()
