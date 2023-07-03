@@ -4,10 +4,12 @@ import sys
 import typing
 from collections.abc import Callable
 
-from .check_convert import (
+from .checker import (
     can_int,
     # Check type of any value
     is_int,
+)
+from .convert import (
     # Expectation types
     must_bool,
     must_list,
@@ -116,6 +118,7 @@ def isinstance_check(check: typing.Any, instance) -> bool:
 
 
 def cached_import(module_path, class_name):
+    """Cached import package"""
     modules = sys.modules
     if (
         module_path not in modules
