@@ -142,9 +142,8 @@ def generate_version(
         + (["--list", "--dry-run"] if dry_run else [])
     )
     writer_changelog()
+    Path(".bumpversion.cfg").unlink(missing_ok=False)
     merge2latest_commit(no_verify=True)
-
-    # Path(".bumpversion.cfg").unlink(missing_ok=False)
     return 0
 
 

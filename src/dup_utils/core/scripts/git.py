@@ -157,6 +157,10 @@ def validate_for_warning(
             "There should be an empty line between "
             "the commit title and body."
         )
+
+    if not lines[0].strip().endswith("."):
+        lines[0] = f"{lines[0].strip()}."
+        results.append("There should not has dot in the end of commit message.")
     return results
 
 
