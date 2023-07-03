@@ -77,6 +77,7 @@ COMMIT_PREFIX_TYPE = (
 class CommitMsg:
     content: InitVar[str]
     mtype: InitVar[str] = None
+    body: str = None
 
     def __str__(self):
         return f"{self.mtype}: {self.content}"
@@ -234,7 +235,7 @@ def get_commit_logs() -> List[CommitLog]:
                 "git",
                 "log",
                 tag2head,
-                "--pretty=format:%h|%ad|%s%d|%an",
+                "--pretty=format:%h|%ad|%s|%b|%an",
                 "--date=short",
             ]
         )
@@ -247,8 +248,8 @@ def get_commit_logs() -> List[CommitLog]:
             CommitLog(
                 hash=_s[0],
                 date=datetime.strptime(_s[1], "%Y-%m-%d"),
-                msg=CommitMsg(content=_s[2]),
-                author=_s[3],
+                msg=CommitMsg(content=_s[2], body=_s[3]),
+                author=_s[4],
             )
         )
     return msgs

@@ -143,7 +143,7 @@ def generate_version(
     )
     writer_changelog()
     Path(".bumpversion.cfg").unlink(missing_ok=False)
-    merge2latest_commit(no_verify=True)
+    # merge2latest_commit(no_verify=True)
     return 0
 
 
