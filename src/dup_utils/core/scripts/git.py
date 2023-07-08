@@ -12,9 +12,7 @@ from typing import List, Optional, Tuple
 import click
 
 from .utils import (
-    Level as LV,
-)
-from .utils import (
+    Level,
     make_color,
 )
 
@@ -77,7 +75,7 @@ COMMIT_PREFIX_TYPE = (
 class CommitMsg:
     content: InitVar[str]
     mtype: InitVar[str] = None
-    body: str = None
+    body: str = None  # Mark new-line with |
 
     def __str__(self):
         return f"{self.mtype}: {self.content}"
@@ -167,16 +165,16 @@ def validate_for_warning(
 
 def validate_commit_msg(
     lines: List[str],
-) -> Tuple[List[str], LV]:
+) -> Tuple[List[str], Level]:
     if not lines:
         return (
             ["Please supply commit message without start with ``#``."],
-            LV.ERROR,
+            Level.ERROR,
         )
 
     rs = validate_for_warning(lines)
     if rs:
-        return rs, LV.WARNING
+        return rs, Level.WARNING
 
     has_story_id: bool = False
     for line in lines[1:]:
@@ -193,9 +191,9 @@ def validate_commit_msg(
     if not rs:
         return (
             ["The commit message has the required pattern."],
-            LV.OK,
+            Level.OK,
         )
-    return rs, LV.WARNING
+    return rs, Level.WARNING
 
 
 def get_branch_name() -> str:
@@ -224,18 +222,17 @@ def get_latest_tag(default: bool = True) -> Optional[str]:
         return None
 
 
-def get_commit_logs() -> List[CommitLog]:
-    tag2head: str = (
-        f"{tag}..HEAD" if (tag := get_latest_tag(default=False)) else "HEAD"
-    )
-    msgs: List[CommitLog] = []
-    for _ in (
+def prepare_commit_logs(tag2head: str):
+    """Prepare contents logs to List of commit log."""
+    results: List = []
+    prepare: List[str] = []
+    for line in (
         subprocess.check_output(
             [
                 "git",
                 "log",
                 tag2head,
-                "--pretty=format:%h|%ad|%s|%b|%an",
+                "--pretty=format:%h|%ad|%an%n%s%n%b%-C()%n(END)",
                 "--date=short",
             ]
         )
@@ -243,13 +240,36 @@ def get_commit_logs() -> List[CommitLog]:
         .strip()
         .splitlines()
     ):
-        _s: List[str] = _.split("|")
+        if line == "(END)":
+            results.append(prepare)
+            prepare = []
+            continue
+        prepare.append(line)
+    return results
+
+
+def get_commit_logs(
+    tag: Optional[str] = None,
+    all_logs: bool = False,
+) -> List[CommitLog]:
+    if tag:
+        tag2head: str = f"{tag}..HEAD"
+    elif all_logs or not (tag := get_latest_tag(default=False)):
+        tag2head = "HEAD"
+    else:
+        tag2head = f"{tag}..HEAD"
+    msgs: List[CommitLog] = []
+    for _ in prepare_commit_logs(tag2head):
+        if "Merge" in _[1]:
+            continue
+
+        _s: List[str] = _[0].split("|")
         msgs.append(
             CommitLog(
                 hash=_s[0],
                 date=datetime.strptime(_s[1], "%Y-%m-%d"),
-                msg=CommitMsg(content=_s[2], body=_s[3]),
-                author=_s[4],
+                msg=CommitMsg(content=_[1], body="|".join(_[2:])),
+                author=_s[2],
             )
         )
     return msgs
@@ -288,7 +308,7 @@ def get_latest_commit(
     rss, level = validate_commit_msg(lines)
     for rs in rss:
         print(make_color(rs, level))
-    if level not in (LV.OK, LV.WARNING):
+    if level not in (Level.OK, Level.WARNING):
         sys.exit(1)
 
     if edit:
@@ -313,21 +333,23 @@ def cli_git():
 
 @cli_git.command()
 def bn():
-    """Branch name"""
+    """Show the Current Branch"""
     sys.exit(get_branch_name())
 
 
 @cli_git.command()
 def ltn():
-    """The Latest Tag name"""
+    """Show the Latest Tag"""
     sys.exit(get_latest_tag())
 
 
 @cli_git.command()
-def cml():
-    """Commit log from latest tag"""
+@click.option("-t", "--tag", type=click.STRING, default=None)
+@click.option("-a", "--all-logs", is_flag=True)
+def cml(tag: Optional[str], all_logs: bool):
+    """Show the Commit Logs from the latest Tag to HEAD"""
     sys.exit(
-        "\n".join(str(x) for x in get_commit_logs()),
+        "\n".join(str(x) for x in get_commit_logs(tag=tag, all_logs=all_logs)),
     )
 
 
@@ -337,6 +359,7 @@ def cml():
 @click.option("-e", "--edit", is_flag=True)
 @click.option("-o", "--output-file", is_flag=True)
 def cmm(latest: bool, file: Optional[str], edit: bool, output_file: bool):
+    """Show the latest Commit message"""
     if latest and not file:
         file = ".git/COMMIT_EDITMSG"
     sys.exit(
@@ -347,18 +370,19 @@ def cmm(latest: bool, file: Optional[str], edit: bool, output_file: bool):
 @cli_git.command()
 @click.option("--no-verify", is_flag=True)
 def cmp(no_verify: bool):
-    """Commit to the latest commit with same message"""
+    """Commit changes to the Previous Commit with same message"""
     merge2latest_commit(no_verify=no_verify)
 
 
 @cli_git.command()
-def revert_cm():
-    """Revert the latest commit on local"""
+def rvcm():
+    """Revert the latest Commit on this Local"""
     subprocess.run(["git", "reset", "HEAD^"])
 
 
 @cli_git.command()
-def clear_local():
+def clb():
+    """Clear Local Branches that sync from the Remote"""
     subprocess.run(
         ["git", "checkout", "main"],
         stderr=subprocess.DEVNULL,
