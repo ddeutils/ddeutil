@@ -2,6 +2,20 @@
 
 ## Latest Changes
 
+### Features
+
+- :dart: feat: add load config function from pyproject file (_2023-07-08_)
+- :dart: feat: add clear-local command to git tools (_2023-07-03_)
+
+### Code Changes
+
+- :construction: refactor: change git log format that include commit body (_2023-07-03_)
+- :construction: refactor: change git log format that include commit body (_2023-07-03_)
+
+### Build & Workflow
+
+- :toolbox: build: add release filter for publish GitHub workflow (_2023-07-03_)
+
 ## 0.0.1
 
 ### Features

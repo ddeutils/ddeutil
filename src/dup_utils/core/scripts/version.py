@@ -6,7 +6,7 @@ import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List, Optional
 
 import click
 
@@ -71,13 +71,13 @@ def generate_group_commit_log() -> Dict[str, List[tuple]]:
     }
 
 
-def writer_changelog():
+def writer_changelog(file: str):
     group_logs: Dict[str, List[tuple]] = generate_group_commit_log()
 
-    with Path("CHANGELOG.md").open(encoding="utf-8") as f_changes:
+    with Path(file).open(encoding="utf-8") as f_changes:
         changes = f_changes.read().splitlines()
 
-    writer = Path("CHANGELOG.md").open(mode="w", encoding="utf-8", newline="")
+    writer = Path(file).open(mode="w", encoding="utf-8", newline="")
     skip_line: bool = True
     written: bool = False
     for line in changes:
@@ -87,6 +87,7 @@ def writer_changelog():
         if re.match(rf"## {BUMP_REGEX}", line):
             if not written:
                 writer.write(f"## Latest Changes{os.linesep}{os.linesep}")
+                written = True
             skip_line = True
 
         if skip_line:
@@ -131,7 +132,7 @@ def generate_version(
                 changelog=changelog,
             )
         )
-    writer_changelog()
+    writer_changelog(changelog)
     merge2latest_commit(no_verify=True)
     subprocess.run(
         [
@@ -141,10 +142,9 @@ def generate_version(
         ]
         + (["--list", "--dry-run"] if dry_run else [])
     )
-    writer_changelog()
-    merge2latest_commit(no_verify=True)
-
-    # Path(".bumpversion.cfg").unlink(missing_ok=False)
+    writer_changelog(changelog)
+    Path(".bumpversion.cfg").unlink(missing_ok=False)
+    # merge2latest_commit(no_verify=True)
     return 0
 
 
@@ -155,6 +155,18 @@ def current_version(file: str) -> str:
     raise NotImplementedError(f"{file} does not implement version value.")
 
 
+def load_project() -> Dict[str, Any]:
+    from .utils import load_pyproject
+
+    return load_pyproject().get("project", {})
+
+
+def load_config() -> Dict[str, Any]:
+    from .utils import load_pyproject
+
+    return load_pyproject().get("tool", {}).get("utils", {}).get("version", {})
+
+
 @click.group(name="vs")
 def cli_vs():
     """Version commands"""
@@ -162,9 +174,18 @@ def cli_vs():
 
 
 @cli_vs.command()
-def mcl():
+def conf():
+    """Return Configuration for Bump version"""
+    sys.exit(load_config())
+
+
+@cli_vs.command()
+@click.option("-c", "--changelog", type=click.Path(exists=True))
+def mcl(changelog: Optional[str]):
     """Make Changelogs file"""
-    writer_changelog()
+    if not changelog:
+        changelog = load_config().get("changelog", None) or "CHANGELOG.md"
+    writer_changelog(changelog)
     sys.exit(0)
 
 
@@ -179,11 +200,18 @@ def current(file: str):
 @click.option("-f", "--file", type=click.Path(exists=True))
 @click.option("-c", "--changelog", type=click.Path(exists=True))
 @click.option("--dry-run", is_flag=True)
-def bump(action: str, file: str, changelog: str, dry_run: bool):
+def bump(
+    action: str,
+    file: Optional[str],
+    changelog: Optional[str],
+    dry_run: bool,
+):
     if not file:
-        file = r".\src\dup_utils\core\__about__.py"
+        file = load_config().get("version", None) or (
+            f"./{load_project().get('name', 'unknown')}/__about__.py"
+        )
     if not changelog:
-        changelog = "CHANGELOG.md"
+        changelog = load_config().get("changelog", None) or "CHANGELOG.md"
     sys.exit(generate_version(action, file, changelog, dry_run))
 
 
