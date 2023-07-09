@@ -2,6 +2,8 @@
 
 ## Latest Changes
 
+## 0.0.2
+
 ### Features
 
 - :dart: feat: create cli script for git and version (#5) (_2023-07-08_)
