@@ -1,9 +1,18 @@
 from enum import Enum
 from pathlib import Path
+from typing import Any, Dict
+
+import tomli
 
 
 def pwd() -> Path:
     return Path(".")
+
+
+def load_pyproject() -> Dict[str, Any]:
+    """Load Configuration from pyproject.toml file."""
+    pyproject: Path = Path("pyproject.toml")
+    return tomli.loads(pyproject.read_text()) if pyproject.exists() else {}
 
 
 def ls(path: str):
@@ -46,4 +55,4 @@ class Level(str, Enum):
 
 def make_color(message: str, level: Level) -> str:
     """Print the message with a color for the corresponding level."""
-    return f"{Bcolors[level]}{Bcolors.BOLD}" f"{level}: {message}{Bcolors.ENDC}"
+    return f"{Bcolors[level]}{Bcolors.BOLD}{level}: {message}{Bcolors.ENDC}"

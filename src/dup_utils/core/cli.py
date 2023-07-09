@@ -16,15 +16,22 @@ def cli():
 
 
 @cli.command()
-@click.argument("path", type=click.Path(exists=True, resolve_path=True))
+@click.option(
+    "-p",
+    "--path",
+    type=click.Path(exists=True, resolve_path=True),
+    default=".",
+)
 def ls(path: str):
+    """List files in Current Path"""
     for file in Path(path).glob("*"):
         print(f"> {file.resolve()}")
-    sys.exit("Hello World")
+    sys.exit(0)
 
 
 @cli.command()
 def say():
+    """Say Hello World"""
     sys.exit("Hello World")
 
 

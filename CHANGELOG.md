@@ -2,6 +2,16 @@
 
 ## Latest Changes
 
+## 0.0.2
+
+### Features
+
+- :dart: feat: create cli script for git and version (#5) (_2023-07-08_)
+
+### Code Changes
+
+- :construction: refactor: change function name and generate group logs (#6) (_2023-07-09_)
+
 ## 0.0.1
 
 ### Features

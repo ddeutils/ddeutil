@@ -64,9 +64,12 @@ version = {attr = "dup_utils.core.__about__.__version__"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
-# TODO: Implement cli for use on cmd
 [project.scripts]
 utils = "dup_utils.core.__main__:main"
+
+[tool.utils.version]
+version = "./src/dup_utils/core/__about__.py"
+changelog = "CHANGELOG.md"
 
 [tool.coverage.run]
 branch = true
