@@ -338,7 +338,7 @@ def bn():
 
 
 @cli_git.command()
-def ltn():
+def tl():
     """Show the Latest Tag"""
     sys.exit(get_latest_tag())
 
@@ -346,7 +346,7 @@ def ltn():
 @cli_git.command()
 @click.option("-t", "--tag", type=click.STRING, default=None)
 @click.option("-a", "--all-logs", is_flag=True)
-def cml(tag: Optional[str], all_logs: bool):
+def cl(tag: Optional[str], all_logs: bool):
     """Show the Commit Logs from the latest Tag to HEAD"""
     sys.exit(
         "\n".join(str(x) for x in get_commit_logs(tag=tag, all_logs=all_logs)),
@@ -358,7 +358,12 @@ def cml(tag: Optional[str], all_logs: bool):
 @click.option("-l", "--latest", is_flag=True)
 @click.option("-e", "--edit", is_flag=True)
 @click.option("-o", "--output-file", is_flag=True)
-def cmm(latest: bool, file: Optional[str], edit: bool, output_file: bool):
+def cm(
+    file: Optional[str],
+    latest: bool,
+    edit: bool,
+    output_file: bool,
+):
     """Show the latest Commit message"""
     if latest and not file:
         file = ".git/COMMIT_EDITMSG"
@@ -369,19 +374,19 @@ def cmm(latest: bool, file: Optional[str], edit: bool, output_file: bool):
 
 @cli_git.command()
 @click.option("--no-verify", is_flag=True)
-def cmp(no_verify: bool):
+def commit_previous(no_verify: bool):
     """Commit changes to the Previous Commit with same message"""
     merge2latest_commit(no_verify=no_verify)
 
 
 @cli_git.command()
-def rvcm():
+def commit_revert():
     """Revert the latest Commit on this Local"""
     subprocess.run(["git", "reset", "HEAD^"])
 
 
 @cli_git.command()
-def clb():
+def clear_branch():
     """Clear Local Branches that sync from the Remote"""
     subprocess.run(
         ["git", "checkout", "main"],
@@ -401,6 +406,7 @@ def clb():
     for branch in branches:
         if ": gone]" in branch:
             subprocess.run(["git", "branch", "-d", branch.strip().split()[0]])
+    subprocess.run(["git", "checkout", "-"])
 
 
 if __name__ == "__main__":
