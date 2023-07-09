@@ -10,6 +10,8 @@ from typing import Any, Dict, List, Optional
 
 import click
 
+from .git import CommitLog
+
 BUMP_VERSION = (("bump", ":bookmark:"),)  # 🔖 :bookmark:
 
 BUMP_REGEX = (
@@ -58,21 +60,22 @@ replace = ## {{new_version}}
 cli_vs: click.Command
 
 
-def generate_group_commit_log() -> Dict[str, List[tuple]]:
+def generate_group_commit_log() -> Dict[str, List[CommitLog]]:
     """Generate Group of the Commit Logs"""
     from .git import get_commit_logs
 
-    group_logs: Dict[str, List[tuple]] = defaultdict(list)
-    for _ in get_commit_logs():
-        group_logs[_.msg.mtype].append((_.date, _.msg.content, _.author))
+    group_logs: Dict[str, List[CommitLog]] = defaultdict(list)
+    for log in get_commit_logs():
+        group_logs[log.msg.mtype].append(log)
     return {
-        k: sorted(v, key=lambda x: x[0], reverse=True)
+        k: sorted(v, key=lambda x: x.date, reverse=True)
         for k, v in group_logs.items()
     }
 
 
 def writer_changelog(file: str):
-    group_logs: Dict[str, List[tuple]] = generate_group_commit_log()
+    """Write Commit logs to the changelog file."""
+    group_logs: Dict[str, List[CommitLog]] = generate_group_commit_log()
 
     with Path(file).open(encoding="utf-8") as f_changes:
         changes = f_changes.read().splitlines()
@@ -105,18 +108,19 @@ def writer_changelog(file: str):
             writer.write(f"## Latest Changes{linesep}")
 
             for cpt in COMMIT_PREFIX_TYPE:
-                if cpt_exist := group_logs.get(cpt[0], []):
+                if cpt[0] in group_logs:
                     writer.write(f"### {cpt[0]}{os.linesep}{os.linesep}")
-                    for cm in cpt_exist:
+                    for log in group_logs[cpt[0]]:
                         writer.write(
-                            f"- {cm[1]} (_{cm[0]:%Y-%m-%d}_)" f"{os.linesep}"
+                            f"- {log.msg.content} (_{log.date:%Y-%m-%d}_)"
+                            f"{os.linesep}"
                         )
                     writer.write(os.linesep)
             written = True
     writer.close()
 
 
-def generate_version(
+def bump2version(
     action: str,
     file: str,
     changelog_file: str,
@@ -192,6 +196,11 @@ def changelog(file: Optional[str]):
 @cli_vs.command()
 @click.option("-f", "--file", type=click.Path(exists=True))
 def current(file: str):
+    """Return Current Version"""
+    if not file:
+        file = load_config().get("version", None) or (
+            f"./{load_project().get('name', 'unknown')}/__about__.py"
+        )
     sys.exit(current_version(file))
 
 
@@ -206,13 +215,14 @@ def bump(
     changelog_file: Optional[str],
     dry_run: bool,
 ):
+    """Bump Version"""
     if not file:
         file = load_config().get("version", None) or (
             f"./{load_project().get('name', 'unknown')}/__about__.py"
         )
     if not changelog_file:
         changelog_file = load_config().get("changelog", None) or "CHANGELOG.md"
-    sys.exit(generate_version(action, file, changelog_file, dry_run))
+    sys.exit(bump2version(action, file, changelog_file, dry_run))
 
 
 if __name__ == "__main__":

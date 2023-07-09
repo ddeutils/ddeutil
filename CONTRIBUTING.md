@@ -9,7 +9,7 @@
 ## Getting Installed
 
 ```shell
-git clone https://github.com/korawica/dup-fmt.git
+git clone https://github.com/korawica/dup-utils.git
 ```
 
 > **Note**: \
@@ -36,7 +36,7 @@ python -m venv venv
 
 ```shell
 (venv) $ pip install -e ".[test,dev]" --no-cache
-(venv) $ pip uninstall dup-fmt
+(venv) $ pip uninstall dup-utils
 ```
 
 ## Test Installation
