@@ -137,7 +137,16 @@ def bump2version(
             )
         )
     writer_changelog(file=changelog_file)
-    merge2latest_commit(no_verify=True)
+    # merge2latest_commit(no_verify=True)
+    subprocess.run(
+        [
+            "git",
+            "commit",
+            "-am",
+            "build: add bump2version config file",
+            "--no-verify",
+        ]
+    )
     subprocess.run(
         [
             "bump2version",
@@ -149,6 +158,30 @@ def bump2version(
     writer_changelog(file=changelog_file)
     Path(".bumpversion.cfg").unlink(missing_ok=False)
     merge2latest_commit(no_verify=True)
+    subprocess.run(
+        [
+            "git",
+            "reset",
+            "--soft",
+            "HEAD~2",
+        ],
+        stderr=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+    )
+    with Path(".git/COMMIT_EDITMSG").open(encoding="utf-8") as f_msg:
+        raw_msg = f_msg.read().splitlines()
+    subprocess.run(
+        [
+            "git",
+            "commit",
+            "--amend",
+            "-m",
+            raw_msg[0],
+            "--no-verify",
+        ],
+        stderr=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+    )
     return 0
 
 

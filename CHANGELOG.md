@@ -2,6 +2,16 @@
 
 ## Latest Changes
 
+## 0.0.2.post1
+
+### Features
+
+- :dart: feat: add force flag for commit-revert command (_2023-07-11_)
+
+### Code Changes
+
+- refactore: add commit subprocess instead merge2latest func (_2023-07-11_)
+
 ### Fix Bugs
 
 - :gear: fix: change decode of subprocess that use ascii to stdout.encoding (#8) (_2023-07-11_)
