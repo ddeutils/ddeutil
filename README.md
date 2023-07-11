@@ -1,6 +1,7 @@
 # Data Utility Packages: _Core_
 
 [![test](https://github.com/korawica/dup-utils/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/korawica/dup-utils/actions/workflows/tests.yml)
+[![python support version](https://img.shields.io/pypi/pyversions/dup-utils)](https://pypi.org/project/dup-utils/)
 [![size](https://img.shields.io/github/languages/code-size/korawica/dup-utils)](https://github.com/korawica/dup-utils)
 
 **Type**: `DUP` | **Tag**: `Data` `Utility` `Core`

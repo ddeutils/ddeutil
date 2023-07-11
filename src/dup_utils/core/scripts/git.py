@@ -408,7 +408,7 @@ def clear_branch():
     )
     for branch in branches:
         if ": gone]" in branch:
-            subprocess.run(["git", "branch", "-d", branch.strip().split()[0]])
+            subprocess.run(["git", "branch", "-D", branch.strip().split()[0]])
     subprocess.run(["git", "checkout", "-"])
 
 
