@@ -199,7 +199,7 @@ def validate_commit_msg(
 def get_branch_name() -> str:
     return (
         subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
-        .decode("ascii")
+        .decode(sys.stdout.encoding)
         .strip()
     )
 
@@ -211,7 +211,7 @@ def get_latest_tag(default: bool = True) -> Optional[str]:
                 ["git", "describe", "--tags", "--abbrev=0"],
                 stderr=subprocess.DEVNULL,
             )
-            .decode("ascii")
+            .decode(sys.stdout.encoding)
             .strip()
         )
     except subprocess.CalledProcessError:
@@ -236,7 +236,7 @@ def prepare_commit_logs(tag2head: str):
                 "--date=short",
             ]
         )
-        .decode("ascii")
+        .decode(sys.stdout.encoding)
         .strip()
         .splitlines()
     ):
@@ -295,7 +295,7 @@ def get_latest_commit(
             subprocess.check_output(
                 ["git", "log", "HEAD^..HEAD", "--pretty=format:%B"]
             )
-            .decode("ascii")
+            .decode(sys.stdout.encoding)
             .strip()
             .splitlines()
         )
@@ -399,7 +399,7 @@ def clear_branch():
     )
     branches = (
         subprocess.check_output(["git", "branch", "-vv"])
-        .decode("ascii")
+        .decode(sys.stdout.encoding)
         .strip()
         .splitlines()
     )
