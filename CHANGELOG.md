@@ -2,6 +2,10 @@
 
 ## Latest Changes
 
+### Fix Bugs
+
+- :gear: fix: change decode of subprocess that use ascii to stdout.encoding (#8) (_2023-07-11_)
+
 ## 0.0.2
 
 ### Features

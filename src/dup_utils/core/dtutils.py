@@ -90,14 +90,3 @@ def next_date(
     return dt + relativedelta.relativedelta(
         **{f"{mode}s": (-next_value if reverse else next_value)}
     )
-
-
-if __name__ == "__main__":
-    nowaday = now()
-    print(nowaday.weekday())
-    print(next_date(nowaday, "day", next_value=2).weekday())
-    _reverse = True
-    print(replace_date(nowaday, mode="hour", reverse=_reverse))
-    # for _ in range(12):
-    #     nowaday = next_date(nowaday, mode='month', reverse=_reverse)
-    #     print(nowaday)
