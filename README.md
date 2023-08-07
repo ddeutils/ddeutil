@@ -32,13 +32,52 @@ building to **PyPI**.
 
 ## Features
 
+### Base Utility Tools
+
+- Merge:
+- Split:
+
 ## CLI
 
 This Utility package provide some CLI for development process handler.
 
 ### Git
 
+```shell
+Usage: utils.exe git [OPTIONS] COMMAND [ARGS]...
+
+  Git commands
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  bn               Show the Current Branch
+  cl               Show the Commit Logs from the latest Tag to HEAD
+  clear-branch     Clear Local Branches that sync from the Remote
+  cm               Show the latest Commit message
+  commit-previous  Commit changes to the Previous Commit with same message
+  commit-revert    Revert the latest Commit on this Local
+  tl               Show the Latest Tag
+```
+
 ### Version
+
+```shell
+Usage: utils.exe vs [OPTIONS] COMMAND [ARGS]...
+
+  Version commands
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  bump       Bump Version
+  changelog  Make Changelogs file
+  conf       Return Configuration for Bump version
+  current    Return Current Version
+
+```
 
 ## License
 

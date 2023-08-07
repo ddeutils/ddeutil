@@ -39,7 +39,7 @@ python -m venv venv
 (venv) $ pip uninstall dup-utils
 ```
 
-## Test Installation
+## Test PyPI Installation
 
 ```shell
 (venv) $ pip install --index-url https://test.pypi.org/simple/ \
@@ -54,6 +54,8 @@ python -m venv venv
 ```
 
 ## Release Code
+
+When you finish the feature coding in your branch, you can merge the code to the version branch.
 
 ```shell
 bump2version patch

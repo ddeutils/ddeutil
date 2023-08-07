@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import (
     Any,
     Tuple,
@@ -47,9 +49,12 @@ def is_int(value: Any) -> bool:
     """
     if isinstance(value, int):
         return True
+
     _value = str(value)
     if not value:
         return False
+
+    # For string type, it has checking methods like:
     # ``str.isdigit()`` or ``str.isdecimal()`` or ``str.isnumeric()``
     return (
         _value[1:].isdecimal()

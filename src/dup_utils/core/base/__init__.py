@@ -32,7 +32,7 @@ from .hash import (
     is_same_pwd,
     tokenize,
 )
-from .merge_split import (
+from .merge import (
     merge_dict,
     merge_list,
 )
