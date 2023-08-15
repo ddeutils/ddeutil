@@ -124,6 +124,7 @@ def bump2version(
     action: str,
     file: str,
     changelog_file: str,
+    ignore_changelog: bool = False,
     dry_run: bool = False,
 ):
     from .git import merge2latest_commit
@@ -136,7 +137,8 @@ def bump2version(
                 changelog=changelog_file,
             )
         )
-    writer_changelog(file=changelog_file)
+    if not ignore_changelog:
+        writer_changelog(file=changelog_file)
     # merge2latest_commit(no_verify=True)
     subprocess.run(
         [
@@ -241,11 +243,13 @@ def current(file: str):
 @click.argument("action", type=click.STRING)
 @click.option("-f", "--file", type=click.Path(exists=True))
 @click.option("-c", "--changelog-file", type=click.Path(exists=True))
+@click.option("--ignore-changelog", is_flag=True)
 @click.option("--dry-run", is_flag=True)
 def bump(
     action: str,
     file: Optional[str],
     changelog_file: Optional[str],
+    ignore_changelog: bool,
     dry_run: bool,
 ):
     """Bump Version"""
@@ -255,7 +259,9 @@ def bump(
         )
     if not changelog_file:
         changelog_file = load_config().get("changelog", None) or "CHANGELOG.md"
-    sys.exit(bump2version(action, file, changelog_file, dry_run))
+    sys.exit(
+        bump2version(action, file, changelog_file, ignore_changelog, dry_run)
+    )
 
 
 if __name__ == "__main__":

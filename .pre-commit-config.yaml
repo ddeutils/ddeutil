@@ -1,3 +1,4 @@
+default_install_hook_types: [pre-commit, commit-msg]  # pre-push
 default_language_version:
     python: python3.8
 
@@ -111,9 +112,10 @@ repos:
         stages:
             - commit-msg
         types: [python]
-        entry: venv/Scripts/python.exe scripts/commit-msg-2.py
+#        entry: venv/Scripts/python.exe scripts/commit-msg-2.py
+        entry: venv/Scripts/utils.exe git cm -e -p
         language: system
-        args: [.git/COMMIT_EDITMSG]
+#        args: [.git/COMMIT_EDITMSG]
         always_run: true
 
     -   id: pytest-check

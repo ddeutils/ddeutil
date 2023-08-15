@@ -2,6 +2,17 @@
 
 ## Latest Changes
 
+### Code Changes
+
+
+- :test_tube: test: add test cases for base feature (_2023-08-15_)
+- :construction: refactored: split merge and split features to 2 files (_2023-08-07_)
+
+### Fix Bugs
+
+- :gear: fixed: fix import module that was chanaged name of package (_2023-08-15_)
+- :gear: fix: change delete command to force delete (_2023-07-11_)
+
 ## 0.0.2.post1
 
 ### Features
@@ -10,7 +21,7 @@
 
 ### Code Changes
 
-- refactore: add commit subprocess instead merge2latest func (_2023-07-11_)
+- :construction: refactored: add commit subprocess instead merge2latest func (_2023-07-11_)
 
 ### Fix Bugs
 

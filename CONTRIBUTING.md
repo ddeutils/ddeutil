@@ -39,6 +39,12 @@ python -m venv venv
 (venv) $ pip uninstall dup-utils
 ```
 
+### Pre-Commit Installation
+
+```shell
+pre-commit install
+```
+
 ## Test PyPI Installation
 
 ```shell
