@@ -6,7 +6,7 @@ from collections.abc import Mapping, Set
 from numbers import Number
 from typing import Any, Optional, List, Dict
 
-from src.dup_utils.core.base.merge_split import split
+from src.dup_utils.core.base.split import split
 
 ZERO_DEPTH_BASES = (str, bytes, Number, range, bytearray)
 
