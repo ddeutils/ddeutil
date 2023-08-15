@@ -3,7 +3,7 @@
 **Table of Contents**:
 
 - [Getting Installed](#getting-installed)
-- [Test Installation](#test-installation)
+- [Test Installation](#test-pypi-installation)
 - [Release Code](#release-code)
 
 ## Getting Installed
