@@ -362,25 +362,32 @@ def cl(tag: Optional[str], all_logs: bool):
 @click.option("-o", "--output-file", is_flag=True)
 @click.option("-p", "--prepare", is_flag=True)
 def cm(
-        file: Optional[str],
-        latest: bool,
-        edit: bool,
-        output_file: bool,
-        prepare: bool,
+    file: Optional[str],
+    latest: bool,
+    edit: bool,
+    output_file: bool,
+    prepare: bool,
 ):
     """Show the latest Commit message"""
     if latest and not file:
         file = ".git/COMMIT_EDITMSG"
     if not prepare:
-        sys.exit(
+        print(
             "\n".join(get_latest_commit(file, edit, output_file)),
         )
+        sys.exit(0)
     else:
         edit: bool = True
         cm_msg: str = "\n".join(get_latest_commit(file, edit, output_file))
         subprocess.run(
             [
-                "git", "commit", "--amend", "-a", "--no-verify", "-m", cm_msg,
+                "git",
+                "commit",
+                "--amend",
+                "-a",
+                "--no-verify",
+                "-m",
+                cm_msg,
             ]
         )
 
