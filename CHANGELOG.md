@@ -16,7 +16,7 @@
 
 ### Fix Bugs
 
-- :gear: fixed: fix import module that was chanaged name of package (_2023-08-15_)
+- :gear: fixed: fix import module that was changed name of package (_2023-08-15_)
 - :gear: fix: change delete command to force delete (_2023-07-11_)
 
 ## 0.0.2.post1
