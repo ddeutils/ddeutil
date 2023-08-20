@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 import sys
 from pathlib import Path
 
@@ -33,6 +34,14 @@ def ls(path: str):
 def say():
     """Say Hello World"""
     sys.exit("Hello World")
+
+
+@cli.command()
+def cove():
+    """Run coverage"""
+    subprocess.run(["coverage", "run", "--m", "pytest", "tests"])
+    subprocess.run(["coverage", "combine"])
+    subprocess.run(["coverage", "report", "--show-missing"])
 
 
 def main() -> None:

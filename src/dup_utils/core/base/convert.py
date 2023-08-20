@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 import ast
 from typing import (
     Any,
     Optional,
     Tuple,
     Union,
+    Dict,
+    List,
+    TypeVar,
 )
 
 import ujson
@@ -14,12 +19,16 @@ from src.dup_utils.core.base.checker import (
 )
 
 
+T = TypeVar("T")
+
+
 def str2bool(
     value: Optional[str] = None,
     force_raise: bool = True,
 ) -> bool:
-    """
-    :usage:
+    """Convert string value to boolean value.
+
+    .. usage:
         >>> str2bool('yes')
         True
         >>> str2bool('false')
@@ -42,9 +51,10 @@ def str2bool(
 def str2list(
     value: Optional[str] = None,
     force_raise: bool = True,
-) -> list:
-    """
-    :usage:
+) -> List[Any]:
+    """Convert string to list value.
+
+    .. usage:
         >>> str2list('["a", "b", "c"]')
         ['a', 'b', 'c']
         >>> str2list('["d""]', force_raise=False)
@@ -58,7 +68,7 @@ def str2list(
         return []
     if value.startswith("[") and value.endswith("]"):
         try:
-            # ISSUE: When we talk about performance
+            # ISSUE: When we talk about performance;
             # - ast.literal_eval(value) handler error SyntaxError (slower)
             return ujson.loads(value)
         except ujson.JSONDecodeError as err:
@@ -69,9 +79,13 @@ def str2list(
     return [value]
 
 
-def str2dict(value: Optional[str] = None, force_raise: bool = True) -> dict:
-    """
-    :usage:
+def str2dict(
+        value: Optional[str] = None,
+        force_raise: bool = True,
+) -> Dict[Any, Any]:
+    """Covert string value to dict value.
+
+    .. usage:
         >>> str2dict('{"a": 1, "b": 2, "c": 3}')
         {'a': 1, 'b': 2, 'c': 3}
         >>> str2dict('{"d""}', force_raise=False)
@@ -129,22 +143,36 @@ def str2int_float(
             ) from err
 
 
-def must_list(value: Optional[Union[str, list]] = None) -> list:
+def must_list(value: Optional[Union[str, List[Any]]] = None) -> List[Any]:
+    """Return the list value that was converted from string or list value.
+
+    .. usage::
+        >>> must_list('[1, 2, 3]')
+        [1, 2, 3]
+        >>> must_list(None)
+        []
+
+    """
     if value:
         return str2list(value) if isinstance(value, str) else value
     return []
 
 
 def must_bool(
-    value: Optional[Union[str, int, bool]] = None, force_raise: bool = False
+        value: Optional[Union[str, int, bool]] = None,
+        force_raise: bool = False,
 ) -> bool:
-    """
+    """Return the boolean value that was converted from string, integer,
+    or boolean value.
+
     .. usage::
         >>> must_bool('1')
         True
         >>> must_bool(0)
         False
         >>> must_bool("[1, 2, 'foo']")
+        False
+        >>> must_bool(None)
         False
     """
     if value:
@@ -157,8 +185,9 @@ def must_bool(
 
 
 def str2any(value: str) -> Any:
-    """Convert string value to real type.
-    :usage:
+    """Convert string value to the real type of that object.
+
+    .. usage:
         >>> str2any('1245')
         1245
         >>> str2any('"string"')
@@ -188,17 +217,23 @@ def str2any(value: str) -> Any:
     return value
 
 
-def revert_args(*args, **kwargs) -> Tuple[tuple, dict]:
+def revert_args(*args, **kwargs) -> Tuple[Tuple[Any], Dict[Any, Any]]:
     """Return arguments and key-word arguments.
+
     .. usage::
         >>> revert_args('value', 1, name='demo', _dict={'k1': 'v1', 'k2': 'v2'})
         (('value', 1), {'name': 'demo', '_dict': {'k1': 'v1', 'k2': 'v2'}})
+        >>> revert_args(1, 2, 3)
+        ((1, 2, 3), {})
+        >>> revert_args(foo='bar')
+        ((), {'foo': 'bar'})
     """
     return args, kwargs
 
 
-def str2args(value: Optional[str]) -> Tuple[tuple, dict]:
-    """Convert arguments string to args and kwargs
+def str2args(value: Optional[str]) -> Tuple[Tuple[Any], Dict[Any, Any]]:
+    """Convert arguments string to args and kwargs.
+
     .. usage::
         >>> str2args("'value', 1, name='demo'")
         (('value', 1), {'name': 'demo'})

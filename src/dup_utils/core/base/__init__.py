@@ -32,7 +32,7 @@ from .hash import (
     is_same_pwd,
     tokenize,
 )
-from .merge_split import (
+from .merge import (
     merge_dict,
     merge_list,
 )
@@ -105,7 +105,7 @@ def isinstance_check(check: typing.Any, instance) -> bool:
         if Ellipsis in _dict or (origin is not tuple):
             return all(isinstance_check(i, _dict[0]) for i in iter(check))
         try:
-            from src.dup_utils.core.base.merge_split import zip_equal
+            from src.dup_utils.core.base.merge import zip_equal
 
             return all(
                 isinstance_check(i[0], i[1]) for i in zip_equal(check, _dict)

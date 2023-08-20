@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import wraps
 
 
@@ -34,9 +36,9 @@ class memoize:
 
 
 def memoized_property(func_get):
-    """Return a property attribute for new-style classes that only calls its getter on the first
-    access. The result is stored and on subsequent accesses is returned, preventing the need to
-    call the getter any more.
+    """Return a property attribute for new-style classes that only calls its
+    getter on the first access. The result is stored and on subsequent
+    accesses is returned, preventing the need to call the getter any more.
 
     :usage:
         >>> class C(object):

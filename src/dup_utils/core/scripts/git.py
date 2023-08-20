@@ -47,14 +47,16 @@ BRANCH_EXCEPTIONS = [
     "bugfix",  # for fixing a bug
     "feature",  # for adding, removing or modifying a feature
     "test",  # for experimenting something which is not an issue
-    "wip",  # for a work in progress"
+    "wip",  # for a work in progress
 ]
 
 COMMIT_PREFIX = (
     ("feat", "Features", ":dart:"),  # 🎯, 📋 :clipboard:
+    ("fixed", "Fix Bugs", ":gear:"),  # ⚙️, 🛠️ :hammer_and_wrench:
     ("fix", "Fix Bugs", ":gear:"),  # ⚙️, 🛠️ :hammer_and_wrench:
     ("docs", "Documents", ":page_facing_up:"),  # 📄, 📑 :bookmark_tabs:
     ("style", "Code Changes", ":art:"),  # 🎨, 📝 :memo:, ✒️ :black_nib:
+    ("refactored", "Code Changes", ":construction:"),  # 🚧, 💬 :speech_balloon:
     ("refactor", "Code Changes", ":construction:"),  # 🚧, 💬 :speech_balloon:
     ("perf", "Code Changes", ":chart_with_upwards_trend:"),  # 📈, ⌛ :hourglass:
     ("test", "Code Changes", ":test_tube:"),  # 🧪, ⚗️ :alembic:
@@ -327,7 +329,7 @@ def get_branch_ref(branch):
 
 @click.group(name="git")
 def cli_git():
-    """Git commands"""
+    """Extended Git commands"""
     pass
 
 
@@ -358,18 +360,36 @@ def cl(tag: Optional[str], all_logs: bool):
 @click.option("-l", "--latest", is_flag=True)
 @click.option("-e", "--edit", is_flag=True)
 @click.option("-o", "--output-file", is_flag=True)
+@click.option("-p", "--prepare", is_flag=True)
 def cm(
     file: Optional[str],
     latest: bool,
     edit: bool,
     output_file: bool,
+    prepare: bool,
 ):
     """Show the latest Commit message"""
     if latest and not file:
         file = ".git/COMMIT_EDITMSG"
-    sys.exit(
-        "\n".join(get_latest_commit(file, edit, output_file)),
-    )
+    if not prepare:
+        print(
+            "\n".join(get_latest_commit(file, edit, output_file)),
+        )
+        sys.exit(0)
+    else:
+        edit: bool = True
+        cm_msg: str = "\n".join(get_latest_commit(file, edit, output_file))
+        subprocess.run(
+            [
+                "git",
+                "commit",
+                "--amend",
+                "-a",
+                "--no-verify",
+                "-m",
+                cm_msg,
+            ]
+        )
 
 
 @cli_git.command()
@@ -408,7 +428,7 @@ def clear_branch():
     )
     for branch in branches:
         if ": gone]" in branch:
-            subprocess.run(["git", "branch", "-d", branch.strip().split()[0]])
+            subprocess.run(["git", "branch", "-D", branch.strip().split()[0]])
     subprocess.run(["git", "checkout", "-"])
 
 
