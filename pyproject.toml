@@ -75,6 +75,7 @@ source = ["dup_utils", "tests"]
 omit = [
     "*/perfs/",
     "scripts/",
+    "perf_*.py",
 ]
 relative_files = true
 

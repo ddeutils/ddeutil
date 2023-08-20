@@ -329,7 +329,7 @@ def get_branch_ref(branch):
 
 @click.group(name="git")
 def cli_git():
-    """Git commands"""
+    """Extended Git commands"""
     pass
 
 

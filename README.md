@@ -4,16 +4,25 @@
 [![python support version](https://img.shields.io/pypi/pyversions/dup-utils)](https://pypi.org/project/dup-utils/)
 [![size](https://img.shields.io/github/languages/code-size/korawica/dup-utils)](https://github.com/korawica/dup-utils)
 
-**Type**: `DUP` | **Tag**: `Data` `Utility` `Core`
+**Type**: `DUP` | **Tag**: `Data` `Utility` `Core` `CLI`
 
 **Table of Contents:**:
 
-- [Overviews](#overviews)
 - [Features](#features)
+  - [Base Utility Functions](#base-utility-functions)
+  - [Utility Functions](#utility-functions)
 - [CLI](#cli)
+  - [Extended Git](#extended-git)
+  - [Version](#version)
 
 The **Data Utility Core** package with the utility objects that was created with
-sub-package namespace, `dup_utils`, for independent installation.
+sub-package namespace, `dup_utils`, for independent installation. This make this
+package able to extend with any extension with this namespace. In the future,
+this namespace able to scale out the coding with folder structure. You can add
+any features that you want to install and import by `import dup_utils.{extension}`.
+
+This package provide the Base Utility and Utility functions for any data package
+and **CLI** tools for develop data package like extended git and version commands.
 
 **Install from PyPI**:
 
@@ -21,32 +30,36 @@ sub-package namespace, `dup_utils`, for independent installation.
 pip install dup-utils
 ```
 
-In the future, this package can scale out the coding with folder structure. You
-can add any features that you want to install and import by
-`import dup_utils.{extension}`.
-
-## Overviews
-
-This package implement with _src-layout_ structure and use `setuptools` for package
-building to **PyPI**.
-
 ## Features
 
-### Base Utility Tools
+### Base Utility Functions
 
-- Merge:
-- Split:
+```text
+core.base
+    - cache
+    - merge
+    - split
+```
+
+### Utility Functions
+
+```text
+core
+    - decorator
+    - dtutils
+    - randomly
+```
 
 ## CLI
 
-This Utility package provide some CLI for development process handler.
+This Utility Package provide some CLI tools for handler development process.
 
-### Git
+### Extended Git
 
 ```shell
 Usage: utils.exe git [OPTIONS] COMMAND [ARGS]...
 
-  Git commands
+  Extended Git commands
 
 Options:
   --help  Show this message and exit.
