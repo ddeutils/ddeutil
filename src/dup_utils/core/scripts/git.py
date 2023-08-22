@@ -52,6 +52,7 @@ BRANCH_EXCEPTIONS = [
 
 COMMIT_PREFIX = (
     ("feat", "Features", ":dart:"),  # 🎯, 📋 :clipboard:
+    ("hotfix", "Fix Bugs", ":fire:"),  # 🔥
     ("fixed", "Fix Bugs", ":gear:"),  # ⚙️, 🛠️ :hammer_and_wrench:
     ("fix", "Fix Bugs", ":gear:"),  # ⚙️, 🛠️ :hammer_and_wrench:
     ("docs", "Documents", ":page_facing_up:"),  # 📄, 📑 :bookmark_tabs:
