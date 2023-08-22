@@ -15,15 +15,6 @@ MAX_THREAD = os.getenv("MAX_THREAD", 10)
 """
 
 
-"""
-Return a list of all Thread objects currently active. The list includes
-daemonic threads and dummy thread objects created by current_thread().
-It excludes terminated threads and threads that have not yet been started.
-However, the main thread is always part of the result, even when terminated
-"""
-threading.enumerate()
-
-
 class LearnSemaphore:
     # Usually, you create a Semaphore that will allow a certain number of threads
     # into a section of code. This one starts at 5.
