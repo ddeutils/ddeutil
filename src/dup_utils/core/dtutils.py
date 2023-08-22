@@ -27,11 +27,13 @@ def get_datetime_replace(
     year: Optional[int] = None,
     month: Optional[int] = None,
 ) -> Dict[str, tuple]:
-    _day: int = calendar.monthrange(year, month)[1] if year and month else 31
     return {
         "year": (1990, 9999),
         "month": (1, 12),
-        "day": (1, _day),
+        "day": (
+            1,
+            (calendar.monthrange(year, month)[1] if year and month else 31),
+        ),
         "hour": (0, 23),
         "minute": (0, 59),
         "second": (0, 59),
