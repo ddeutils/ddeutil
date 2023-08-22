@@ -10,7 +10,7 @@ except ImportError:
 
 from dateutil import relativedelta
 
-LOCAL_TZ: str = "Asia/Bangkok"
+LOCAL_TZ: ZoneInfo = ZoneInfo("Asia/Bangkok")
 
 DATETIME_SET: set = {
     "year",
@@ -54,8 +54,8 @@ class DatetimeDim(enum.IntEnum):
 
 
 def now(_tz: Optional[str] = None):
-    _tz: str = _tz or LOCAL_TZ
-    return datetime.datetime.now(ZoneInfo(_tz))
+    _tz: ZoneInfo = ZoneInfo(_tz) if _tz and isinstance(_tz, str) else LOCAL_TZ
+    return datetime.datetime.now(_tz)
 
 
 def get_date(fmt: str) -> Union[datetime.datetime, datetime.date, str]:
