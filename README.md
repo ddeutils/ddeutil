@@ -56,7 +56,7 @@ This Utility Package provide some CLI tools for handler development process.
 
 ### Extended Git
 
-```shell
+```text
 Usage: utils.exe git [OPTIONS] COMMAND [ARGS]...
 
   Extended Git commands
@@ -76,7 +76,7 @@ Commands:
 
 ### Version
 
-```shell
+```text
 Usage: utils.exe vs [OPTIONS] COMMAND [ARGS]...
 
   Version commands

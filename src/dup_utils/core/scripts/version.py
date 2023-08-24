@@ -139,12 +139,12 @@ def bump2version(
         )
     if not ignore_changelog:
         writer_changelog(file=changelog_file)
-    # merge2latest_commit(no_verify=True)
+    subprocess.run(["git", "add", "-A"])
     subprocess.run(
         [
             "git",
             "commit",
-            "-am",
+            "-m",
             "build: add bump2version config file",
             "--no-verify",
         ]

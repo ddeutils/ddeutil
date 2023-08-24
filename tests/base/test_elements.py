@@ -2,7 +2,7 @@ import logging
 import unittest
 from typing import List
 
-import src.dup_utils.core.base.elements as element
+import src.dup_utils.core.base.elements as elements
 
 
 class ConvertTestCase(unittest.TestCase):
@@ -29,5 +29,6 @@ class ConvertTestCase(unittest.TestCase):
     def test_only_one_with_default(self):
         for index, _list in enumerate(self.input_lists, start=0):
             self.assertEqual(
-                self.output_lists[index], element.only_one(_list, self.fix_list)
+                self.output_lists[index],
+                elements.only_one(_list, self.fix_list),
             )
