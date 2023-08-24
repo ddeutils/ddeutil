@@ -2,6 +2,21 @@
 
 ## Latest Changes
 
+## 0.0.4
+
+### Code Changes
+
+- :test_tube: test: add more initial test cases. (_2023-08-22_)
+- :art: style: change getter style of private attributes or methods. (_2023-08-22_)
+- :construction: refactored: rename core function and remove queues. (_2023-08-22_)
+- :construction: refactor: ⬆ bump pypa/gh-action-pypi-publish from 1.8.6 to 1.8.10 (#11) (_2023-08-20_)
+- :package: Create dependabot.yml (_2023-08-20_)
+
+### Fix Bugs
+
+- :gear: fixed: git in bump cli does not add config file after create. (_2023-08-24_)
+- :fire: hotfix: fix tomli dependency package. (_2023-08-22_)
+
 ## 0.0.3
 
 ### Features
