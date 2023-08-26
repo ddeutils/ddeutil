@@ -3,21 +3,20 @@ from __future__ import annotations
 import ast
 from typing import (
     Any,
-    Optional,
-    Tuple,
-    Union,
     Dict,
     List,
+    Optional,
+    Tuple,
     TypeVar,
+    Union,
 )
 
 import ujson
 
-from src.dup_utils.core.base.checker import (
+from .checker import (
     StringFalseLower,
     StringTrueLower,
 )
-
 
 T = TypeVar("T")
 
@@ -80,8 +79,8 @@ def str2list(
 
 
 def str2dict(
-        value: Optional[str] = None,
-        force_raise: bool = True,
+    value: Optional[str] = None,
+    force_raise: bool = True,
 ) -> Dict[Any, Any]:
     """Covert string value to dict value.
 
@@ -159,8 +158,8 @@ def must_list(value: Optional[Union[str, List[Any]]] = None) -> List[Any]:
 
 
 def must_bool(
-        value: Optional[Union[str, int, bool]] = None,
-        force_raise: bool = False,
+    value: Optional[Union[str, int, bool]] = None,
+    force_raise: bool = False,
 ) -> bool:
     """Return the boolean value that was converted from string, integer,
     or boolean value.
