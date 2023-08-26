@@ -2,6 +2,17 @@
 
 ## Latest Changes
 
+## 0.0.5
+
+### Features
+
+- :dart: feat: add filtering and pathutils features. (_2023-08-26_)
+- :dart: feat: add coverage cli command. (_2023-08-25_)
+
+### Fix Bugs
+
+- :gear: fixed: fix import internal module. (_2023-08-26_)
+
 ## 0.0.4
 
 ### Code Changes
