@@ -37,11 +37,24 @@ def say():
 
 
 @cli.command()
-def cove():
+@click.option(
+    "-m",
+    "--module",
+    type=click.STRING,
+    default="pytest",
+)
+@click.option(
+    "-h",
+    "--html",
+    is_flag=True,
+)
+def cove(module: str, html: bool):
     """Run coverage"""
-    subprocess.run(["coverage", "run", "--m", "pytest", "tests"])
+    subprocess.run(["coverage", "run", "--m", module, "tests"])
     subprocess.run(["coverage", "combine"])
     subprocess.run(["coverage", "report", "--show-missing"])
+    if html:
+        subprocess.run(["coverage", "html"])
 
 
 def main() -> None:

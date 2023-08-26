@@ -4,17 +4,17 @@ import sys
 from collections import deque
 from collections.abc import Mapping, Set
 from numbers import Number
-from typing import Any, Optional, List, Dict
+from typing import Any, Dict, List, Optional
 
-from src.dup_utils.core.base.split import split
+from .split import split
 
 ZERO_DEPTH_BASES = (str, bytes, Number, range, bytearray)
 
 
 def only_one(
-        check: List[str],
-        value: List[str],
-        default: bool = True,
+    check: List[str],
+    value: List[str],
+    default: bool = True,
 ) -> Optional[str]:
     """Get only one element from check list that exists in match list.
 
@@ -102,9 +102,7 @@ def getdot(
     raise ValueError(f"{_search} does not exists in {content}")
 
 
-def setdot(
-        search: str, content: dict, value: Any, **kwargs
-) -> Dict:
+def setdot(search: str, content: dict, value: Any, **kwargs) -> Dict:
     """
     .. usage:
         >>> setdot('data.value', {'data': {'value': 1}}, 2)
