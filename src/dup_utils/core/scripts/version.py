@@ -165,7 +165,7 @@ def bump2version(
             "git",
             "reset",
             "--soft",
-            "HEAD~2",
+            "HEAD~1",
         ],
         stderr=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
