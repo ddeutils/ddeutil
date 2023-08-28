@@ -2,6 +2,12 @@
 
 ## Latest Changes
 
+## 0.0.5.post0
+
+### Code Changes
+
+- :art: style: remove src prefix in import any modules. (_2023-08-28_)
+
 ### Fix Bugs
 
 - :fire: hotfix: adjust reset commit on bump cli command. (_2023-08-27_)
