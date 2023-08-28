@@ -2,6 +2,10 @@
 
 ## Latest Changes
 
+### Fix Bugs
+
+- :fire: hotfix: adjust reset commit on bump cli command. (_2023-08-27_)
+
 ## 0.0.5
 
 ### Features

@@ -1,6 +1,6 @@
 import unittest
 
-import src.dup_utils.core.base.sorting as sorting
+import dup_utils.core.base.sorting as sorting
 
 
 class SortingTestCase(unittest.TestCase):

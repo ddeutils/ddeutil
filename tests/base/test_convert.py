@@ -1,7 +1,7 @@
 import unittest
 from typing import List
 
-import src.dup_utils.core.base.convert as cc
+import dup_utils.core.base.convert as cc
 
 
 class ConvertTestCase(unittest.TestCase):

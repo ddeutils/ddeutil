@@ -86,6 +86,7 @@ exclude_lines = [
 ]
 
 [tool.pytest.ini_options]
+pythonpath = ["src"]
 console_output_style = "count"
 addopts = [
     "--strict-config",

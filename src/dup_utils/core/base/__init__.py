@@ -4,6 +4,11 @@ import sys
 import typing
 from collections.abc import Callable
 
+from .cache import (
+    clear_cache,
+    memoize,
+    memoized_property,
+)
 from .checker import (
     can_int,
     # Check type of any value
@@ -21,6 +26,16 @@ from .convert import (
     str2int_float,
     str2list,
 )
+from .elements import (
+    getdot,
+    hasdot,
+    only_one,
+    setdot,
+    size,
+)
+from .filtering import (
+    filter_dict,
+)
 from .hash import (
     checksum,
     freeze,
@@ -34,11 +49,27 @@ from .hash import (
 )
 from .merge import (
     merge_dict,
+    merge_dict_value,
+    merge_dict_values,
     merge_list,
+    merge_values,
+    zip_equal,
 )
 from .prepare import (
     remove_pad,
     round_up,
+)
+from .sorting import (
+    ordered,
+    reverse_mapping,
+    reverse_non_unique_mapping,
+    sort_list_by_priority,
+)
+from .splitter import (
+    isplit,
+    rsplit,
+    split,
+    split_str,
 )
 
 concat: typing.Callable[[typing.Any], str] = "".join
@@ -105,8 +136,6 @@ def isinstance_check(check: typing.Any, instance) -> bool:
         if Ellipsis in _dict or (origin is not tuple):
             return all(isinstance_check(i, _dict[0]) for i in iter(check))
         try:
-            from .merge import zip_equal
-
             return all(
                 isinstance_check(i[0], i[1]) for i in zip_equal(check, _dict)
             )

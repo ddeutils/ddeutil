@@ -1,6 +1,6 @@
 import unittest
 
-import src.dup_utils.core.decorator as decorator
+import dup_utils.core.decorator as decorator
 
 
 class DecoratorTestCase(unittest.TestCase):

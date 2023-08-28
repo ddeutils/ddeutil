@@ -73,6 +73,7 @@ def generate_group_commit_log() -> Dict[str, List[CommitLog]]:
     }
 
 
+# TODO: add new style of changelog file
 def writer_changelog(file: str):
     """Write Commit logs to the changelog file."""
     group_logs: Dict[str, List[CommitLog]] = generate_group_commit_log()
@@ -95,7 +96,6 @@ def writer_changelog(file: str):
 
         if skip_line:
             writer.write(line + os.linesep)
-            continue
         elif written:
             continue
         else:

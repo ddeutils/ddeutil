@@ -1,6 +1,5 @@
+import dup_utils.core.base.merge as merge
 import perfplot
-
-import src.dup_utils.core.base.merge as merge
 
 
 class MergePerfTest:
