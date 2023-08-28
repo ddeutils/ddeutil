@@ -1,5 +1,10 @@
 from .__about__ import __version__
 from .base import (
+    concat,
+    operate,
+    is_generic,
+    isinstance_check,
+    import_string,
     # checker
     can_int,
     # hash
