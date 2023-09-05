@@ -6,6 +6,7 @@ from base64 import b64encode
 from functools import wraps
 from typing import (
     Any,
+    Collection,
     Optional,
     Tuple,
 )
@@ -26,7 +27,7 @@ def checksum(value: Any) -> str:
 
 def hash_all(
     value: Any,
-    exclude: Optional[set] = None,
+    exclude: Optional[Collection] = None,
 ):
     """Hash values in dictionary
 
@@ -34,7 +35,7 @@ def hash_all(
         >>> hash_all({'foo': 'bar'})
         {'foo': '37b51d194a7513e45b56f6524f2d51f2'}
     """
-    _exclude_keys: set = exclude or set()
+    _exclude_keys: Collection = exclude or set()
     if isinstance(value, dict):
         return {
             k: hash_all(v) if k not in _exclude_keys else v
