@@ -433,5 +433,11 @@ def clear_branch():
     subprocess.run(["git", "checkout", "-"])
 
 
+@cli_git.command()
+def init_conf():
+    """Initialize local GIT config"""
+    return 0
+
+
 if __name__ == "__main__":
     cli_git.main()

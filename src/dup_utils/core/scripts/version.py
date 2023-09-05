@@ -74,6 +74,8 @@ def generate_group_commit_log() -> Dict[str, List[CommitLog]]:
 
 
 # TODO: add new style of changelog file
+# TODO: add parameter that able to write after release version like
+#  hot-changes commit
 def writer_changelog(file: str):
     """Write Commit logs to the changelog file."""
     group_logs: Dict[str, List[CommitLog]] = generate_group_commit_log()

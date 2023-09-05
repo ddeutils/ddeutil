@@ -197,7 +197,3 @@ class PathSearch:
             if number_now == (number_all - 1)
             else self._icon_next
         )
-
-
-if __name__ == "__main__":
-    touch("test.txt")
