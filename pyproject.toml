@@ -32,8 +32,8 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/korawica/dup_utils/"
-"Source Code" = "https://github.com/korawica/dup_utils/"
+Homepage = "https://github.com/korawica/dup-utils/"
+"Source Code" = "https://github.com/korawica/dup-utils/"
 
 [project.optional-dependencies]
 test = [
