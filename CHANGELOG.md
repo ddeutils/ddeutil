@@ -2,6 +2,24 @@
 
 ## Latest Changes
 
+## 0.1.0
+
+### Features
+
+- :dart: feat: init features of git and version cli. (_2023-09-05_)
+
+### Code Changes
+
+- :construction: refactored: change package name from dup-utils to ddeutil on PyPI. (_2023-09-07_)
+
+### Documents
+
+- :page_facing_up: docs: update source code url to GitHub page. (_2023-09-06_)
+
+### Fix Bugs
+
+- :fire: hotfix: add loss function from base init file (_2023-08-28_)
+
 ## 0.0.5.post0
 
 ### Code Changes
