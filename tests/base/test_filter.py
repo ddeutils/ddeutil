@@ -1,6 +1,6 @@
 import unittest
 
-import dup_utils.core.base.filtering as filtering
+import ddeutil.core.base.filtering as filtering
 
 
 class FilteringTestCase(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 
-import dup_utils.core.pathutils as pathutils
+import ddeutil.core.pathutils as pathutils
 
 
 class PathutilsTestCase(unittest.TestCase):

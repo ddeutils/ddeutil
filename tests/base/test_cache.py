@@ -1,6 +1,6 @@
 import unittest
 
-import dup_utils.core.base.cache as cache
+import ddeutil.core.base.cache as cache
 
 
 class CacheTestCase(unittest.TestCase):

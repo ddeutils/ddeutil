@@ -1,6 +1,6 @@
 import unittest
 
-import dup_utils.core.base.checker as ck
+import ddeutil.core.base.checker as ck
 
 
 class CheckTestCase(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 
-import dup_utils.core.base.prepare as pp
+import ddeutil.core.base.prepare as pp
 
 
 class PrepareTestCase(unittest.TestCase):

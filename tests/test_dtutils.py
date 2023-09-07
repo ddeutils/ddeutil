@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-import dup_utils.core.dtutils as dtutils
+import ddeutil.core.dtutils as dtutils
 
 
 class DtutilsTestCase(unittest.TestCase):

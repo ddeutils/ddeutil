@@ -1,5 +1,5 @@
 [project]
-name = "dup_utils"
+name = "ddeutil"
 description = "The utility objects for the data engine package"
 readme = {file = "README.md", content-type = "text/markdown"}
 license = {text = "MIT"}
@@ -45,7 +45,7 @@ test = [
     "perfplot>=0.10.2",
 ]
 dev = [
-    "dup_utils[test]",
+    "ddeutil[test]",
     "ruff>=0.0.138",
     "pre-commit>=3.3.3",
     "bump2version>=1.0.1"
@@ -56,23 +56,23 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
-version = {attr = "dup_utils.core.__about__.__version__"}
+version = {attr = "ddeutil.core.__about__.__version__"}
 
 # TODO: docs: https://github.com/netinvent/ofunctions/tree/master/ofunctions
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [project.scripts]
-utils = "dup_utils.core.__main__:main"
+ddeutil = "ddeutil.core.__main__:main"
 
 [tool.utils.version]
-version = "./src/dup_utils/core/__about__.py"
+version = "./src/ddeutil/core/__about__.py"
 changelog = "CHANGELOG.md"
 
 [tool.coverage.run]
 branch = true
 concurrency = ["thread", "multiprocessing"]
-source = ["dup_utils", "tests"]
+source = ["ddeutil", "tests"]
 omit = [
     "*/perfs/",
     "scripts/",
@@ -96,7 +96,7 @@ filterwarnings = ["error"]
 
 [tool.mypy]
 python_version = "3.8"
-files = ["dup_utils"]
+files = ["ddeutil"]
 show_error_codes = true
 pretty = true
 strict = true
@@ -104,7 +104,7 @@ local_partial_types = true
 warn_unreachable = true
 
 [[tool.mypy.overrides]]
-module = "dup_utils.utils"
+module = "ddeutil.utils"
 warn_unused_ignores = false
 ignore_missing_imports = true
 

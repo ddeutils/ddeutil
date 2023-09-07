@@ -1,6 +1,6 @@
 import unittest
 
-import dup_utils.core.base.splitter as split
+import ddeutil.core.base.splitter as split
 
 
 class SplitTestCase(unittest.TestCase):

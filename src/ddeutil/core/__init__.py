@@ -1,15 +1,11 @@
 from .__about__ import __version__
 from .base import (
-    concat,
-    operate,
-    is_generic,
-    isinstance_check,
-    import_string,
     # checker
     can_int,
     # hash
     checksum,
     clear_cache,
+    concat,
     # filtering
     filter_dict,
     freeze,
@@ -20,9 +16,12 @@ from .base import (
     hash_pwd,
     hash_str,
     hash_str_by_salt,
+    import_string,
+    is_generic,
     # Check type of any value
     is_int,
     is_same_pwd,
+    isinstance_check,
     # cache
     memoize,
     memoized_property,
@@ -37,6 +36,7 @@ from .base import (
     must_list,
     # elements
     only_one,
+    operate,
     # sorting
     ordered,
     # prepare
