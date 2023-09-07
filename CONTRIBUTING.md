@@ -20,7 +20,7 @@ to local. Please check the Python version on your local environment that match
 with the base version of this package.
 
 ```shell
-git clone https://github.com/korawica/dup-utils.git
+git clone https://github.com/korawica/ddeutil.git
 ```
 
 > **Note**: \
@@ -53,7 +53,7 @@ Third, I will install this package dependencies on my local environment.
 
 ```shell
 (venv) $ pip install -e ".[test,dev]" --no-cache
-(venv) $ pip uninstall dup-utils
+(venv) $ pip uninstall ddeutil
 ```
 
 Finally, I will set up the test and development packages for helping me when I
@@ -115,7 +115,7 @@ utils vs changelog ; utils git commit-previous
 (venv) $ pip install --index-url https://test.pypi.org/simple/ \
   --extra-index-url https://pypi.org/simple/ \
   --no-cache \
-  "dup-utils[test,dev]"
+  "ddeutil[test,dev]"
 (venv) $ pytest -v
 ```
 

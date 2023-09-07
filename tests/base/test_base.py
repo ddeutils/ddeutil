@@ -10,7 +10,7 @@ from typing import (
     Union,
 )
 
-from dup_utils.core.base import isinstance_check
+from ddeutil.core.base import isinstance_check
 
 
 class BaseTestCase(unittest.TestCase):
