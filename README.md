@@ -4,8 +4,6 @@
 [![python support version](https://img.shields.io/pypi/pyversions/ddeutil)](https://pypi.org/project/ddeutil/)
 [![size](https://img.shields.io/github/languages/code-size/korawica/ddeutil)](https://github.com/korawica/ddeutil)
 
-**Type**: `DUP` | **Tag**: `Data` `Utility` `Core` `CLI`
-
 **Table of Contents:**:
 
 - [Features](#features)
@@ -15,7 +13,7 @@
   - [Extended Git](#extended-git)
   - [Version](#version)
 
-The **Data Utility Core** package with the utility objects that was created with
+The **Core Utility** package with the utility objects that was created with
 sub-package namespace, `ddeutil`, for independent installation. This make this
 package able to extend with any extension with this namespace. In the future,
 this namespace able to scale out the coding with folder structure. You can add
@@ -29,6 +27,10 @@ and **CLI** tools for develop data package like extended git and version command
 ```shell
 pip install ddeutil
 ```
+
+In the future, this namespace package will implement extension package for
+dynamic installation such as you want to use file utility package that
+implement by this namespace, you can install by `pip install ddeutil-file`.
 
 ## Features
 
