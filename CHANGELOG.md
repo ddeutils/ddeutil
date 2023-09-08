@@ -2,6 +2,17 @@
 
 ## Latest Changes
 
+## 0.2.0
+
+### Code Changes
+
+- reafactored: remove cli feature from this project. (_2023-09-08_)
+- :test_tube: test: upgrade pre-commit hooks. (_2023-09-07_)
+
+### Documents
+
+- :page_facing_up: docs: update README and change url of source code on pyproject. (_2023-09-07_)
+
 ## 0.1.0
 
 ### Features
