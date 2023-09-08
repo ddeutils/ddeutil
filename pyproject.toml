@@ -26,8 +26,6 @@ dependencies = [
     'backports.zoneinfo>=0.2.1; python_version == "3.8"',
     "tzdata>=2023.3",
     "python-dateutil",
-    "click>=8.1.3",
-    "tomli>=2.0.1",
 ]
 dynamic = ["version"]
 
