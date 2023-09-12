@@ -56,7 +56,7 @@ class Parallelize:
                     )
                     self.shutdown()
                     sys.exit(1)
-        return map(lambda r: r[1], sorted(results, key=lambda r: r[0]))
+        return (r[1] for r in sorted(results, key=lambda r: r[0]))
 
     # This version doesn't handle the following cases properly:
     # - when a child process exists unexpectedly
