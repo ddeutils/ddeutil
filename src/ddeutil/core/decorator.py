@@ -1,7 +1,7 @@
 import contextlib
 import copy
 from functools import wraps
-from time import time
+from time import sleep, time
 
 
 def deepcopy(func):
@@ -134,6 +134,35 @@ def class_property(func):
     return ClassPropertyDescriptor(func)
 
 
+def timer(func):
+    """
+    .. usage::
+        >>> import time
+        >>> @timer
+        ... def will_sleep():
+        ...     time.sleep(2)
+        ...     return
+        >>> will_sleep()
+        Execution time: 2.003119945526123 seconds
+    """
+
+    def wrapper(*args, **kwargs):
+        # start the timer
+        start_time = time()
+        # call the decorated function
+        result = func(*args, **kwargs)
+        # remeasure the time
+        end_time = time()
+        # compute the elapsed time and print it
+        execution_time = end_time - start_time
+        print(f"Execution time: {execution_time} seconds")
+        # return the result of the decorated function execution
+        return result
+
+    # return reference to the wrapper function
+    return wrapper
+
+
 def timing(name):
     """
     .. usage::
@@ -177,3 +206,113 @@ def timer_perf(title):
     padded_name = f"{title} ".ljust(60, ".")
     padded_time = f" {(te - ts):0.2f}".rjust(6, ".")
     print(f"{padded_name}{padded_time}s", flush=True)
+
+
+def debug(func):
+    """
+    :usage:
+        >>> @debug
+        ... def add_numbers(x, y):
+        ...     return x + y
+        >>> add_numbers(7, y=5,)
+        Calling add_numbers with args: (7,) kwargs: {'y': 5}
+        add_numbers returned: 12
+        12
+    """
+
+    def wrapper(*args, **kwargs):
+        # print the function name and arguments
+        print(f"Calling {func.__name__} with args: {args} kwargs: {kwargs}")
+        # call the function
+        result = func(*args, **kwargs)
+        # print the results
+        print(f"{func.__name__} returned: {result}")
+        return result
+
+    return wrapper
+
+
+def exception_handler(func):
+    """
+    :usage:
+        >>> @exception_handler
+        ... def divide(x, y):
+        ...     result = x / y
+        ...     return result
+        >>> divide(10, 0)
+        An exception occurred: division by zero
+    """
+
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            # Handle the exception
+            print(f"An exception occurred: {str(e)}")
+            # Optionally, perform additional error handling or logging
+            # Reraise the exception if needed
+
+    return wrapper
+
+
+def validate_input(*validations):
+    """
+    :usage:
+        >>> @validate_input(lambda x: x > 0, lambda y: isinstance(y, str))
+        ... def divide_and_print(x, message):
+        ...     print(message)
+        ...     return 1 / x
+        >>> divide_and_print(5, "Hello!")
+        Hello!
+        0.2
+    """
+
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for i, val in enumerate(args):
+                if i < len(validations) and not validations[i](val):
+                    raise ValueError(f"Invalid argument: {val}")
+            for key, val in kwargs.items():
+                if key in validations[len(args) :] and not validations[
+                    len(args) :
+                ][key](val):
+                    raise ValueError(f"Invalid argument: {key}={val}")
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
+def retry(max_attempts, delay=1):
+    """
+    :usage:
+        >>> @retry(max_attempts=3, delay=2)
+        ... def fetch_data(url):
+        ...     print("Fetching the data ...")
+        ...     raise TimeoutError("Server is not responding.")
+        >>> fetch_data("https://example.com/data")
+        Fetching the data ...
+        Attempt 1 failed: Server is not responding.
+        Fetching the data ...
+        Attempt 2 failed: Server is not responding.
+        Fetching the data ...
+        Attempt 3 failed: Server is not responding.
+        Function failed after 3 attempts
+    """
+
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            attempts = 0
+            while attempts < max_attempts:
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    attempts += 1
+                    print(f"Attempt {attempts} failed: {e}")
+                    sleep(delay)
+            print(f"Function failed after {max_attempts} attempts")
+
+        return wrapper
+
+    return decorator
