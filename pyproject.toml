@@ -24,8 +24,8 @@ requires-python = ">=3.8.10"
 dependencies = [
     "ujson==5.8.0,<6.0.0",
     'backports.zoneinfo>=0.2.1; python_version == "3.8"',
-    "tzdata>=2023.3",
-    "python-dateutil",
+    "tzdata==2023.3",
+    "python-dateutil==2.8.2,<3.0.0",
 ]
 dynamic = ["version"]
 
@@ -35,10 +35,10 @@ Homepage = "https://github.com/korawica/ddeutil/"
 
 [project.optional-dependencies]
 test = [
-    "clishelf",
-    "types-python-dateutil",
-    "memory_profiler>=0.61.0",
-    "perfplot>=0.10.2",
+    "clishelf==0.0.4",
+    "types-python-dateutil==2.8.19.14",
+    "memory_profiler==0.61.0",
+    "perfplot==0.10.2,<1.0.0",
 ]
 
 [build-system]
