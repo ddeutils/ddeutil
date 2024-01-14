@@ -27,14 +27,12 @@ from .convert import (
     str2list,
 )
 from .elements import (
+    filter_dict,
     getdot,
     hasdot,
     only_one,
     setdot,
     size,
-)
-from .filtering import (
-    filter_dict,
 )
 from .hash import (
     checksum,
@@ -45,6 +43,7 @@ from .hash import (
     hash_str,
     hash_str_by_salt,
     is_same_pwd,
+    random_string,
     tokenize,
 )
 from .merge import (

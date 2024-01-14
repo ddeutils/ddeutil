@@ -1,13 +1,8 @@
 import logging
-import os
 import unittest
-from unittest.mock import patch
+from unittest import mock
 
-import ddeutil.core.randomly as randomly
-
-
-def fake_remove(path, *a, **k):
-    print("remove done")
+import ddeutil.core.base.hash as _hash
 
 
 class RandomTestCase(unittest.TestCase):
@@ -18,21 +13,12 @@ class RandomTestCase(unittest.TestCase):
         level=logging.INFO,
     )
 
-    @patch("os.remove", fake_remove)
-    def test(self):
-        try:
-            os.remove("%$!?&*")
-        except OSError as e:
-            print(e)
-        else:
-            print("test success")
-
     def setUp(self) -> None:
-        self.patcher = patch("random.choices", return_value="AA145WQ2")
+        self.patcher = mock.patch("random.choices", return_value="AA145WQ2")
         self.patcher.start()
 
     def tearDown(self) -> None:
         self.patcher.stop()
 
     def test_random_string(self):
-        self.assertEqual(randomly.random_string(), "AA145WQ2")
+        self.assertEqual(_hash.random_string(), "AA145WQ2")

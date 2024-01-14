@@ -102,7 +102,6 @@ def clear_cache(attrs: tuple):
         'the name'
         >>> c.load_name_count
         2
-
     """
 
     def clear_cache_internal(func_get):

@@ -39,6 +39,7 @@ from .base import (
     operate,
     # sorting
     ordered,
+    random_string,
     # prepare
     remove_pad,
     reverse_mapping,

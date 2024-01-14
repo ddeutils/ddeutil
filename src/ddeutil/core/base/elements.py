@@ -4,7 +4,7 @@ import sys
 from collections import deque
 from collections.abc import Mapping, Set
 from numbers import Number
-from typing import Any, Dict, List, Optional
+from typing import Any, Collection, Dict, List, Optional
 
 from .splitter import split
 
@@ -125,6 +125,32 @@ def setdot(search: str, content: dict, value: Any, **kwargs) -> Dict:
     if _ignore:
         return content
     raise ValueError(f"{_search} does not exists in {content}")
+
+
+def filter_dict(
+    value: Dict[Any, Any],
+    included: Optional[Collection] = None,
+    excluded: Optional[Collection] = None,
+):
+    """
+    .. usage:
+        >>> filter_dict({"foo": "bar"}, included={}, excluded={"foo"})
+        {}
+
+        >>> filter_dict(
+        ...     {"foo": 1, "bar": 2, "baz": 3},
+        ...     included=("foo", )
+        ... )
+        {'foo': 1}
+    """
+    _exc = excluded or ()
+    return dict(
+        filter(
+            lambda i: i[0]
+            in (v for v in (included or value.keys()) if v not in _exc),
+            value.items(),
+        )
+    )
 
 
 def size(value: Any) -> int:

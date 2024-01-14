@@ -32,3 +32,14 @@ class ConvertTestCase(unittest.TestCase):
                 self.output_lists[index],
                 elements.only_one(_list, self.fix_list),
             )
+
+
+class FilteringTestCase(unittest.TestCase):
+    def test_filter_dict(self):
+        self.assertDictEqual(
+            elements.filter_dict(
+                {"foo": "bar"},
+                excluded={"foo"},
+            ),
+            {},
+        )

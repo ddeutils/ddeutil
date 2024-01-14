@@ -150,7 +150,6 @@ def must_list(value: Optional[Union[str, List[Any]]] = None) -> List[Any]:
         [1, 2, 3]
         >>> must_list(None)
         []
-
     """
     if value:
         return str2list(value) if isinstance(value, str) else value

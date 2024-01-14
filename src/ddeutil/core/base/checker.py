@@ -29,7 +29,8 @@ def is_int(value: Any) -> bool:
     """Check value that is integer
 
     .. docs::
-        https://stackoverflow.com/questions/1265665/how-can-i-check-if-a-string-represents-an-int-without-using-try-except
+        https://stackoverflow.com/questions/1265665/
+        how-can-i-check-if-a-string-represents-an-int-without-using-try-except
 
     .. usage::
         >>> is_int('')

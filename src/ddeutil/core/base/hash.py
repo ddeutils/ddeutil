@@ -1,6 +1,8 @@
 import hashlib
 import hmac
 import os
+import random
+import string
 import uuid
 from base64 import b64encode
 from functools import wraps
@@ -197,3 +199,10 @@ def freeze_args(func):
         return func(*args, **kwargs)
 
     return wrapped
+
+
+def random_string(num_length: int = 8) -> str:
+    """Random string from uppercase ASCII and number 0-9"""
+    return "".join(
+        random.choices(string.ascii_uppercase + string.digits, k=num_length)
+    )
