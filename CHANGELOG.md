@@ -2,6 +2,42 @@
 
 ## Latest Changes
 
+## 0.2.1
+
+### Features
+
+- :dart: feat: add some decorator funcs from python blog. (_2023-10-05_)
+
+### Code Changes
+
+- :construction: refactored: remove parallel and example of thread. (_2024-01-14_)
+- :construction: refactored: merge filtering and randomly. (_2024-01-14_)
+- :construction: refactored: ⬆ bump actions/setup-python from 4 to 5 (_2024-01-01_)
+- :construction: refactored: 📦 bump clishelf from 0.1.0 to 0.1.1 (_2024-01-01_)
+- :construction: refactored: 📦 bump tzdata from 2023.3 to 2023.4 (_2024-01-01_)
+- :construction: refactored: 📦 update ujson requirement from <6.0.0,==5.8.0 to ==5.9.0 (_2024-01-01_)
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.8.10 to 1.8.11 (_2023-12-01_)
+- :construction: refactored: ⬆ bump clishelf from 0.0.4 to 0.1.0 (_2023-11-01_)
+- :art: style: add prefix on pre-commit ci hook and skip local test. (_2023-09-12_)
+- :construction: refactored: [pre-commit.ci] auto fixes from pre-commit.com hooks (_2023-09-11_)
+- :construction: refactored: ⬆ bump actions/checkout from 3 to 4 (_2023-09-11_)
+- :construction: refactored: remove contribute file from this project. (_2023-09-09_)
+
+### Documents
+
+- :page_facing_up: docs: update README for list all of features. (_2024-01-14_)
+- :page_facing_up: docs: remove cli from README. (_2023-09-08_)
+
+### Fix Bugs
+
+- :gear: fixed: change config key of clishelf. (_2024-01-14_)
+
+### Build & Workflow
+
+- :toolbox: build: change frequency of dependabot from weekly to monthly. (_2023-11-22_)
+- :toolbox: build: update deps version on pyproject. (_2023-10-12_)
+- :toolbox: build: change hook id on pre-commit config file. (_2023-09-12_)
+
 ## 0.2.0
 
 ### Code Changes
