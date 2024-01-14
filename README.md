@@ -35,8 +35,14 @@ implement by this namespace, you can install by `pip install ddeutil-file`.
 ```text
 core.base
     - cache
+    - checker
+    - convert
+    - elements
+    - hash
     - merge
-    - split
+    - prepare
+    - sorting
+    - splitter
 ```
 
 ### Utility Functions
