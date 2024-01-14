@@ -55,7 +55,7 @@ version = {attr = "ddeutil.core.__about__.__version__"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.utils.version]
+[tool.shelf.version]
 version = "./src/ddeutil/core/__about__.py"
 changelog = "CHANGELOG.md"
 
