@@ -10,23 +10,21 @@
   - [Base Utility Functions](#base-utility-functions)
   - [Utility Functions](#utility-functions)
 
-The **Core Utility** package with the utility objects that was created with
-sub-package namespace, `ddeutil`, for independent installation. This make this
-package able to extend with any extension with this namespace. In the future,
-this namespace able to scale out the coding with folder structure. You can add
-any features that you want to install and import by `import ddeutil.{extension}`.
+The **Core Utility** package implements the utility functions and objects
+that was created on sub-package namespace, `ddeutil`, design for independent
+installation. I make this package able to extend with any sub-extension with this
+namespace. This namespace able to scale out the coding with folder
+structure design. You can add any extension features and import by
+`import ddeutil.{extension}`.
 
-This package provide the Base Utility and Utility functions for any data package.
+This package provide the Base Utility functions and objects for any data package
+or data application.
 
 **Install from PyPI**:
 
 ```shell
 pip install ddeutil
 ```
-
-In the future, this namespace package will implement extension package for
-dynamic installation such as you want to use file utility package that
-implement by this namespace, you can install by `pip install ddeutil-file`.
 
 ## Features
 
