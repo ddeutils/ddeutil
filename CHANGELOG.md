@@ -2,6 +2,17 @@
 
 ## Latest Changes
 
+## 0.2.2
+
+### Features
+
+- :dart: feat: remove some funcs that does not use. (_2024-01-24_)
+
+### Documents
+
+- :page_facing_up: docs: update README that remove some func. (_2024-01-24_)
+- :page_facing_up: docs: update README file. (_2024-01-22_)
+
 ## 0.2.1
 
 ### Features
