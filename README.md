@@ -38,7 +38,6 @@ core.base
     - elements
     - hash
     - merge
-    - prepare
     - sorting
     - splitter
 ```

@@ -1,7 +1,12 @@
 import calendar
 import datetime
 import enum
-from typing import Dict, Optional, Union
+from typing import (
+    Dict,
+    Optional,
+    Tuple,
+    Union,
+)
 
 try:
     from zoneinfo import ZoneInfo
@@ -12,7 +17,7 @@ from dateutil import relativedelta
 
 LOCAL_TZ: ZoneInfo = ZoneInfo("Asia/Bangkok")
 
-DATETIME_SET: set = {
+DATETIME_SET: Tuple[str, ...] = (
     "year",
     "month",
     "day",
@@ -20,7 +25,7 @@ DATETIME_SET: set = {
     "minute",
     "second",
     "microsecond",
-}
+)
 
 
 def get_datetime_replace(
@@ -58,8 +63,17 @@ def now(_tz: Optional[str] = None):
     return datetime.datetime.now(_tz)
 
 
-def get_date(fmt: str) -> Union[datetime.datetime, datetime.date, str]:
-    _datetime: datetime.datetime = now()
+def get_date(
+    fmt: str,
+    *,
+    _tz: Optional[str] = None,
+) -> Union[datetime.datetime, datetime.date, str]:
+    """
+    Examples:
+        >>> get_date(fmt='%Y-%m-%d')
+        '2023-01-01'
+    """
+    _datetime: datetime.datetime = now(_tz)
     if fmt == "datetime":
         return _datetime
     elif fmt == "date":
@@ -70,6 +84,11 @@ def get_date(fmt: str) -> Union[datetime.datetime, datetime.date, str]:
 def replace_date(
     dt: datetime.datetime, mode: str, reverse: bool = False
 ) -> datetime.datetime:
+    """
+    Examples:
+        >>> replace_date(datetime.datetime(2023, 1, 31, 13, 2, 47), mode='day')
+        datetime.datetime(2023, 1, 31, 0, 0)
+    """
     assert mode in {"month", "day", "hour", "minute", "second", "microsecond"}
     replace_mapping: Dict[str, tuple] = get_datetime_replace(dt.year, dt.month)
     return dt.replace(
@@ -88,6 +107,15 @@ def next_date(
     reverse: bool = False,
     next_value: int = 1,
 ) -> datetime.datetime:
+    """
+    Examples:
+        >>> next_date(datetime.datetime(2023, 1, 31, 0, 0, 0), mode='day')
+        datetime.datetime(2023, 2, 1, 0, 0)
+        >>> next_date(datetime.datetime(2023, 1, 31, 0, 0, 0), mode='month')
+        datetime.datetime(2023, 2, 28, 0, 0)
+        >>> next_date(datetime.datetime(2023, 1, 31, 0, 0, 0), mode='hour')
+        datetime.datetime(2023, 1, 31, 1, 0)
+    """
     assert mode in {"month", "day", "hour", "minute", "second", "microsecond"}
     return dt + relativedelta.relativedelta(
         **{f"{mode}s": (-next_value if reverse else next_value)}

@@ -7,7 +7,7 @@ from time import sleep, time
 def deepcopy(func):
     """Deep copy method
 
-    .. usage::
+    EExamples:
         >>> @deepcopy
         ... def foo(a, b, c=None):
         ...     c = c or {}
@@ -38,7 +38,7 @@ def deepcopy(func):
 def deepcopy_args(func):
     """Deep copy method
 
-    .. usage::
+    Examples:
         >>> class Foo:
         ...
         ...     @deepcopy_args
@@ -72,7 +72,7 @@ class classproperty:
     """Decorator that converts a method with a single cls argument
     into a property that can be accessed directly from the class.
 
-    .. usage::
+    Examples:
 
         >>> class Car:
         ...     wheel: int = 4
@@ -119,8 +119,7 @@ class ClassPropertyDescriptor:
 
 def class_property(func):
     """
-    .. usage::
-
+    Examples:
         >>> class Car:
         ...     wheel: int = 4
         ...     @class_property
@@ -136,7 +135,7 @@ def class_property(func):
 
 def timer(func):
     """
-    .. usage::
+    Examples:
         >>> import time
         >>> @timer
         ... def will_sleep():
@@ -163,9 +162,9 @@ def timer(func):
     return wrapper
 
 
-def timing(name):
+def timing(name: str):
     """
-    .. usage::
+    Examples:
         >>> import time
         >>> @timing("Sleep")
         ... def will_sleep():
@@ -192,9 +191,9 @@ def timing(name):
 
 
 @contextlib.contextmanager
-def timer_perf(title):
+def timer_perf(title: str):
     """
-    :usage:
+    Examples:
         >>> import time
         >>> with timer_perf('Sleep'):
         ...     time.sleep(2)
@@ -210,7 +209,7 @@ def timer_perf(title):
 
 def debug(func):
     """
-    :usage:
+    Examples:
         >>> @debug
         ... def add_numbers(x, y):
         ...     return x + y
@@ -234,7 +233,7 @@ def debug(func):
 
 def exception_handler(func):
     """
-    :usage:
+    Examples:
         >>> @exception_handler
         ... def divide(x, y):
         ...     result = x / y
@@ -246,9 +245,9 @@ def exception_handler(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except Exception as e:
+        except Exception as err:
             # Handle the exception
-            print(f"An exception occurred: {str(e)}")
+            print(f"An exception occurred: {str(err)}")
             # Optionally, perform additional error handling or logging
             # Reraise the exception if needed
 
@@ -284,7 +283,7 @@ def validate_input(*validations):
     return decorator
 
 
-def retry(max_attempts, delay=1):
+def retry(max_attempts, delay: int = 1):
     """
     :usage:
         >>> @retry(max_attempts=3, delay=2)

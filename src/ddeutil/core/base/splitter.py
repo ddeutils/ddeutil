@@ -39,10 +39,9 @@ def isplit(source: AnyStr, sep=None, regex=False):
     :returns:
         generator yielding elements of string.
 
-    .. usage::
+    Examples:
         >>> list(isplit("abcb", "b"))
         ['a', 'c', '']
-
         >>> next(isplit("foo bar"))
         'foo'
     """
@@ -79,11 +78,12 @@ def isplit(source: AnyStr, sep=None, regex=False):
 def split(
     source: str,
     sep: str = None,
+    *,
     maxsplit: int = -1,
     mustsplit: bool = True,
 ):
     """
-    .. usage::
+    Examples:
         >>> split('asd|fasd', '|', maxsplit=2)
         ['asd', 'fasd', None]
 
@@ -101,17 +101,16 @@ def split(
 def rsplit(
     source: str,
     sep: str = None,
+    *,
     maxsplit: int = -1,
     mustsplit: bool = True,
 ):
     """
-    .. usage::
+    Examples:
         >>> rsplit('asd|foo', '|', maxsplit=2)
         [None, 'asd', 'foo']
-
         >>> rsplit('foo bar', maxsplit=1)
         ['foo', 'bar']
-
         >>> rsplit('foo bar', maxsplit=2, mustsplit=False)
         ['foo', 'bar']
     """

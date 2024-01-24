@@ -3,9 +3,10 @@ from functools import partial
 from typing import (
     Any,
     Dict,
-    Iterable,
     List,
     Optional,
+    Set,
+    Tuple,
     TypeVar,
     Union,
 )
@@ -28,7 +29,7 @@ def ordered(value: Any) -> Any:
 
 
 def sort_list_by_priority(
-    values: Union[Iterable, List[T]],
+    values: Union[List[T], Set[T], Tuple[T, ...]],
     priority: List[T],
     reverse: bool = False,
     mode: Optional[str] = None,
@@ -39,6 +40,12 @@ def sort_list_by_priority(
         >>> sort_list_by_priority(values=[1, 2, 2, 3], priority=[2, 3, 1])
         [2, 2, 3, 1]
         >>> sort_list_by_priority(values={1, 2, 3}, priority=[2,3])
+        [2, 3, 1]
+        >>> sort_list_by_priority(values=(1, 2, 3), priority=[2,3])
+        [2, 3, 1]
+        >>> sort_list_by_priority(
+        ...     values=(1, 2, 3), priority=[2,3], mode="enumerate"
+        ... )
         [2, 3, 1]
     """
     _mode: str = mode or "default"
@@ -54,16 +61,13 @@ def sort_list_by_priority(
     def default(_values, _priority, _reverse):
         priority_dict = defaultdict(
             lambda: len(_priority),
-            zip(
-                _priority,
-                range(len(_priority)),
-            ),
+            zip(_priority, range(len(_priority))),
         )
         priority_getter = priority_dict.__getitem__  # dict.get(key)
         return sorted(_values, key=priority_getter, reverse=_reverse)
 
     switcher: Dict[str, partial] = {
-        "chain": partial(default, values, priority, reverse),
+        "default": partial(default, values, priority, reverse),
         "enumerate": partial(_enumerate, values, priority, reverse),
     }
 
