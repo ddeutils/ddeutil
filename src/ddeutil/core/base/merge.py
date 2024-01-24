@@ -130,7 +130,9 @@ def merge_dict_value(*dicts, **kwargs) -> dict:
 def merge_dict_values(*dicts, **kwargs) -> dict:
     """
     :usage:
-        >>> merge_dict_values({'a': [1, 2], 'b': []}, {'a': [1, 3], 'b': [5, 6]})
+        >>> merge_dict_values(
+        ...     {'a': [1, 2], 'b': []}, {'a': [1, 3], 'b': [5, 6]}
+        ... )
         {'a': [1, 2, 1, 3], 'b': [5, 6]}
     """
     _dup: bool = kwargs.pop("duplicate", True)
@@ -153,7 +155,11 @@ def merge_values(
 ) -> Union[int, float]:
     """
     :usage:
-        >>> merge_values({1: 128, 2: 134, 3: 45, 4: 104, 5: 129}, start=3, end=5)
+        >>> merge_values(
+        ...     {1: 128, 2: 134, 3: 45, 4: 104, 5: 129},
+        ...     start=3,
+        ...     end=5,
+        ... )
         278
     """
     _start: int = start or 0

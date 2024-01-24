@@ -15,12 +15,10 @@ from .base import (
     hash_all,
     hash_pwd,
     hash_str,
-    hash_str_by_salt,
     import_string,
     is_generic,
     # Check type of any value
     is_int,
-    is_same_pwd,
     isinstance_check,
     # cache
     memoize,
@@ -39,15 +37,13 @@ from .base import (
     operate,
     # sorting
     ordered,
-    random_string,
+    random_str,
     # prepare
     remove_pad,
-    reverse_mapping,
-    reverse_non_unique_mapping,
     round_up,
     rsplit,
+    same_pwd,
     setdot,
-    size,
     sort_list_by_priority,
     # split
     split,

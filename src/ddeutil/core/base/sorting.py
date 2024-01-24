@@ -1,18 +1,22 @@
-import re
 from collections import defaultdict
 from functools import partial
 from typing import (
     Any,
+    Dict,
     Iterable,
     List,
     Optional,
+    TypeVar,
     Union,
 )
 
+T = TypeVar("T")
 
-def ordered(value: Any):
+
+def ordered(value: Any) -> Any:
     """Order an object by ``sorted``.
-    .. usage::
+
+    Examples:
         >>> ordered([[11], [2], [4, 1]])
         [[1, 4], [2], [11]]
     """
@@ -24,16 +28,16 @@ def ordered(value: Any):
 
 
 def sort_list_by_priority(
-    values: Union[Iterable, List],
-    priority: List,
+    values: Union[Iterable, List[T]],
+    priority: List[T],
     reverse: bool = False,
     mode: Optional[str] = None,
-) -> List:
+) -> List[T]:
     """Sorts an iterable according to a list of priority items.
-    :usage:
+
+    Examples:
         >>> sort_list_by_priority(values=[1, 2, 2, 3], priority=[2, 3, 1])
         [2, 2, 3, 1]
-
         >>> sort_list_by_priority(values={1, 2, 3}, priority=[2,3])
         [2, 3, 1]
     """
@@ -58,37 +62,10 @@ def sort_list_by_priority(
         priority_getter = priority_dict.__getitem__  # dict.get(key)
         return sorted(_values, key=priority_getter, reverse=_reverse)
 
-    switcher: dict = {
+    switcher: Dict[str, partial] = {
         "chain": partial(default, values, priority, reverse),
         "enumerate": partial(_enumerate, values, priority, reverse),
     }
 
     func = switcher.get(_mode, lambda: [])
     return func()
-
-
-def atoi(text):
-    return int(text) if text.isdigit() else text
-
-
-def alphanumeric_sort(text):
-    """
-    alist.sort(key=natural_keys) sorts in human order
-    http://nedbatchelder.com/blog/200712/human_sorting.html
-    (See Toothy's implementation in the comments)
-    """
-    return [atoi(c) for c in re.split(r"(\d+)", text)]
-
-
-def reverse_non_unique_mapping(d):
-    result = {}
-    for k, v in d.items():
-        if v in result:
-            result[v].append(k)
-        else:
-            result[v] = [k]
-    return result
-
-
-def reverse_mapping(d):
-    return {v: k for k, v in d.items()}

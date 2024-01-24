@@ -1,12 +1,19 @@
 from __future__ import annotations
 
-import sys
-from collections import deque
-from collections.abc import Mapping, Set
 from numbers import Number
-from typing import Any, Collection, Dict, List, Optional
+from typing import (
+    Any,
+    Collection,
+    Dict,
+    List,
+    Optional,
+)
 
-from .splitter import split
+try:
+    from .splitter import split
+except ImportError:
+    from splitter import split
+
 
 ZERO_DEPTH_BASES = (str, bytes, Number, range, bytearray)
 
@@ -104,7 +111,7 @@ def getdot(
 
 def setdot(search: str, content: dict, value: Any, **kwargs) -> Dict:
     """
-    .. usage:
+    Examples:
         >>> setdot('data.value', {'data': {'value': 1}}, 2)
         {'data': {'value': 2}}
         >>> setdot('data.value.key', {'data': {'value': 1}}, 2, ignore=True)
@@ -133,7 +140,7 @@ def filter_dict(
     excluded: Optional[Collection] = None,
 ):
     """
-    .. usage:
+    Examples:
         >>> filter_dict({"foo": "bar"}, included={}, excluded={"foo"})
         {}
 
@@ -151,56 +158,3 @@ def filter_dict(
             value.items(),
         )
     )
-
-
-def size(value: Any) -> int:
-    """Recursively iterate to sum size of object & members.
-
-        Empty
-        Bytes  type        scaling notes
-        28     int         +4 bytes about every 30 powers of 2
-        37     bytes       +1 byte per additional byte
-        49     str         +1-4 per additional character (depending on max width)
-        48     tuple       +8 per additional item
-        64     list        +8 for each additional
-        224    set         5th increases to 736; 21nd, 2272; 85th, 8416; 341, 32992
-        240    dict        6th increases to 368; 22nd, 1184; 43rd, 2280; 86th,
-                            4704; 171st, 9320
-        136    func def    does not include default args and other attrs
-        1056   class def   no slots
-        56     class inst  has a __dict__ attr, same scaling as dict above
-        888    class def   with slots
-        16     __slots__   seems to store in mutable tuple-like structure
-                            first slot grows to 48, and so on.
-
-    .. usage:
-        >>> size({'foo': 'bar'})
-        336
-        >>> size('foo')
-        52
-    """
-    _seen_ids = set()
-
-    def inner(obj):
-        obj_id = id(obj)
-        if obj_id in _seen_ids:
-            return 0
-        _seen_ids.add(obj_id)
-        _size = sys.getsizeof(obj)
-        if isinstance(obj, ZERO_DEPTH_BASES):
-            # bypass remaining control flow and return
-            pass
-        elif isinstance(obj, (tuple, list, Set, deque)):
-            _size += sum(inner(i) for i in obj)
-        elif isinstance(obj, Mapping) or hasattr(obj, "items"):
-            _size += sum(inner(k) + inner(v) for k, v in obj.items())
-        # Check for custom object instances - may subclass above too
-        if hasattr(obj, "__dict__"):
-            _size += inner(vars(obj))
-        if hasattr(obj, "__slots__"):  # can have __slots__ with __dict__
-            _size += sum(
-                inner(getattr(obj, s)) for s in obj.__slots__ if hasattr(obj, s)
-            )
-        return _size
-
-    return inner(value)

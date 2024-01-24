@@ -3,7 +3,6 @@ import hmac
 import os
 import random
 import string
-import uuid
 from base64 import b64encode
 from functools import wraps
 from typing import (
@@ -33,7 +32,7 @@ def hash_all(
 ):
     """Hash values in dictionary
 
-    .. usage::
+    Examples:
         >>> hash_all({'foo': 'bar'})
         {'foo': '37b51d194a7513e45b56f6524f2d51f2'}
     """
@@ -54,67 +53,50 @@ def hash_all(
     return hashlib.md5(value.encode("utf-8")).hexdigest()
 
 
-def hash_str(value: str, length: int = 8) -> str:
+def hash_str(value: str, n: int = 8) -> str:
     """Hash str input to number with SHA256 algorithm
     more algoritm be md5, sha1, sha224, sha256, sha384, sha512
-    :usage:
+
+    Examples:
         >>> hash_str('Hello World')
         '40300654'
-
         >>> hash_str('hello world')
         '05751529'
     """
-    _algorithm: str = "sha256"
-    return str(
-        int(
-            getattr(hashlib, _algorithm)(value.encode("utf-8")).hexdigest(),
-            16,
-        )
-    )[-length:]
-
-
-def hash_str_by_salt(value):
-    """Hash str
-
-    .. usage::
-        >>> hash_str_by_salt('P@ssw0rd')
-        ('19787c1219844c599915852bdd3ac6df', '7082...f895bb')
-    """
-    salt = uuid.uuid4().hex
-    hashed_password = hashlib.sha512((value + salt).encode("utf-8")).hexdigest()
-    return salt, hashed_password
+    return str(int(hashlib.sha256(value.encode("utf-8")).hexdigest(), 16))[-n:]
 
 
 def hash_pwd(password: str) -> Tuple[bytes, bytes]:
     """Hash the provided password with a randomly-generated salt and return the
     salt and hash to store in the database.
 
-    .. warning::
-        - The use of a 16-byte salt and 100000 iterations of PBKDF2 match
-          the minimum numbers recommended in the Python docs. Further increasing
-          the number of iterations will make your hashes slower to compute,
-          and therefore more secure.
+    Warnings:
+        * The use of a 16-byte salt and 100000 iterations of PBKDF2 match
+            the minimum numbers recommended in the Python docs. Further increasing
+            the number of iterations will make your hashes slower to compute,
+            and therefore more secure.
 
-    .. ref::
-        - https://stackoverflow.com/questions/9594125/salt-and-hash-a-password-in-python/56915300#56915300
+    References:
+        * https://stackoverflow.com/questions/9594125/salt-and-hash-a-password-in-python/56915300#56915300
     """
+    # Able use `uuid.uuid4().hex`
     salt = b64encode(os.urandom(16))
-    pw_hash = hashlib.pbkdf2_hmac(
+    hashed_password = hashlib.pbkdf2_hmac(
         "sha256",
         password.encode("utf-8"),
         salt,
         100000,
     )
-    return salt, pw_hash
+    return salt, hashed_password
 
 
-def is_same_pwd(salt: bytes, pw_hash: bytes, password: str) -> bool:
+def same_pwd(salt: bytes, pw_hash: bytes, password: str) -> bool:
     """Given a previously-stored salt and hash, and a password provided by a user
     trying to log in, check whether the password is correct.
 
-    .. usage::
+    Examples:
         >>> s, pw = hash_pwd('P@ssW0rd')
-        >>> is_same_pwd(s, pw, 'P@ssW0rd')
+        >>> same_pwd(s, pw, 'P@ssW0rd')
         True
 
     :ref:
@@ -127,29 +109,32 @@ def is_same_pwd(salt: bytes, pw_hash: bytes, password: str) -> bool:
 
 def tokenize(*args, **kwargs):
     """Deterministic token (modified from dask.base)
-    :usage:
+
+    Examples:
         >>> tokenize([1, 2, '3'])
         '9d71491b50023b06fc76928e6eddb952'
-
         >>> tokenize('Hello') == tokenize('Hello')
         True
     """
     if kwargs:
         args += (kwargs,)
     try:
-        return hashlib.md5(str(args).encode()).hexdigest()
+        rs = hashlib.md5(str(args).encode())
     except ValueError:
         # FIPS systems: https://github.com/fsspec/filesystem_spec/issues/380
-        return hashlib.md5(
-            str(args).encode(), usedforsecurity=False
-        ).hexdigest()
+        rs = hashlib.md5(str(args).encode(), usedforsecurity=False)
+    return rs.hexdigest()
 
 
-def freeze(value: Any):
-    """Freeze the value to immutable
-    .. usage::
+def freeze(value: Any) -> Any:
+    """Freeze a value to immutable object.
+    Examples:
         >>> freeze({'foo': 'bar'})
         frozenset({('foo', 'bar')})
+        >>> freeze('foo')
+        'foo'
+        >>> freeze(('foo', 'bar'))
+        ('foo', 'bar')
     """
     if isinstance(value, dict):
         return frozenset((key, freeze(value)) for key, value in value.items())
@@ -161,10 +146,10 @@ def freeze(value: Any):
 
 
 def freeze_args(func):
-    """Transform mutable dictionary into immutable useful to
-    be compatible with cache.
+    """Transform mutable dictionary into immutable useful to be compatible with
+    cache.
 
-    .. usage::
+    Examples:
         >>> from functools import lru_cache
         >>>
         >>> @lru_cache(maxsize=None)
@@ -201,7 +186,7 @@ def freeze_args(func):
     return wrapped
 
 
-def random_string(num_length: int = 8) -> str:
+def random_str(num_length: int = 8) -> str:
     """Random string from uppercase ASCII and number 0-9"""
     return "".join(
         random.choices(string.ascii_uppercase + string.digits, k=num_length)

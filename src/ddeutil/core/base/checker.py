@@ -28,11 +28,11 @@ StringFalseLower: Tuple[str, ...] = (
 def is_int(value: Any) -> bool:
     """Check value that is integer
 
-    .. docs::
+    Notes:
         https://stackoverflow.com/questions/1265665/
         how-can-i-check-if-a-string-represents-an-int-without-using-try-except
 
-    .. usage::
+    Examples:
         >>> is_int('')
         False
         >>> is_int('0.0')
@@ -66,10 +66,18 @@ def is_int(value: Any) -> bool:
 
 def can_int(value: Any) -> bool:
     """Check value that able to integer
-    .. usage:
+    Examples:
         >>> can_int('0.0')
         True
         >>> can_int('-1.0')
+        True
+        >>> can_int('1.1')
+        False
+        >>> can_int('s')
+        False
+        >>> can_int('1')
+        True
+        >>> can_int(1.0)
         True
     """
     try:

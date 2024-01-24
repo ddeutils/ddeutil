@@ -7,18 +7,21 @@ from typing import (
     List,
     Optional,
     Tuple,
-    TypeVar,
     Union,
 )
 
 import ujson
 
-from .checker import (
-    StringFalseLower,
-    StringTrueLower,
-)
-
-T = TypeVar("T")
+try:
+    from .checker import (
+        StringFalseLower,
+        StringTrueLower,
+    )
+except ImportError:
+    from checker import (
+        StringFalseLower,
+        StringTrueLower,
+    )
 
 
 def str2bool(
@@ -27,7 +30,7 @@ def str2bool(
 ) -> bool:
     """Convert string value to boolean value.
 
-    .. usage:
+    Examples:
         >>> str2bool('yes')
         True
         >>> str2bool('false')

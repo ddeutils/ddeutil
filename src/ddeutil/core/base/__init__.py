@@ -3,6 +3,7 @@ import operator
 import sys
 import typing
 from collections.abc import Callable
+from math import ceil
 
 from .cache import (
     clear_cache,
@@ -32,7 +33,6 @@ from .elements import (
     hasdot,
     only_one,
     setdot,
-    size,
 )
 from .hash import (
     checksum,
@@ -41,9 +41,8 @@ from .hash import (
     hash_all,
     hash_pwd,
     hash_str,
-    hash_str_by_salt,
-    is_same_pwd,
-    random_string,
+    random_str,
+    same_pwd,
     tokenize,
 )
 from .merge import (
@@ -54,14 +53,8 @@ from .merge import (
     merge_values,
     zip_equal,
 )
-from .prepare import (
-    remove_pad,
-    round_up,
-)
 from .sorting import (
     ordered,
-    reverse_mapping,
-    reverse_non_unique_mapping,
     sort_list_by_priority,
 )
 from .splitter import (
@@ -75,7 +68,6 @@ concat: typing.Callable[[typing.Any], str] = "".join
 
 
 def operate(x):
-    """"""
     return getattr(operator, x)
 
 
@@ -94,12 +86,15 @@ def not_generic(check: typing.Any, instance):
 
 def isinstance_check(check: typing.Any, instance) -> bool:
     """Return True if check data is instance.
-    :usage:
+
+    Examples:
         >>> import typing
         >>> assert isinstance_check(['s', ], typing.List[str])
         >>> assert isinstance_check(('s', 't', ), typing.Tuple[str, ...])
         >>> assert not isinstance_check(('s', 't', ), typing.Tuple[str])
-        >>> assert isinstance_check({'s': 1, 'd': 'r'}, typing.Dict[str, typing.Union[int, str]])
+        >>> assert isinstance_check({'s': 1, 'd': 'r'}, typing.Dict[
+        ...     str, typing.Union[int, str]]
+        ... )
         >>> assert isinstance_check('s', typing.Optional[str])
         >>> assert isinstance_check(1, typing.Optional[typing.Union[str, int]])
         >>> assert not isinstance_check('s', typing.List[str])
@@ -107,7 +102,9 @@ def isinstance_check(check: typing.Any, instance) -> bool:
         >>> assert not isinstance_check('s', typing.NoReturn)
         >>> assert isinstance_check(None, typing.NoReturn)
         >>> assert isinstance_check('A', typing.Any)
-        >>> assert isinstance_check([1, [1, 2, 3]], typing.List[typing.Union[typing.List[int], int]])
+        >>> assert isinstance_check([1, [1, 2, 3]], typing.List[
+        ...     typing.Union[typing.List[int], int]
+        ... ])
     """
     if not is_generic(instance):
         return not_generic(check, instance)
@@ -172,5 +169,36 @@ def import_string(dotted_path):
         return cached_import(module_path, class_name)
     except AttributeError as err:
         raise ImportError(
-            f'Module "{module_path}" does not define a "{class_name}" attribute/class'
+            f'Module "{module_path}" does not define a "{class_name}" '
+            f"attribute/class"
         ) from err
+
+
+def round_up(number: float, decimals):
+    """
+    Examples:
+        >>> round_up(1.00406, 2)
+        1.01
+        >>> round_up(1.00001, 1)
+        1.1
+    """
+    assert isinstance(number, float)
+    assert isinstance(decimals, int)
+    assert decimals >= 0
+    if decimals == 0:
+        return ceil(number)
+    factor = 10**decimals
+    return ceil(number * factor) / factor
+
+
+def remove_pad(value: str) -> str:
+    """Remove zero padding of string
+    Examples:
+        >>> remove_pad('000')
+        '0'
+        >>> remove_pad('0123')
+        '123'
+        >>> remove_pad('0000123')
+        '123'
+    """
+    return _last_char if (_last_char := value[-1]) == "0" else value.lstrip("0")

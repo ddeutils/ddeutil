@@ -54,6 +54,7 @@ version = {attr = "ddeutil.core.__about__.__version__"}
 # TODO: docs: https://github.com/netinvent/ofunctions/tree/master/ofunctions
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["ddeutil.core", "ddeutil.vendore"]
 
 [tool.shelf.version]
 version = "./src/ddeutil/core/__about__.py"

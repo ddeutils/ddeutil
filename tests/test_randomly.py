@@ -21,4 +21,4 @@ class RandomTestCase(unittest.TestCase):
         self.patcher.stop()
 
     def test_random_string(self):
-        self.assertEqual(_hash.random_string(), "AA145WQ2")
+        self.assertEqual(_hash.random_str(), "AA145WQ2")
