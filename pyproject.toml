@@ -38,7 +38,7 @@ vendor = [
     "pandas",
 ]
 test = [
-    "clishelf==0.1.1",
+    "clishelf==0.1.2",
     "types-python-dateutil==2.8.19.20240106",
     "memory_profiler==0.61.0",
     "perfplot==0.10.2,<1.0.0",
