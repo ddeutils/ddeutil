@@ -2,6 +2,23 @@
 
 ## Latest Changes
 
+## 0.2.3
+
+> **Note**: \
+> Change the Repository location from Personal to Organization, `ddeutils`.
+
+### Code Changes
+
+- :construction: refactored: remove vendor from this repo and move to ddeutil-dataframe. (_2024-01-28_)
+- :construction: refactored: 📦 bump clishelf from 0.1.1 to 0.1.2 (#41) (_2024-01-28_)
+- :construction: refactored: 📦 bump types-python-dateutil from 2.8.19.14 to 2.8.19.20240106 (_2024-01-28_)
+- :construction: refactored: ⬆ bump actions/cache from 3 to 4 (_2024-01-28_)
+
+### Fix Bugs
+
+- :gear: fixed: remove vendor path on pyproject config. (_2024-01-29_)
+- :gear: fixed: remove bumpversion config file from local. (_2024-01-28_)
+
 ## 0.2.2
 
 ### Features
