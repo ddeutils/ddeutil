@@ -8,7 +8,11 @@
 
 - [Features](#features)
   - [Base Utility Functions](#base-utility-functions)
+    - [Hash](#hash)
+    - [Checker](#checker)
+    - [Convert](#convert)
   - [Utility Functions](#utility-functions)
+    - [DT-Utils](#dt-utils)
 
 The **Core Utility** package implements the utility functions and objects
 that was created on sub-package namespace, `ddeutil`, design for independent
@@ -42,13 +46,56 @@ core.base
     - splitter
 ```
 
+#### Hash
+
+```python
+from ddeutil.core import random_str, hash_str
+
+assert hash_str('hello world') == '05751529'
+assert len(random_str()) == 8  # Random str with default length, 8
+```
+
+#### Checker
+
+```python
+from ddeutil.core import can_int, is_int
+
+assert is_int('-3')
+assert not is_int('0.0')
+assert not is_int('-3.1')
+
+assert can_int('-1.0')
+assert not can_int('1.1')
+```
+
+#### Convert
+
+```python
+from ddeutil.core import str2bool
+
+assert str2bool('yes')
+assert not str2bool('no')
+assert not str2bool('0')
+```
+
 ### Utility Functions
 
 ```text
 core
     - decorator
     - dtutils
-    - randomly
+```
+
+### DT-Utils
+
+```python
+import datetime
+from ddeutil.core.dtutils import next_date
+
+assert (
+  next_date(datetime.datetime(2023, 1, 31, 0, 0, 0), mode='day')
+  == datetime.datetime(2023, 2, 1, 0, 0)
+)
 ```
 
 ## License
