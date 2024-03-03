@@ -59,7 +59,8 @@ jobs:
         if:  steps.cache.outputs.cache-hit != 'true'
         run: |
           pip install --upgrade pip
-          pip install -e .[test]
+          pip install -e .
+          pip install "pytest>=7.4.3,<8.0.0"
 
       - name: Check git is working
         run: |
