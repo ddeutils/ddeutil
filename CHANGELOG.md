@@ -2,6 +2,24 @@
 
 ## Latest Changes
 
+## 0.2.4
+
+### :black_nib: Code Changes
+
+- :construction: refactored: 📦 update python-dateutil requirement from <3.0.0,==2.8.2 to ==2.9.0 (#44) (_2024-03-03_)
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.8.11 to 1.8.12 (_2024-03-01_)
+- :construction: refactored: 📦 bump tzdata from 2023.4 to 2024.1 (_2024-03-01_)
+- :construction: refactored: 📦 bump clishelf from 0.1.2 to 0.1.8 (_2024-03-01_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: update README file for more information. (_2024-03-03_)
+- :page_facing_up: docs: update example code to README. (_2024-01-29_)
+
+### :postbox: Dependencies
+
+- :pushpin: deps: update dependencies and workflow deps. (_2024-03-03_)
+
 ## 0.2.3
 
 > **Note**: \
