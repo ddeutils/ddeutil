@@ -4,15 +4,16 @@
 [![python support version](https://img.shields.io/pypi/pyversions/ddeutil)](https://pypi.org/project/ddeutil/)
 [![size](https://img.shields.io/github/languages/code-size/korawica/ddeutil)](https://github.com/korawica/ddeutil)
 
-**Table of Contents:**:
+**Table of Contents**:
 
+- [Installation](#installation)
 - [Features](#features)
   - [Base Utility Functions](#base-utility-functions)
     - [Hash](#hash)
     - [Checker](#checker)
     - [Convert](#convert)
   - [Utility Functions](#utility-functions)
-    - [DT-Utils](#dt-utils)
+    - [Date Utilities](#date-utilities)
 
 The **Core Utility** package implements the utility functions and objects
 that was created on sub-package namespace, `ddeutil`, design for independent
@@ -21,13 +22,14 @@ namespace. This namespace able to scale out the coding with folder
 structure design. You can add any extension features and import by
 `import ddeutil.{extension}`.
 
-This package provide the Base Utility functions and objects for any data package
-or data application.
+> [!NOTE]
+> This package provide the Base Utility functions and objects for any sub-namespace
+> package that use for data function or application.
 
-**Install from PyPI**:
+## Installation
 
 ```shell
-pip install ddeutil
+pip install -U ddeutil
 ```
 
 ## Features
@@ -86,7 +88,7 @@ core
     - dtutils
 ```
 
-### DT-Utils
+#### Date Utilities
 
 ```python
 import datetime
