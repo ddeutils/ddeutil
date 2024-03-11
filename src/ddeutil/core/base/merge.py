@@ -8,7 +8,6 @@ from functools import (
 )
 from itertools import zip_longest
 from typing import (
-    Dict,
     Optional,
     Union,
 )
@@ -149,7 +148,7 @@ def merge_dict_values(*dicts, **kwargs) -> dict:
 
 
 def merge_values(
-    _dict: Dict[int, Union[int, float]],
+    _dict: dict[int, Union[int, float]],
     start: Optional[int] = None,
     end: Optional[int] = None,
 ) -> Union[int, float]:

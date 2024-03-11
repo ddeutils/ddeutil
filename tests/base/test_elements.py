@@ -1,6 +1,5 @@
 import logging
 import unittest
-from typing import List
 
 import ddeutil.core.base.elements as elements
 
@@ -15,7 +14,7 @@ class ConvertTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
         self.fix_list: list = ["a", "b", "c"]
-        self.input_lists: List[list] = [
+        self.input_lists: list[list] = [
             [
                 "a",
                 "e",

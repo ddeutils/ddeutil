@@ -4,12 +4,11 @@ import os
 import random
 import string
 from base64 import b64encode
+from collections.abc import Collection
 from functools import wraps
 from typing import (
     Any,
-    Collection,
     Optional,
-    Tuple,
 )
 
 import ujson
@@ -66,7 +65,7 @@ def hash_str(value: str, n: int = 8) -> str:
     return str(int(hashlib.sha256(value.encode("utf-8")).hexdigest(), 16))[-n:]
 
 
-def hash_pwd(password: str) -> Tuple[bytes, bytes]:
+def hash_pwd(password: str) -> tuple[bytes, bytes]:
     """Hash the provided password with a randomly-generated salt and return the
     salt and hash to store in the database.
 

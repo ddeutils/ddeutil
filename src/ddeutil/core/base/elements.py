@@ -1,11 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Collection
 from numbers import Number
 from typing import (
     Any,
-    Collection,
-    Dict,
-    List,
     Optional,
 )
 
@@ -19,8 +17,8 @@ ZERO_DEPTH_BASES = (str, bytes, Number, range, bytearray)
 
 
 def only_one(
-    check: List[str],
-    value: List[str],
+    check: list[str],
+    value: list[str],
     default: bool = True,
 ) -> Optional[str]:
     """Get only one element from check list that exists in match list.
@@ -41,7 +39,7 @@ def only_one(
     )
 
 
-def hasdot(search: str, content: Dict[Any, Any]) -> bool:
+def hasdot(search: str, content: dict[Any, Any]) -> bool:
     """Return True value if dot searching exists in content data.
 
     .. usage:
@@ -63,7 +61,7 @@ def hasdot(search: str, content: Dict[Any, Any]) -> bool:
 
 def getdot(
     search: str,
-    content: Dict[Any, Any],
+    content: dict[Any, Any],
     *args,
     **kwargs,
 ) -> Any:
@@ -109,7 +107,7 @@ def getdot(
     raise ValueError(f"{_search} does not exists in {content}")
 
 
-def setdot(search: str, content: dict, value: Any, **kwargs) -> Dict:
+def setdot(search: str, content: dict, value: Any, **kwargs) -> dict:
     """
     Examples:
         >>> setdot('data.value', {'data': {'value': 1}}, 2)
@@ -135,7 +133,7 @@ def setdot(search: str, content: dict, value: Any, **kwargs) -> Dict:
 
 
 def filter_dict(
-    value: Dict[Any, Any],
+    value: dict[Any, Any],
     included: Optional[Collection] = None,
     excluded: Optional[Collection] = None,
 ):

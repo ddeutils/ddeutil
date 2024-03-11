@@ -1,12 +1,11 @@
 import unittest
-from typing import List
 
 import ddeutil.core.base.convert as cc
 
 
 class ConvertTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.str_true_lists: List[str] = [
+        self.str_true_lists: list[str] = [
             "true",
             "True",
             "1",
@@ -15,7 +14,7 @@ class ConvertTestCase(unittest.TestCase):
             "yes",
             "Yes",
         ]
-        self.str_false_lists: List[str] = [
+        self.str_false_lists: list[str] = [
             "false",
             "False",
             "0",
@@ -24,7 +23,7 @@ class ConvertTestCase(unittest.TestCase):
             "no",
             "No",
         ]
-        self.str_raise_lists: List[str] = [
+        self.str_raise_lists: list[str] = [
             # "x",
             # "X",
             "Nop",

@@ -3,10 +3,7 @@ from __future__ import annotations
 import ast
 from typing import (
     Any,
-    Dict,
-    List,
     Optional,
-    Tuple,
     Union,
 )
 
@@ -53,7 +50,7 @@ def str2bool(
 def str2list(
     value: Optional[str] = None,
     force_raise: bool = True,
-) -> List[Any]:
+) -> list[Any]:
     """Convert string to list value.
 
     .. usage:
@@ -84,7 +81,7 @@ def str2list(
 def str2dict(
     value: Optional[str] = None,
     force_raise: bool = True,
-) -> Dict[Any, Any]:
+) -> dict[Any, Any]:
     """Covert string value to dict value.
 
     .. usage:
@@ -145,7 +142,7 @@ def str2int_float(
             ) from err
 
 
-def must_list(value: Optional[Union[str, List[Any]]] = None) -> List[Any]:
+def must_list(value: Optional[Union[str, list[Any]]] = None) -> list[Any]:
     """Return the list value that was converted from string or list value.
 
     .. usage::
@@ -218,7 +215,7 @@ def str2any(value: str) -> Any:
     return value
 
 
-def revert_args(*args, **kwargs) -> Tuple[Tuple[Any], Dict[Any, Any]]:
+def revert_args(*args, **kwargs) -> tuple[tuple[Any], dict[Any, Any]]:
     """Return arguments and key-word arguments.
 
     .. usage::
@@ -232,7 +229,7 @@ def revert_args(*args, **kwargs) -> Tuple[Tuple[Any], Dict[Any, Any]]:
     return args, kwargs
 
 
-def str2args(value: Optional[str]) -> Tuple[Tuple[Any], Dict[Any, Any]]:
+def str2args(value: Optional[str]) -> tuple[tuple[Any], dict[Any, Any]]:
     """Convert arguments string to args and kwargs.
 
     .. usage::

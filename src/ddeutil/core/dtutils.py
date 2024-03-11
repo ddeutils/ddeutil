@@ -2,9 +2,7 @@ import calendar
 import datetime
 import enum
 from typing import (
-    Dict,
     Optional,
-    Tuple,
     Union,
 )
 
@@ -17,7 +15,7 @@ from dateutil import relativedelta
 
 LOCAL_TZ: ZoneInfo = ZoneInfo("Asia/Bangkok")
 
-DATETIME_SET: Tuple[str, ...] = (
+DATETIME_SET: tuple[str, ...] = (
     "year",
     "month",
     "day",
@@ -31,7 +29,7 @@ DATETIME_SET: Tuple[str, ...] = (
 def get_datetime_replace(
     year: Optional[int] = None,
     month: Optional[int] = None,
-) -> Dict[str, tuple]:
+) -> dict[str, tuple]:
     return {
         "year": (1990, 9999),
         "month": (1, 12),
@@ -90,7 +88,7 @@ def replace_date(
         datetime.datetime(2023, 1, 31, 0, 0)
     """
     assert mode in {"month", "day", "hour", "minute", "second", "microsecond"}
-    replace_mapping: Dict[str, tuple] = get_datetime_replace(dt.year, dt.month)
+    replace_mapping: dict[str, tuple] = get_datetime_replace(dt.year, dt.month)
     return dt.replace(
         **{
             _.name.lower(): replace_mapping[_.name.lower()][int(reverse)]

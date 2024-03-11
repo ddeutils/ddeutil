@@ -2,11 +2,7 @@ from collections import defaultdict
 from functools import partial
 from typing import (
     Any,
-    Dict,
-    List,
     Optional,
-    Set,
-    Tuple,
     TypeVar,
     Union,
 )
@@ -29,11 +25,11 @@ def ordered(value: Any) -> Any:
 
 
 def sort_list_by_priority(
-    values: Union[List[T], Set[T], Tuple[T, ...]],
-    priority: List[T],
+    values: Union[list[T], set[T], tuple[T, ...]],
+    priority: list[T],
     reverse: bool = False,
     mode: Optional[str] = None,
-) -> List[T]:
+) -> list[T]:
     """Sorts an iterable according to a list of priority items.
 
     Examples:
@@ -66,7 +62,7 @@ def sort_list_by_priority(
         priority_getter = priority_dict.__getitem__  # dict.get(key)
         return sorted(_values, key=priority_getter, reverse=_reverse)
 
-    switcher: Dict[str, partial] = {
+    switcher: dict[str, partial] = {
         "default": partial(default, values, priority, reverse),
         "enumerate": partial(_enumerate, values, priority, reverse),
     }

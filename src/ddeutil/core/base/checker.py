@@ -2,10 +2,9 @@ from __future__ import annotations
 
 from typing import (
     Any,
-    Tuple,
 )
 
-StringTrueLower: Tuple[str, ...] = (
+StringTrueLower: tuple[str, ...] = (
     "yes",
     "y",
     "true",
@@ -14,7 +13,7 @@ StringTrueLower: Tuple[str, ...] = (
     "1.0",
     "o",
 )
-StringFalseLower: Tuple[str, ...] = (
+StringFalseLower: tuple[str, ...] = (
     "no",
     "n",
     "false",

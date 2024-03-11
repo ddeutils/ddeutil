@@ -1,6 +1,5 @@
 import logging
 import unittest
-from typing import List
 
 import ddeutil.core.base.merge as merge
 
@@ -14,7 +13,7 @@ class MergeTestCase(unittest.TestCase):
     )
 
     def setUp(self) -> None:
-        self.dicts: List[dict] = [
+        self.dicts: list[dict] = [
             {
                 "A": 1,
                 "B": 2,
@@ -34,7 +33,7 @@ class MergeTestCase(unittest.TestCase):
             "C": 300,
             "D": 400,
         }
-        self.lists: List[list] = [
+        self.lists: list[list] = [
             [
                 "A",
                 "B",
