@@ -2,6 +2,15 @@
 
 ## Latest Changes
 
+## 0.3.0
+
+> [!NOTE]
+> This version start support python version >= 3.9.13.
+
+### :sparkles: Features
+
+- :dart: feat: upgrade python version from 3.8 to 3.9. (_2024-03-11_)
+
 ## 0.2.4
 
 ### :black_nib: Code Changes
@@ -22,7 +31,7 @@
 
 ## 0.2.3
 
-> **Note**: \
+> [!NOTE]
 > Change the Repository location from Personal to Organization, `ddeutils`.
 
 ### Code Changes
