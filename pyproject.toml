@@ -29,8 +29,8 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/korawica/ddeutil/"
-"Source Code" = "https://github.com/korawica/ddeutil/"
+Homepage = "https://github.com/ddeutils/ddeutil/"
+"Source Code" = "https://github.com/ddeutils/ddeutil/"
 
 [project.optional-dependencies]
 dev = [
