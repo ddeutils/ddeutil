@@ -5,11 +5,7 @@ from typing import (
     Optional,
     Union,
 )
-
-try:
-    from zoneinfo import ZoneInfo
-except ImportError:
-    from backports.zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo
 
 from dateutil import relativedelta
 
