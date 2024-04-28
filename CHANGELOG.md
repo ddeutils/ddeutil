@@ -2,6 +2,21 @@
 
 ## Latest Changes
 
+## 0.3.1
+
+### :black_nib: Code Changes
+
+- :construction: refactored: remove not necessary code from this package. (_2024-04-28_)
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.8.12 to 1.8.14 (_2024-04-01_)
+- :construction: refactored: 📦 bump types-python-dateutil from 2.8.19.20240311 to 2.9.0.20240316 (_2024-04-01_)
+- :construction: refactored: 📦 bump python-dateutil from 2.9.0 to 2.9.0.post0 (_2024-04-01_)
+- :construction: refactored: remove dynamic zoneinfo that support for py38. (_2024-03-12_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: remove example docs from readme file. (_2024-04-28_)
+- :page_facing_up: docs: update project urls on pyproject file. (_2024-03-11_)
+
 ## 0.3.0
 
 > [!NOTE]
