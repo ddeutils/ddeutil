@@ -44,7 +44,7 @@ from .base import (
     rsplit,
     same_pwd,
     setdot,
-    sort_list_by_priority,
+    sort_priority,
     # split
     split,
     str2any,

@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from functools import wraps
+from typing import Any
 
 
 class memoize:
-    """
+    """Return a cachable function that keep all argruments and pass to string
+    type for keeping it in the caching key.
+
     :usage:
         >>> @memoize
         ... def fib(n):
@@ -22,15 +25,15 @@ class memoize:
     """
 
     def __init__(self, function):
-        self.cache = {}
+        self.cache: dict[str, Any] = {}
         self.function = function
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs) -> Any:
         key: str = str(args) + str(kwargs)
         if key in self.cache:
             return self.cache[key]
 
-        value = self.function(*args, **kwargs)
+        value: Any = self.function(*args, **kwargs)
         self.cache[key] = value
         return value
 
@@ -38,13 +41,13 @@ class memoize:
 def memoized_property(func_get):
     """Return a property attribute for new-style classes that only calls its
     getter on the first access. The result is stored and on subsequent
-    accesses is returned, preventing the need to call the getter any more.
+    accesses is returned, preventing the need to call the getter anymore.
 
     :usage:
         >>> class C(object):
         ...     load_name_count = 0
         ...     @memoized_property
-        ...     def name(self):
+        ...     def name(self) -> str:
         ...         "name's docstring"
         ...         self.load_name_count += 1
         ...         return "the name"
@@ -66,7 +69,6 @@ def memoized_property(func_get):
     def func_get_memoized(self):
         if not hasattr(self, attr_name):
             setattr(self, attr_name, func_get(self))
-            # print(attr_name)
         return getattr(self, attr_name)
 
     return property(func_get_memoized)
@@ -78,12 +80,12 @@ def clear_cache(attrs: tuple):
         >>> class C(object):
         ...     load_name_count = 0
         ...     @memoized_property
-        ...     def name(self):
+        ...     def name(self) -> str:
         ...         "name's docstring"
         ...         self.load_name_count += 1
         ...         return "the name"
         ...     @clear_cache(attrs=('_name', ))
-        ...     def reset(self):
+        ...     def reset(self) -> str:
         ...         return "reset cache"
         >>> c = C()
         >>> c.load_name_count

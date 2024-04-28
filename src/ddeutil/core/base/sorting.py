@@ -24,7 +24,7 @@ def ordered(value: Any) -> Any:
     return value
 
 
-def sort_list_by_priority(
+def sort_priority(
     values: Union[list[T], set[T], tuple[T, ...]],
     priority: list[T],
     reverse: bool = False,
@@ -33,13 +33,13 @@ def sort_list_by_priority(
     """Sorts an iterable according to a list of priority items.
 
     Examples:
-        >>> sort_list_by_priority(values=[1, 2, 2, 3], priority=[2, 3, 1])
+        >>> sort_priority(values=[1, 2, 2, 3], priority=[2, 3, 1])
         [2, 2, 3, 1]
-        >>> sort_list_by_priority(values={1, 2, 3}, priority=[2,3])
+        >>> sort_priority(values={1, 2, 3}, priority=[2,3])
         [2, 3, 1]
-        >>> sort_list_by_priority(values=(1, 2, 3), priority=[2,3])
+        >>> sort_priority(values=(1, 2, 3), priority=[2,3])
         [2, 3, 1]
-        >>> sort_list_by_priority(
+        >>> sort_priority(
         ...     values=(1, 2, 3), priority=[2,3], mode="enumerate"
         ... )
         [2, 3, 1]

@@ -1,22 +1,18 @@
 import re
-from typing import (
-    AnyStr,
-)
+from collections.abc import Iterator
+from typing import AnyStr
 
 
-def split_str(strings, sep: str = r"\s+"):
+def split_str(strings, sep: str = r"\s+") -> Iterator[str]:
     """
     warning: does not yet work if sep is a lookahead like `(?=b)`
     usage:
         >>> list(split_str('A,b,c.', sep=','))
         ['A', 'b', 'c.']
-
         >>> list(split_str(',,A,b,c.,', sep=','))
         ['', '', 'A', 'b', 'c.', '']
-
         >>> list(split_str('.......A...b...c....', '...'))
         ['', '', '.A', 'b', 'c', '.']
-
         >>> list(split_str('   A  b  c. '))
         ['', 'A', 'b', 'c.', '']
     """
@@ -81,12 +77,11 @@ def split(
     *,
     maxsplit: int = -1,
     mustsplit: bool = True,
-):
+) -> list[str]:
     """
     Examples:
         >>> split('asd|fasd', '|', maxsplit=2)
         ['asd', 'fasd', None]
-
         >>> split('data', '.', maxsplit=1)
         ['data', None]
     """
@@ -104,7 +99,7 @@ def rsplit(
     *,
     maxsplit: int = -1,
     mustsplit: bool = True,
-):
+) -> list[str]:
     """
     Examples:
         >>> rsplit('asd|foo', '|', maxsplit=2)

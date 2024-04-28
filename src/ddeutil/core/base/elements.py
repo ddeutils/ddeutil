@@ -13,7 +13,13 @@ except ImportError:
     from splitter import split
 
 
-ZERO_DEPTH_BASES = (str, bytes, Number, range, bytearray)
+ZERO_DEPTH_BASES = (
+    str,
+    bytes,
+    Number,
+    range,
+    bytearray,
+)
 
 
 def only_one(
@@ -23,7 +29,7 @@ def only_one(
 ) -> Optional[str]:
     """Get only one element from check list that exists in match list.
 
-    .. usage:
+    Examples:
         >>> only_one(['a', 'b'], ['a', 'b', 'c'])
         'a'
         >>> only_one(['a', 'b'], ['c', 'e', 'f'])
@@ -42,7 +48,7 @@ def only_one(
 def hasdot(search: str, content: dict[Any, Any]) -> bool:
     """Return True value if dot searching exists in content data.
 
-    .. usage:
+    Examples:
         >>> hasdot('data.value', {'data': {'value': 2}})
         True
         >>> hasdot('data.value.key', {'data': {'value': 2}})
@@ -67,7 +73,7 @@ def getdot(
 ) -> Any:
     """Return the value if dot searching exists in content data.
 
-    .. usage:
+    Examples:
         >>> getdot('data.value', {'data': {'value': 1}})
         1
         >>> getdot('data', {'data': 'test'})
@@ -145,6 +151,13 @@ def filter_dict(
         >>> filter_dict(
         ...     {"foo": 1, "bar": 2, "baz": 3},
         ...     included=("foo", )
+        ... )
+        {'foo': 1}
+
+        >>> filter_dict(
+        ...     {"foo": 1, "bar": 2, "baz": 3},
+        ...     included=("foo", "bar", ),
+        ...     excluded=("bar", )
         ... )
         {'foo': 1}
     """

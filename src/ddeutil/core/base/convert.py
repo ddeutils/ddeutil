@@ -53,7 +53,7 @@ def str2list(
 ) -> list[Any]:
     """Convert string to list value.
 
-    .. usage:
+    Examples:
         >>> str2list('["a", "b", "c"]')
         ['a', 'b', 'c']
         >>> str2list('["d""]', force_raise=False)
@@ -84,7 +84,7 @@ def str2dict(
 ) -> dict[Any, Any]:
     """Covert string value to dict value.
 
-    .. usage:
+    Examples:
         >>> str2dict('{"a": 1, "b": 2, "c": 3}')
         {'a': 1, 'b': 2, 'c': 3}
         >>> str2dict('{"d""}', force_raise=False)
@@ -145,7 +145,7 @@ def str2int_float(
 def must_list(value: Optional[Union[str, list[Any]]] = None) -> list[Any]:
     """Return the list value that was converted from string or list value.
 
-    .. usage::
+    Examples:
         >>> must_list('[1, 2, 3]')
         [1, 2, 3]
         >>> must_list(None)
@@ -163,7 +163,7 @@ def must_bool(
     """Return the boolean value that was converted from string, integer,
     or boolean value.
 
-    .. usage::
+    Examples:
         >>> must_bool('1')
         True
         >>> must_bool(0)
@@ -185,7 +185,7 @@ def must_bool(
 def str2any(value: str) -> Any:
     """Convert string value to the real type of that object.
 
-    .. usage:
+    Examples:
         >>> str2any('1245')
         1245
         >>> str2any('"string"')
@@ -218,7 +218,7 @@ def str2any(value: str) -> Any:
 def revert_args(*args, **kwargs) -> tuple[tuple[Any], dict[Any, Any]]:
     """Return arguments and key-word arguments.
 
-    .. usage::
+    Examples:
         >>> revert_args('value', 1, name='demo', _dict={'k1': 'v1', 'k2': 'v2'})
         (('value', 1), {'name': 'demo', '_dict': {'k1': 'v1', 'k2': 'v2'}})
         >>> revert_args(1, 2, 3)
@@ -232,7 +232,7 @@ def revert_args(*args, **kwargs) -> tuple[tuple[Any], dict[Any, Any]]:
 def str2args(value: Optional[str]) -> tuple[tuple[Any], dict[Any, Any]]:
     """Convert arguments string to args and kwargs.
 
-    .. usage::
+    Examples:
         >>> str2args("'value', 1, name='demo'")
         (('value', 1), {'name': 'demo'})
 

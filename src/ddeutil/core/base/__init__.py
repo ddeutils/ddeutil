@@ -55,7 +55,7 @@ from .merge import (
 )
 from .sorting import (
     ordered,
-    sort_list_by_priority,
+    sort_priority,
 )
 from .splitter import (
     isplit,

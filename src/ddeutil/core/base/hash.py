@@ -15,8 +15,9 @@ import ujson
 
 
 def checksum(value: Any) -> str:
-    """
-    .. usage::
+    """Return a string of the hashing value by MD5 algorithm.
+
+    Examples:
         >>> checksum({"foo": "bar", "baz": 1})
         '83788ce748a5899920673e5a4384979b'
     """
@@ -28,7 +29,7 @@ def checksum(value: Any) -> str:
 def hash_all(
     value: Any,
     exclude: Optional[Collection] = None,
-):
+) -> Any:
     """Hash values in dictionary
 
     Examples:
@@ -65,7 +66,7 @@ def hash_str(value: str, n: int = 8) -> str:
     return str(int(hashlib.sha256(value.encode("utf-8")).hexdigest(), 16))[-n:]
 
 
-def hash_pwd(password: str) -> tuple[bytes, bytes]:
+def hash_pwd(pwd: str) -> tuple[bytes, bytes]:
     """Hash the provided password with a randomly-generated salt and return the
     salt and hash to store in the database.
 
@@ -82,16 +83,16 @@ def hash_pwd(password: str) -> tuple[bytes, bytes]:
     salt = b64encode(os.urandom(16))
     hashed_password = hashlib.pbkdf2_hmac(
         "sha256",
-        password.encode("utf-8"),
+        pwd.encode("utf-8"),
         salt,
-        100000,
+        iterations=100000,
     )
     return salt, hashed_password
 
 
 def same_pwd(salt: bytes, pw_hash: bytes, password: str) -> bool:
-    """Given a previously-stored salt and hash, and a password provided by a user
-    trying to log in, check whether the password is correct.
+    """Given a previously-stored salt and hash, and a password provided by
+    a user trying to log in, check whether the password is correct.
 
     Examples:
         >>> s, pw = hash_pwd('P@ssW0rd')

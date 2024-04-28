@@ -15,16 +15,15 @@ from typing import (
 
 def zip_equal(*iterables):
     """
-    >>> list(zip_equal((1, 2, 3, 4, ), ('a', 'b', 'c', 'd', )))
-    [(1, 'a'), (2, 'b'), (3, 'c'), (4, 'd')]
-
-    >>> next(zip_equal((1, 2, 3, 4, ), ('a', 'b', 'c', )))
-    (1, 'a')
-
-    >>> list(zip_equal((1, 2, 3, 4, ), ('a', 'b', 'c', )))
-    Traceback (most recent call last):
-    ...
-    ValueError: Iterables have different lengths
+    Examples:
+        >>> list(zip_equal((1, 2, 3, 4, ), ('a', 'b', 'c', 'd', )))
+        [(1, 'a'), (2, 'b'), (3, 'c'), (4, 'd')]
+        >>> next(zip_equal((1, 2, 3, 4, ), ('a', 'b', 'c', )))
+        (1, 'a')
+        >>> list(zip_equal((1, 2, 3, 4, ), ('a', 'b', 'c', )))
+        Traceback (most recent call last):
+        ...
+        ValueError: Iterables have different lengths
     """
     sentinel = object()
     for combo in zip_longest(*iterables, fillvalue=sentinel):
