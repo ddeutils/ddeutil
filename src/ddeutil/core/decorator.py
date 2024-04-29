@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import contextlib
 import copy
 from functools import wraps
@@ -5,9 +7,21 @@ from time import (
     sleep,
     time,
 )
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
+
+if TYPE_CHECKING:
+    import sys
+
+    if sys.version_info >= (3, 10):
+        from typing import ParamSpec
+    else:
+        from typing_extensions import ParamSpec
+
+    P = ParamSpec("P")
+    T = TypeVar("T")
 
 
-def deepcopy(func):
+def deepcopy(func: Callable[P, T]) -> Callable[P, T]:
     """Deep copy method
 
     EExamples:
@@ -29,7 +43,7 @@ def deepcopy(func):
 
     """
 
-    def func_get(*args, **kwargs):
+    def func_get(*args: P.args, **kwargs: P.kwargs) -> T:
         return func(
             *(copy.deepcopy(x) for x in args),
             **{k: copy.deepcopy(v) for k, v in kwargs.items()},
@@ -38,7 +52,7 @@ def deepcopy(func):
     return func_get
 
 
-def deepcopy_args(func):
+def deepcopy_args(func: Callable[[object, P], T]) -> Callable[[object, P], T]:
     """Deep copy method
 
     Examples:
@@ -61,7 +75,7 @@ def deepcopy_args(func):
 
     """
 
-    def func_get(self, *args, **kwargs):
+    def func_get(self: object, *args: P.args, **kwargs: P.kwargs) -> T:
         return func(
             self,
             *(copy.deepcopy(x) for x in args),
@@ -71,7 +85,7 @@ def deepcopy_args(func):
     return func_get
 
 
-def timer(func):
+def timer(func: Callable[P, T]) -> Callable[P, T]:
     """
     Examples:
         >>> import time
@@ -83,18 +97,17 @@ def timer(func):
         Execution time: 2.003119945526123 seconds
     """
 
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
         start_time = time()
         result = func(*args, **kwargs)
-        end_time = time()
-        execution_time = end_time - start_time
+        execution_time = time() - start_time
         print(f"Execution time: {execution_time} seconds")
         return result
 
     return wrapper
 
 
-def timing(name: str):
+def timing(name: str) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """
     Examples:
         >>> import time
@@ -106,9 +119,9 @@ def timing(name: str):
         Sleep ....................................................... 2.01s
     """
 
-    def timing_internal(func):
+    def timing_internal(func: Callable[P, T]) -> Callable[P, T]:
         @wraps(func)
-        def wrap(*args, **kw):
+        def wrap(*args: P.args, **kw: P.kwargs) -> T:
             ts = time()
             result = func(*args, **kw)
             padded_name: str = f"{name} ".ljust(60, ".")
@@ -138,7 +151,7 @@ def timer_perf(title: str):
     print(f"{padded_name}{padded_time}s", flush=True)
 
 
-def debug(func):
+def debug(func: Callable[P, T]) -> Callable[P, T]:
     """
     Examples:
         >>> @debug
@@ -150,7 +163,8 @@ def debug(func):
         12
     """
 
-    def wrapper(*args, **kwargs):
+    @wraps(func)
+    def wrapper(*args: P.args, **kwargs: P.kwargs):
         print(f"Calling {func.__name__} with args: {args} kwargs: {kwargs}")
         result = func(*args, **kwargs)
         print(f"{func.__name__} returned: {result}")
@@ -159,7 +173,9 @@ def debug(func):
     return wrapper
 
 
-def validate_input(*validations):
+def validate_input(
+    *validations: tuple[Callable[[Any], bool]],
+) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """
     Examples:
         >>> @validate_input(lambda x: x > 0, lambda y: isinstance(y, str))
@@ -171,8 +187,9 @@ def validate_input(*validations):
         0.2
     """
 
-    def decorator(func):
-        def wrapper(*args, **kwargs):
+    def decorator(func: Callable[P, T]) -> Callable[P, T]:
+        @wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
             for i, val in enumerate(args):
                 if i < len(validations) and not validations[i](val):
                     raise ValueError(f"Invalid argument: {val}")
@@ -189,9 +206,9 @@ def validate_input(*validations):
 
 
 def retry(
-    max_attempts,
+    max_attempts: int,
     delay: int = 1,
-):
+) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """Retry decorator with sequencial.
     Examples:
         >>> @retry(max_attempts=3, delay=2)
@@ -208,8 +225,9 @@ def retry(
         Function `fetch_data` failed after 3 attempts
     """
 
-    def decorator(func):
-        def wrapper(*args, **kwargs):
+    def decorator(func: Callable[P, T]) -> Callable[P, T]:
+        @wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
             _attempts: int = 0
             while _attempts < max_attempts:
                 try:
