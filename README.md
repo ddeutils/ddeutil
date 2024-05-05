@@ -9,11 +9,7 @@
 - [Installation](#installation)
 - [Features](#features)
   - [Base Utility Functions](#base-utility-functions)
-    - [Hash](#hash)
-    - [Checker](#checker)
-    - [Convert](#convert)
   - [Utility Functions](#utility-functions)
-    - [Date Utilities](#date-utilities)
 
 The **Core Utility** package implements the utility functions and objects
 that was created on sub-package namespace, `ddeutil`, design for independent
