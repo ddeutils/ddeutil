@@ -140,8 +140,8 @@ def setdot(search: str, content: dict, value: Any, **kwargs) -> dict:
 
 def filter_dict(
     value: dict[Any, Any],
-    included: Optional[Collection] = None,
-    excluded: Optional[Collection] = None,
+    included: Collection | None = None,
+    excluded: Collection | None = None,
 ):
     """
     Examples:
@@ -161,7 +161,7 @@ def filter_dict(
         ... )
         {'foo': 1}
     """
-    _exc = excluded or ()
+    _exc: Collection = excluded or ()
     return dict(
         filter(
             lambda i: i[0]
