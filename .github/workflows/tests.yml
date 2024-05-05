@@ -75,3 +75,36 @@ jobs:
       - name: Test with Pytest
         run: |
           pytest -v
+
+  tests-import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: .venv
+          key: ubuntu-latest-python39-${{ hashFiles('pyproject.toml') }}-test-import
+
+      - name: Install Python Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          uv venv
+          uv pip install -U pip
+          uv pip install -e .
+
+      - name: Use Python virtual environment
+        run: |
+          echo "$GITHUB_WORKSPACE/.venv/bin" >> $GITHUB_PATH
+          echo "VIRTUAL_ENV=$GITHUB_WORKSPACE/.venv" >> $GITHUB_ENV
+
+      - name: Test Import package
+        run: |
+          python -c "import sys; from src.ddeutil.core import merge_dict; print('Able to import core package'); sys.exit(0)"
