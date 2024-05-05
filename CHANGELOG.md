@@ -2,6 +2,25 @@
 
 ## Latest Changes
 
+## 0.3.2
+
+### :sparkles: Features
+
+- :dart: feat: add type hint for decorator functions. (_2024-04-29_)
+
+### :black_nib: Code Changes
+
+- :construction: refactored: 📦 bump pytest from 8.1.1 to 8.2.0 (#49) (_2024-05-01_)
+- :construction: refactored: 📦 bump clishelf from 0.2.0 to 0.2.1 (_2024-05-01_)
+
+### :bug: Fix Bugs
+
+- :gear: fixed: merge branch from remote into local. (_2024-05-05_)
+
+### :package: Build & Workflow
+
+- :toolbox: build: split step of publish workflow for each environment. (_2024-05-05_)
+
 ## 0.3.1
 
 ### :black_nib: Code Changes
