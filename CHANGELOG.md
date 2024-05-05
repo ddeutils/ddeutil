@@ -2,6 +2,21 @@
 
 ## Latest Changes
 
+## 0.3.3
+
+### :bug: Fix Bugs
+
+- :gear: fixed: remove test import on tests workflow. (_2024-05-05_)
+
+### :package: Build & Workflow
+
+- :toolbox: build: fixed find files on setuptools backend. (_2024-05-05_)
+- :toolbox: build: add test import workflow. (_2024-05-05_)
+
+### :postbox: Dependencies
+
+- :pushpin: deps: update pre-commit hook deps. (_2024-05-05_)
+
 ## 0.3.2
 
 ### :sparkles: Features
