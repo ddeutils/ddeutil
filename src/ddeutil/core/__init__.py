@@ -25,6 +25,7 @@ from .__base import (
     merge_values,
     must_bool,
     must_list,
+    must_rsplit,
     must_split,
     onlyone,
     operate,

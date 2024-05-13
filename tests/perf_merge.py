@@ -4,7 +4,8 @@ try:
     import perfplot
 except ImportError as err:
     raise ImportError(
-        "Please install perfplot for this testing perf script"
+        "Please install perfplot for this testing perf script with\n\t\t"
+        "pip install -U perfplot"
     ) from err
 
 
@@ -37,7 +38,7 @@ class MergePerfTest:
 
     def save(self):
         self.merge_dict.save(
-            "images/perf_merge_dict.png", transparent=True, bbox_inches="tight"
+            "img/perf_merge_dict.png", transparent=True, bbox_inches="tight"
         )
 
 
