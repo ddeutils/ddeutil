@@ -2,6 +2,26 @@
 
 ## Latest Changes
 
+## 0.3.4
+
+### :black_nib: Code Changes
+
+- :construction: refactored: change str docs and add __types file for make base type. (_2024-05-13_)
+- :construction: refactored: change str docs and add __types file for make base type. (_2024-05-13_)
+- :construction: refactored: rewrite getter args and change type hint. (_2024-05-05_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: update readme and remove deleted topic. (_2024-05-05_)
+
+### :bug: Fix Bugs
+
+- :gear: fixed: mrge branch that conflict with local. (_2024-05-13_)
+
+### :postbox: Dependencies
+
+- :pushpin: deps: remove optional dependencies from pyproject. (_2024-05-13_)
+
 ## 0.3.3
 
 ### :bug: Fix Bugs
