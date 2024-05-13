@@ -3,29 +3,7 @@ from collections.abc import Iterator
 from typing import AnyStr
 
 
-def split_str(strings, sep: str = r"\s+") -> Iterator[str]:
-    """
-    warning: does not yet work if sep is a lookahead like `(?=b)`
-    usage:
-        >>> list(split_str('A,b,c.', sep=','))
-        ['A', 'b', 'c.']
-        >>> list(split_str(',,A,b,c.,', sep=','))
-        ['', '', 'A', 'b', 'c.', '']
-        >>> list(split_str('.......A...b...c....', '...'))
-        ['', '', '.A', 'b', 'c', '.']
-        >>> list(split_str('   A  b  c. '))
-        ['', 'A', 'b', 'c.', '']
-    """
-    if not sep:
-        return iter(strings)
-    sep = sep.replace(".", "\\.")
-    # alternatively, more verbosely:
-    regex = f"(?:^|{sep})((?:(?!{sep}).)*)"
-    for match in re.finditer(regex, strings):
-        yield match.group(1)
-
-
-def isplit(source: AnyStr, sep=None, regex=False):
+def isplit(source: AnyStr, sep=None, regex=False) -> Iterator[str]:
     """Generator of ``str.split()`` method.
 
     :param source: source string (unicode or bytes)
@@ -38,8 +16,11 @@ def isplit(source: AnyStr, sep=None, regex=False):
     Examples:
         >>> list(isplit("abcb", "b"))
         ['a', 'c', '']
-        >>> next(isplit("foo bar"))
+        >>> s = isplit("foo bar")
+        >>> next(s)
         'foo'
+        >>> next(s)
+        'bar'
     """
     if sep is None:
         # mimic default python behavior
@@ -71,7 +52,7 @@ def isplit(source: AnyStr, sep=None, regex=False):
             start = idx + sep_size
 
 
-def split(
+def must_split(
     source: str,
     sep: str = None,
     *,
@@ -80,10 +61,12 @@ def split(
 ) -> list[str]:
     """
     Examples:
-        >>> split('asd|fasd', '|', maxsplit=2)
+        >>> must_split('asd|fasd', '|', maxsplit=2)
         ['asd', 'fasd', None]
-        >>> split('data', '.', maxsplit=1)
+        >>> must_split('data', '.', maxsplit=1)
         ['data', None]
+        >>> must_split('data')
+        ['data']
     """
     if maxsplit == -1 or not mustsplit:
         return source.split(sep, maxsplit)
@@ -93,7 +76,7 @@ def split(
     return _old
 
 
-def rsplit(
+def must_rsplit(
     source: str,
     sep: str = None,
     *,
@@ -102,12 +85,14 @@ def rsplit(
 ) -> list[str]:
     """
     Examples:
-        >>> rsplit('asd|foo', '|', maxsplit=2)
+        >>> must_rsplit('asd|foo', '|', maxsplit=2)
         [None, 'asd', 'foo']
-        >>> rsplit('foo bar', maxsplit=1)
+        >>> must_rsplit('foo bar', maxsplit=1)
         ['foo', 'bar']
-        >>> rsplit('foo bar', maxsplit=2, mustsplit=False)
+        >>> must_rsplit('foo bar', maxsplit=2, mustsplit=False)
         ['foo', 'bar']
+        >>> must_rsplit('foo')
+        ['foo']
     """
     if maxsplit == -1 or not mustsplit:
         return source.rsplit(sep, maxsplit=maxsplit)

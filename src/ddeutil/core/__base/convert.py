@@ -11,13 +11,13 @@ import ujson
 
 try:
     from .checker import (
-        StringFalseLower,
-        StringTrueLower,
+        FalseStr,
+        TrueStr,
     )
 except ImportError:
     from checker import (
-        StringFalseLower,
-        StringTrueLower,
+        FalseStr,
+        TrueStr,
     )
 
 
@@ -38,9 +38,9 @@ def str2bool(
     value = value or ""
     if not value:
         return False
-    elif value.lower() in StringTrueLower:
+    elif value.lower() in TrueStr:
         return True
-    elif value.lower() in StringFalseLower:
+    elif value.lower() in FalseStr:
         return False
     if force_raise:
         raise ValueError(f"value {value!r} does not convert to boolean type")

@@ -37,7 +37,6 @@ core.base
     - cache
     - checker
     - convert
-    - elements
     - hash
     - merge
     - sorting
@@ -50,6 +49,7 @@ core.base
 core
     - decorator
     - dtutils
+    - randomly
 ```
 
 ## License

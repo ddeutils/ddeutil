@@ -1,7 +1,7 @@
 import logging
 import unittest
 
-import ddeutil.core.base.merge as merge
+import ddeutil.core.__base.merge as merge
 
 
 class MergeTestCase(unittest.TestCase):

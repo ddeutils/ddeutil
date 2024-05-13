@@ -151,11 +151,10 @@ def freeze_args(func):
 
     Examples:
         >>> from functools import lru_cache
-        >>>
-        >>> @lru_cache(maxsize=None)
+        ... @lru_cache(maxsize=None)
         ... def call_name(value: dict):
         ...     return value['foo'] + " " + value['bar']
-        >>> call_name({'foo': 'Hello', 'bar': 'World'})
+        ... call_name({'foo': 'Hello', 'bar': 'World'})
         Traceback (most recent call last):
         ...
         TypeError: unhashable type: 'dict'
@@ -164,7 +163,7 @@ def freeze_args(func):
         ... @lru_cache(maxsize=None)
         ... def call_name(value: dict):
         ...     return value['foo'] + " " + value['bar']
-        >>> call_name({'foo': 'Hello', 'bar': 'World'})
+        ... call_name({'foo': 'Hello', 'bar': 'World'})
         'Hello World'
     """
 

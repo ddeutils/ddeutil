@@ -83,15 +83,13 @@ class ThreadWithControl(threading.Thread):
             raise threading.ThreadError("the thread is not active")
 
         # do we have it cached?
-        if hasattr(self, "_thread_id"):
-            return self._thread_id
+        if hasattr(self, "_ident"):
+            return self._ident
 
-        # no, look for it in the _active dict
-        # for thread_id, thread_obj in threading._active.items():
-        for thread_id, thread_obj in threading._active.items():
-            if thread_obj is self:
-                self._thread_id = thread_id
-                return thread_id
+        for thread in threading.enumerate():
+            if thread is self:
+                self._ident = thread.ident
+                return thread.ident
 
         raise AssertionError("could not determine the thread's id")
 
