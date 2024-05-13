@@ -1,7 +1,6 @@
 from collections import defaultdict
 from functools import partial
 from typing import (
-    Any,
     Optional,
     TypeVar,
     Union,
@@ -10,7 +9,7 @@ from typing import (
 T = TypeVar("T")
 
 
-def ordered(value: Any) -> Any:
+def ordered(value: T) -> T:
     """Order an object by ``sorted``.
 
     Examples:
@@ -59,7 +58,7 @@ def sort_priority(
             lambda: len(_priority),
             zip(_priority, range(len(_priority))),
         )
-        priority_getter = priority_dict.__getitem__  # dict.get(key)
+        priority_getter = priority_dict.__getitem__
         return sorted(_values, key=priority_getter, reverse=_reverse)
 
     switcher: dict[str, partial] = {

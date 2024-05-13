@@ -37,7 +37,8 @@ def merge_dict(*dicts, **kwargs) -> dict:
     precedence goes to key-value pairs in latter dictionaries.
 
     :rtype: object
-    :usage:
+
+    Examples:
         >>> merge_dict({1: 'one',2: 'two',3: 'three'}, {3: 'Three',4: 'Four'})
         {1: 'one', 2: 'two', 3: 'Three', 4: 'Four'}
 
@@ -73,7 +74,7 @@ def merge_dict(*dicts, **kwargs) -> dict:
 
 def merge_list(*lists, **kwargs) -> list:
     """
-    :usage:
+    Examples:
         >>> merge_list(['A', 'B', 'C'], ['C', 'D'])
         ['A', 'B', 'C', 'C', 'D']
 
@@ -100,7 +101,7 @@ def merge_list(*lists, **kwargs) -> list:
 
 def merge_dict_value(*dicts, **kwargs) -> dict:
     """
-    :usage:
+    Examples:
         >>> merge_dict_value({'a': 1, 'b': 5}, {'a': 3, 'b': 6})
         {'a': [1, 3], 'b': [5, 6]}
     """
@@ -127,7 +128,7 @@ def merge_dict_value(*dicts, **kwargs) -> dict:
 
 def merge_dict_values(*dicts, **kwargs) -> dict:
     """
-    :usage:
+    Examples:
         >>> merge_dict_values(
         ...     {'a': [1, 2], 'b': []}, {'a': [1, 3], 'b': [5, 6]}
         ... )

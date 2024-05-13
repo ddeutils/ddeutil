@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-StringTrueLower: tuple[str, ...] = (
+TrueStr: tuple[str, ...] = (
     "yes",
     "y",
     "true",
@@ -11,7 +11,8 @@ StringTrueLower: tuple[str, ...] = (
     "1.0",
     "o",
 )
-StringFalseLower: tuple[str, ...] = (
+
+FalseStr: tuple[str, ...] = (
     "no",
     "n",
     "false",
@@ -23,46 +24,45 @@ StringFalseLower: tuple[str, ...] = (
 
 
 def is_int(value: Any) -> bool:
-    """Check value that is integer
-
-    Notes:
-        https://stackoverflow.com/questions/1265665/
-        how-can-i-check-if-a-string-represents-an-int-without-using-try-except
+    """Check value that is integer.
 
     Examples:
         >>> is_int('')
         False
         >>> is_int('0.0')
         False
-        >>> is_int('-3')
-        True
+        >>> is_int('-3'), int('-3')
+        (True, -3)
         >>> is_int('-123.4')
         False
         >>> is_int('543')
         True
-        >>> is_int('0')
-        True
+        >>> is_int('0'), int('0')
+        (True, 0)
         >>> is_int('-')
         False
+        >>> is_int('+13'), int('+13')
+        (True, 13)
     """
     if isinstance(value, int):
         return True
-
-    _value = str(value)
-    if not value:
+    elif not value:
         return False
 
-    # For string type, it has checking methods like:
-    # ``str.isdigit()`` or ``str.isdecimal()`` or ``str.isnumeric()``
+    # Note:
+    #   For Python string type, it has builtin checking methods like:
+    #   ``str.isdigit()``, ``str.isdecimal()``, or ``str.isnumeric()``.
     return (
         _value[1:].isdecimal()
-        if _value[0] in {"-", "+"}
+        if (_value := str(value))[0] in {"-", "+"}
         else _value.isdecimal()
     )
 
 
 def can_int(value: Any) -> bool:
-    """Check value that able to integer
+    """Check value that able to integer (but some value does not use int() to
+    convert it such as 0.0 or 3.0).
+
     Examples:
         >>> can_int('0.0')
         True
