@@ -1,5 +1,11 @@
 import ddeutil.core.__base.merge as merge
-import perfplot
+
+try:
+    import perfplot
+except ImportError as err:
+    raise ImportError(
+        "Please install perfplot for this testing perf script"
+    ) from err
 
 
 class MergePerfTest:
