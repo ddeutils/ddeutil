@@ -4,12 +4,11 @@ import contextlib
 import copy
 import functools
 import inspect
+import logging
+import time
 import warnings
+from collections.abc import Generator
 from functools import wraps
-from time import (
-    sleep,
-    time,
-)
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 if TYPE_CHECKING:
@@ -30,7 +29,7 @@ STR_TYPES = (bytes, str)
 def deepcopy(func: Callable[P, T]) -> Callable[P, T]:
     """Deep copy method
 
-    EExamples:
+    Examples:
         >>> @deepcopy
         ... def foo(a, b, c=None):
         ...     c = c or {}
@@ -141,7 +140,7 @@ def timing(name: str) -> Callable[[Callable[P, T]], Callable[P, T]]:
 
 
 @contextlib.contextmanager
-def timer_perf(title: str):
+def timer_perf(title: str) -> Generator[None, None, None]:
     """
     Examples:
         >>> import time
@@ -149,12 +148,14 @@ def timer_perf(title: str):
         ...     time.sleep(2)
         Sleep ....................................................... 2.00s
     """
-    ts = time()
-    yield
-    te = time()
-    padded_name: str = f"{title} ".ljust(60, ".")
-    padded_time: str = f" {(te - ts):0.2f}".rjust(6, ".")
-    print(f"{padded_name}{padded_time}s", flush=True)
+    ts = time.monotonic()
+    try:
+        yield
+    finally:
+        te = time.monotonic()
+        padded_name: str = f"{title} ".ljust(60, ".")
+        padded_time: str = f" {(te - ts):0.2f}".rjust(6, ".")
+        logging.debug(f"{padded_name}{padded_time}s")
 
 
 def debug(func: Callable[P, T]) -> Callable[P, T]:
@@ -171,9 +172,11 @@ def debug(func: Callable[P, T]) -> Callable[P, T]:
 
     @wraps(func)
     def wrapper(*args: P.args, **kwargs: P.kwargs):
-        print(f"Calling {func.__name__} with args: {args} kwargs: {kwargs}")
+        logging.debug(
+            f"Calling {func.__name__} with args: {args} kwargs: {kwargs}"
+        )
         result = func(*args, **kwargs)
-        print(f"{func.__name__} returned: {result}")
+        logging.debug(f"{func.__name__} returned: {result}")
         return result
 
     return wrapper
@@ -200,9 +203,10 @@ def validate_input(
                 if i < len(validations) and not validations[i](val):
                     raise ValueError(f"Invalid argument: {val}")
             for key, val in kwargs.items():
-                if key in validations[len(args) :] and not validations[
-                    len(args) :
-                ][key](val):
+                if (
+                    key in validations[len(args):]
+                    and not validations[len(args):][key](val)
+                ):
                     raise ValueError(f"Invalid argument: {key}={val}")
             return func(*args, **kwargs)
 
@@ -240,9 +244,9 @@ def retry(
                     return func(*args, **kwargs)
                 except Exception as e:
                     _attempts += 1
-                    print(f"Attempt {_attempts} failed: {e}")
-                    sleep(delay)
-            print(
+                    logging.info(f"Attempt {_attempts} failed: {e}")
+                    time.sleep(delay)
+            logging.debug(
                 f"Function `{func.__name__}` failed after "
                 f"{max_attempts} attempts"
             )
