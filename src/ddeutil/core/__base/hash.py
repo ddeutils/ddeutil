@@ -108,7 +108,7 @@ def same_pwd(salt: bytes, pw_hash: bytes, password: str) -> bool:
 
 
 def tokenize(*args, **kwargs):
-    """Deterministic token (modified from dask.base)
+    """Deterministic token (modified from dask.base).
 
     Examples:
         >>> tokenize([1, 2, '3'])

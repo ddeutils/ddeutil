@@ -145,6 +145,11 @@ def str2int_float(
 def must_list(value: Optional[Union[str, list[Any]]] = None) -> list[Any]:
     """Return the list value that was converted from string or list value.
 
+    :param value: A value that will validate and force to list value.
+    :type value: str | list[Any] | None
+
+    :rtype: list[Any]
+
     Examples:
         >>> must_list('[1, 2, 3]')
         [1, 2, 3]

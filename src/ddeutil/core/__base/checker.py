@@ -24,7 +24,7 @@ FalseStr: tuple[str, ...] = (
 
 
 def is_int(value: Any) -> bool:
-    """Check value that is integer.
+    """Check value that be integer.
 
     Examples:
         >>> is_int('')

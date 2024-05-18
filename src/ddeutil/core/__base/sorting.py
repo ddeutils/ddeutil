@@ -25,6 +25,7 @@ def ordered(value: T) -> T:
 
 def sort_priority(
     values: Union[list[T], set[T], tuple[T, ...]],
+    *,
     priority: list[T],
     reverse: bool = False,
     mode: Optional[str] = None,
