@@ -120,13 +120,13 @@ def tokenize(*args, **kwargs):
         args += (kwargs,)
     try:
         rs = hashlib.md5(str(args).encode())
-    except ValueError:
+    except ValueError:  # no cove
         # FIPS systems: https://github.com/fsspec/filesystem_spec/issues/380
         rs = hashlib.md5(str(args).encode(), usedforsecurity=False)
     return rs.hexdigest()
 
 
-def freeze(value: Any) -> Any:
+def freeze(value: Any) -> Any:  # no cove
     """Freeze a value to immutable object.
     Examples:
         >>> freeze({'foo': 'bar'})
@@ -145,7 +145,7 @@ def freeze(value: Any) -> Any:
     return value
 
 
-def freeze_args(func):
+def freeze_args(func):  # no cove
     """Transform mutable dictionary into immutable useful to be compatible with
     cache.
 
@@ -185,7 +185,7 @@ def freeze_args(func):
     return wrapped
 
 
-def random_str(num_length: int = 8) -> str:
+def random_str(num_length: int = 8) -> str:  # no cov
     """Random string from uppercase ASCII and number 0-9"""
     return "".join(
         random.choices(string.ascii_uppercase + string.digits, k=num_length)

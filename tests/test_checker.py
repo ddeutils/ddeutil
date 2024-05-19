@@ -36,6 +36,7 @@ def test_is_int():
         ("0.", False),
         (".0", False),
         (".01", False),
+        ("", False),
     )
     for values in map_value_respect:
         _respec, _value = values[1], values[0]
@@ -53,6 +54,9 @@ def test_can_int():
         ("1.0", True),
         ("-1.0", True),
         ("+1.0", True),
+        ("[1.0]", False),
+        ("1.2", False),
+        ("10.0001", False),
     )
     for values in map_value_respect:
         _respec, _value = values[1], values[0]

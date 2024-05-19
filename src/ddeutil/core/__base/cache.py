@@ -38,7 +38,7 @@ class memoize:
         return value
 
 
-def memoized_property(func_get):
+def memoized_property(func_get):  # no cove
     """Return a property attribute for new-style classes that only calls its
     getter on the first access. The result is stored and on subsequent
     accesses is returned, preventing the need to call the getter anymore.
@@ -74,7 +74,7 @@ def memoized_property(func_get):
     return property(func_get_memoized)
 
 
-def clear_cache(attrs: tuple):
+def clear_cache(attrs: tuple):  # no cove
     """Clear or delete attribute value of the class that implement cache.
     :usage:
         >>> class C(object):

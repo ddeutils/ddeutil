@@ -52,7 +52,16 @@ branch = true
 relative_files = true
 concurrency = ["thread", "multiprocessing"]
 source = ["ddeutil", "tests"]
-omit = ["perf_*.py"]
+omit = [
+    "perf_*.py",
+    "core/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "raise NotImplementedError",
+    "no cove",
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

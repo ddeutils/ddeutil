@@ -60,7 +60,7 @@ T = typing.TypeVar("T")
 concat: typing.Callable[[typing.Any], str] = "".join
 
 
-def operate(x):
+def operate(x):  # no cove
     return getattr(operator, x)
 
 
