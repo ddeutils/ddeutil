@@ -8,9 +8,7 @@ keywords = ['data', 'utility']
 classifiers = [
     "Topic :: Utilities",
     "Natural Language :: English",
-    # "Development Status :: 3 - Alpha",
     "Development Status :: 4 - Beta",
-    # "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Programming Language :: Python",

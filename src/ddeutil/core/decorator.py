@@ -103,9 +103,9 @@ def timer(func: Callable[P, T]) -> Callable[P, T]:
     """
 
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
-        start_time = time()
+        start_time = time.monotonic()
         result = func(*args, **kwargs)
-        execution_time = time() - start_time
+        execution_time = time.monotonic() - start_time
         print(f"Execution time: {execution_time} seconds")
         return result
 
@@ -127,10 +127,10 @@ def timing(name: str) -> Callable[[Callable[P, T]], Callable[P, T]]:
     def timing_internal(func: Callable[P, T]) -> Callable[P, T]:
         @wraps(func)
         def wrap(*args: P.args, **kw: P.kwargs) -> T:
-            ts = time()
+            ts = time.monotonic()
             result = func(*args, **kw)
             padded_name: str = f"{name} ".ljust(60, ".")
-            padded_time: str = f" {(time() - ts):0.2f}".rjust(6, ".")
+            padded_time: str = f" {(time.monotonic() - ts):0.2f}".rjust(6, ".")
             print(f"{padded_name}{padded_time}s", flush=True)
             return result
 
@@ -158,7 +158,7 @@ def timer_perf(title: str) -> Generator[None, None, None]:
         logging.debug(f"{padded_name}{padded_time}s")
 
 
-def debug(func: Callable[P, T]) -> Callable[P, T]:
+def debug(func: Callable[P, T]) -> Callable[P, T]:  # no cove
     """
     Examples:
         >>> @debug
@@ -203,10 +203,9 @@ def validate_input(
                 if i < len(validations) and not validations[i](val):
                     raise ValueError(f"Invalid argument: {val}")
             for key, val in kwargs.items():
-                if (
-                    key in validations[len(args):]
-                    and not validations[len(args):][key](val)
-                ):
+                if key in validations[len(args) :] and not validations[
+                    len(args) :
+                ][key](val):
                     raise ValueError(f"Invalid argument: {key}={val}")
             return func(*args, **kwargs)
 
@@ -218,7 +217,7 @@ def validate_input(
 def retry(
     max_attempts: int,
     delay: int = 1,
-) -> Callable[[Callable[P, T]], Callable[P, T]]:
+) -> Callable[[Callable[P, T]], Callable[P, T]]:  # no cove
     """Retry decorator with sequencial.
     Examples:
         >>> @retry(max_attempts=3, delay=2)
