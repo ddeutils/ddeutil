@@ -16,6 +16,7 @@ from .__base import (
     is_generic,
     is_int,
     isinstance_check,
+    lazy,
     memoize,
     memoized_property,
     merge_dict,

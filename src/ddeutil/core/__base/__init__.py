@@ -5,6 +5,7 @@ import operator
 import sys
 import typing
 from collections.abc import Callable, Collection
+from functools import partial
 from math import ceil
 
 from .cache import (
@@ -165,6 +166,11 @@ def import_string(dotted_path: str):
             f'Module "{module_path}" does not define a "{class_name}" '
             f"attribute/class"
         ) from err
+
+
+def lazy(module: str):
+    """Lazy use import_string function that warpped with partial function."""
+    return partial(import_string, module)
 
 
 def round_up(number: float, decimals):
