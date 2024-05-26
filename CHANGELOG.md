@@ -2,6 +2,27 @@
 
 ## Latest Changes
 
+## 0.3.5
+
+### :sparkles: Features
+
+- :dart: feat: add lazy function for lazy import string. (_2024-05-26_)
+
+### :black_nib: Code Changes
+
+- :test_tube: tests: add testcase for increase coverage on hash and checker. (_2024-05-19_)
+- :construction: refactored: remove base dir and add doc-str. (_2024-05-18_)
+- :art: style: add type hint for time decoratored. (_2024-05-16_)
+
+### :bug: Fix Bugs
+
+- :gear: fixed: change time.time to monotonic instead. (_2024-05-19_)
+- :gear: fixed: import lose function from __base. (_2024-05-13_)
+
+### :package: Build & Workflow
+
+- :toolbox: build: add black that was removed from my mistake. (_2024-05-18_)
+
 ## 0.3.4
 
 ### :black_nib: Code Changes
