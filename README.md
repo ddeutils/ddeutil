@@ -13,8 +13,8 @@
 
 The **Core Utility** package implements the utility functions and objects
 that was created on sub-package namespace, `ddeutil`, design for independent
-installation. I make this package able to extend with any sub-extension with this
-namespace. This namespace able to scale out the coding with folder
+installation. I make this package able to extend with any sub-extension with
+this namespace. This namespace able to scale out the coding with folder
 structure design. You can add any extension features and import by
 `import ddeutil.{extension}`.
 
@@ -30,10 +30,12 @@ pip install -U ddeutil
 
 ## Features
 
-### Base Utility Functions
+This Core package will implement all of reusable functions and objects that does
+not re-create again because it is basic code but has a lot of coding.
 
 ```text
-core.base
+core
+  - base
     - cache
     - checker
     - convert
@@ -41,15 +43,35 @@ core.base
     - merge
     - sorting
     - splitter
+  - decorator
+  - dtutils
+  - randomly
 ```
 
-### Utility Functions
+### OnlyOne
 
-```text
-core
-    - decorator
-    - dtutils
-    - randomly
+```python
+from ddeutil.core import onlyone
+
+assert 'a' == onlyone(['a', 'b'], ['a', 'b', 'c'])
+assert 'c' == onlyone(('a', 'b'), ['c', 'e', 'f'])
+assert onlyone(['a', 'b'], ['c', 'e', 'f'], default=False) is None
+```
+
+### Instance Check
+
+```python
+from ddeutil.core import isinstance_check
+from typing import Union, Optional
+
+assert isinstance_check("s", str)
+assert isinstance_check(["s"], list[str])
+assert isinstance_check(("s", "t"), tuple[str, ...])
+assert not isinstance_check(("s", "t"), tuple[str])
+assert isinstance_check({"s": 1, "d": "r"}, dict[str, Union[int, str]])
+assert isinstance_check("s", Optional[str])
+assert isinstance_check(1, Optional[Union[str, int]])
+assert not isinstance_check("s", list[str])
 ```
 
 ## License

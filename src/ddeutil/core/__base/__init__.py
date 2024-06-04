@@ -4,7 +4,7 @@ import importlib
 import operator
 import sys
 import typing
-from collections.abc import Callable, Collection
+from collections.abc import Callable, Collection, Sequence
 from functools import partial
 from math import ceil
 
@@ -204,21 +204,29 @@ def remove_pad(value: str) -> str:
 
 
 def onlyone(
-    check: list[T],
-    value: list[T],
+    check: Sequence[T],
+    value: Sequence[T],
     *,
     default: bool = True,
 ) -> T | None:
     """Get only one element from check list that exists in match list.
 
+    :param check: A sequence of value to check if it exists only one.
+    :param value: A value that want to get only one value.
+    :param default: A flag that use the first value of the value param if it
+        does not exist any only one. Otherwise, it will return None.
+    :type default: bool(=True)
+
     Examples:
         >>> onlyone(['a', 'b'], ['a', 'b', 'c'])
         'a'
-        >>> onlyone(['a', 'b'], ['c', 'e', 'f'])
+        >>> onlyone(('a', 'b'), ['c', 'e', 'f'])
         'c'
         >>> onlyone(['a', 'b'], ['c', 'e', 'f'], default=False)
 
     """
+    if isinstance(check, set) or isinstance(value, set):
+        raise TypeError("The onlyone should able to fix position index type")
     if len(exist := set(check).intersection(set(value))) == 1:
         return list(exist)[0]
     return next(

@@ -8,6 +8,7 @@ from typing import (
     Union,
 )
 
+import pytest
 from ddeutil.core.__base import (
     filter_dict,
     isinstance_check,
@@ -68,6 +69,15 @@ def test_only_one_with_default():
         start=0,
     ):
         assert output_lists[index] == onlyone(_list, fix_list)
+
+
+def test_only_one_dynamic_type():
+    assert 1 == onlyone((1, 2, 3), [1, 4, 5])
+    assert 1 == onlyone([1, 4, 5], (1, 2, 3))
+    assert "1" == onlyone("145", ("1", "2", "3"))
+
+    with pytest.raises(TypeError):
+        onlyone({1, 4, 5}, (1, 2, 3))
 
 
 def test_filter_dict():
