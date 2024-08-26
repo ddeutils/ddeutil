@@ -2,6 +2,26 @@
 
 ## Latest Changes
 
+## 0.3.6
+
+### :sparkles: Features
+
+- :dart: feat: add handler number of digit value in hash_str function. (_2024-08-26_)
+- :dart: feat: add year mode on dtutils module. (_2024-08-26_)
+
+### :black_nib: Code Changes
+
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.8.14 to 1.9.0 (_2024-07-01_)
+- :construction: refactored: 📦 bump ujson from 5.9.0 to 5.10.0 (#51) (_2024-06-03_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: update readme file for more example. (_2024-06-04_)
+
+### :postbox: Dependencies
+
+- :pushpin: deps: update version of types-python-dateutil to 2.9.0.20240821. (_2024-08-26_)
+
 ## 0.3.5
 
 ### :sparkles: Features
