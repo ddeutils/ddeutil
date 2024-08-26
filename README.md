@@ -4,19 +4,13 @@
 [![python support version](https://img.shields.io/pypi/pyversions/ddeutil)](https://pypi.org/project/ddeutil/)
 [![size](https://img.shields.io/github/languages/code-size/korawica/ddeutil)](https://github.com/korawica/ddeutil)
 
-**Table of Contents**:
-
-- [Installation](#installation)
-- [Features](#features)
-  - [Base Utility Functions](#base-utility-functions)
-  - [Utility Functions](#utility-functions)
-
 The **Core Utility** package implements the utility functions and objects
 that was created on sub-package namespace, `ddeutil`, design for independent
 installation. I make this package able to extend with any sub-extension with
-this namespace. This namespace able to scale out the coding with folder
-structure design. You can add any extension features and import by
-`import ddeutil.{extension}`.
+this namespace.
+
+This namespace able to scale out the coding with folder structure design.
+You can add any extension features and import by `import ddeutil.{extension}`.
 
 > [!NOTE]
 > This package provide the Base Utility functions and objects for any sub-namespace
@@ -48,6 +42,8 @@ core
   - randomly
 ```
 
+## Usages
+
 ### OnlyOne
 
 ```python
@@ -73,7 +69,3 @@ assert isinstance_check("s", Optional[str])
 assert isinstance_check(1, Optional[Union[str, int]])
 assert not isinstance_check("s", list[str])
 ```
-
-## License
-
-This project was licensed under the terms of the [MIT license](LICENSE).
