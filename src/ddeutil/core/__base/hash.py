@@ -63,7 +63,17 @@ def hash_str(value: str, n: int = 8) -> str:
         >>> hash_str('hello world')
         '05751529'
     """
-    return str(int(hashlib.sha256(value.encode("utf-8")).hexdigest(), 16))[-n:]
+    if n < -1 or n >= 16:
+        raise ValueError(
+            "Number of hashing string function does not support less than -1, "
+            "or rather than 16 digit."
+        )
+    hasted: str = str(
+        int(hashlib.sha256(value.encode("utf-8")).hexdigest(), 16)
+    )
+    if n == -1:
+        return hasted
+    return hasted[-n:]
 
 
 def hash_pwd(pwd: str) -> tuple[bytes, bytes]:
