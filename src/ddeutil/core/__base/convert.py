@@ -1,3 +1,8 @@
+# ------------------------------------------------------------------------------
+# Copyright (c) 2022 Korawich Anuttra. All rights reserved.
+# Licensed under the MIT License. See LICENSE in the project root for
+# license information.
+# ------------------------------------------------------------------------------
 from __future__ import annotations
 
 import ast
@@ -10,15 +15,9 @@ from typing import (
 import ujson
 
 try:
-    from .checker import (
-        FalseStr,
-        TrueStr,
-    )
+    from .checker import FalseStr, TrueStr
 except ImportError:
-    from checker import (
-        FalseStr,
-        TrueStr,
-    )
+    from checker import FalseStr, TrueStr
 
 
 def str2bool(

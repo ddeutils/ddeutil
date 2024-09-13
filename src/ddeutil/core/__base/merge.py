@@ -1,11 +1,12 @@
-from collections import (
-    ChainMap,
-    defaultdict,
-)
-from functools import (
-    partial,
-    reduce,
-)
+# ------------------------------------------------------------------------------
+# Copyright (c) 2022 Korawich Anuttra. All rights reserved.
+# Licensed under the MIT License. See LICENSE in the project root for
+# license information.
+# ------------------------------------------------------------------------------
+from __future__ import annotations
+
+from collections import ChainMap, defaultdict
+from functools import partial, reduce
 from itertools import zip_longest
 from typing import (
     Optional,

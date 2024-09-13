@@ -1,3 +1,10 @@
+# ------------------------------------------------------------------------------
+# Copyright (c) 2022 Korawich Anuttra. All rights reserved.
+# Licensed under the MIT License. See LICENSE in the project root for
+# license information.
+# ------------------------------------------------------------------------------
+from __future__ import annotations
+
 import hashlib
 import hmac
 import os
@@ -87,7 +94,8 @@ def hash_pwd(pwd: str) -> tuple[bytes, bytes]:
             and therefore more secure.
 
     References:
-        * https://stackoverflow.com/questions/9594125/salt-and-hash-a-password-in-python/56915300#56915300
+        * https://stackoverflow.com/questions/9594125/ -
+            salt-and-hash-a-password-in-python/56915300#56915300
     """
     # Able use `uuid.uuid4().hex`
     salt = b64encode(os.urandom(16))
@@ -109,8 +117,9 @@ def same_pwd(salt: bytes, pw_hash: bytes, password: str) -> bool:
         >>> same_pwd(s, pw, 'P@ssW0rd')
         True
 
-    :ref:
-        - https://stackoverflow.com/questions/9594125/salt-and-hash-a-password-in-python/56915300#56915300
+    References:
+        * https://stackoverflow.com/questions/9594125/ -
+            salt-and-hash-a-password-in-python/56915300#56915300
     """
     return hmac.compare_digest(
         pw_hash, hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 100000)
@@ -179,7 +188,7 @@ def freeze_args(func):  # no cove
 
     class HashDict(dict):
         def __hash__(self):
-            return hash(freeze(self))
+            return hash(freeze(self.items()))
 
     @wraps(func)
     def wrapped(*args, **kwargs):
