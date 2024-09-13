@@ -2,6 +2,24 @@
 
 ## Latest Changes
 
+## 0.3.7
+
+### :sparkles: Features
+
+- :dart: feat: add datetime utils function. (_2024-09-13_)
+
+### :black_nib: Code Changes
+
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.9.0 to 1.10.0 (_2024-09-01_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: update readme and remove license topic. (_2024-08-26_)
+
+### :bug: Fix Bugs
+
+- :gear: fixed: freeze_args does not freeze all items. (_2024-09-13_)
+
 ## 0.3.6
 
 ### :sparkles: Features
