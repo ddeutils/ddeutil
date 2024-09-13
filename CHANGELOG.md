@@ -2,6 +2,16 @@
 
 ## Latest Changes
 
+## 0.3.8
+
+### :bug: Fix Bugs
+
+- :gear: fixed: add hash for list and set type in freeze_args func. (_2024-09-13_)
+
+### :package: Build & Workflow
+
+- :toolbox: build: add support for python version 3.13. (_2024-09-13_)
+
 ## 0.3.7
 
 ### :sparkles: Features
