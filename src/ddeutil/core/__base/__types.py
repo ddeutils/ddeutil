@@ -1,3 +1,8 @@
+# ------------------------------------------------------------------------------
+# Copyright (c) 2022 Korawich Anuttra. All rights reserved.
+# Licensed under the MIT License. See LICENSE in the project root for
+# license information.
+# ------------------------------------------------------------------------------
 from __future__ import annotations
 
 import sys
@@ -14,7 +19,7 @@ T = TypeVar("T")
 P = ParamSpec("P")
 
 Str = Union[str, bytes]
-ZERO_DEPTH_BASES = (
+ZERO_DEPTH_BASES: tuple[object, ...] = (
     str,
     bytes,
     Number,

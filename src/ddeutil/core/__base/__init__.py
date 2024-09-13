@@ -1,3 +1,8 @@
+# ------------------------------------------------------------------------------
+# Copyright (c) 2022 Korawich Anuttra. All rights reserved.
+# Licensed under the MIT License. See LICENSE in the project root for
+# license information.
+# ------------------------------------------------------------------------------
 from __future__ import annotations
 
 import importlib
@@ -201,6 +206,51 @@ def remove_pad(value: str) -> str:
         '123'
     """
     return _last_char if (_last_char := value[-1]) == "0" else value.lstrip("0")
+
+
+def first(iterable, default=None, condition=lambda x: True):
+    """Returns the first item in the `iterable` that satisfies the `condition`.
+    If the condition is not given, returns the first item of the iterable.
+
+        If the `default` argument is given and the iterable is empty, or if it
+    has no items matching the condition, the `default` argument is returned if
+    it matches the condition.
+
+    The `default` argument being None is the same as it not being given.
+
+    Raises `StopIteration` if no item satisfying the condition is found
+    and default is not given or doesn't satisfy the condition.
+
+    Examples:
+        >>> first( (1,2,3), condition=lambda _: _ % 2 == 0)
+        2
+        >>> first(range(3, 100))
+        3
+        >>> first( () )
+        Traceback (most recent call last):
+        ...
+        StopIteration
+        >>> first([], default=1)
+        1
+        >>> first([], default=1, condition=lambda _: _ % 2 == 0)
+        Traceback (most recent call last):
+        ...
+        StopIteration
+        >>> first([1,3,5], default=1, condition=lambda _: _ % 2 == 0)
+        Traceback (most recent call last):
+        ...
+        StopIteration
+
+    References: https://stackoverflow.com/questions/2361426/ -
+            get-the-first-item-from-an-iterable-that-matches-a-condition
+    """
+    try:
+        return next(x for x in iterable if condition(x))
+    except StopIteration:
+        if default is not None and condition(default):
+            return default
+        else:
+            raise
 
 
 def onlyone(

@@ -5,6 +5,7 @@ from .__base import (
     clear_cache,
     concat,
     filter_dict,
+    first,
     freeze,
     freeze_args,
     getdot,
