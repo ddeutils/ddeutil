@@ -1,5 +1,8 @@
+from functools import lru_cache
+
 from ddeutil.core.__base.hash import (
     checksum,
+    freeze_args,
     hash_all,
     hash_pwd,
     hash_str,
@@ -61,3 +64,13 @@ def test_checksum():
     assert "83788ce748a5899920673e5a4384979b" == checksum(
         {"foo": "bar", "baz": 1}
     )
+
+
+def test_freeze_args():
+
+    @freeze_args
+    @lru_cache
+    def cache_func(x, y):
+        return x, y
+
+    cache_func({"data": [1, 2, 3, 4]}, ["a", "b", "c"])

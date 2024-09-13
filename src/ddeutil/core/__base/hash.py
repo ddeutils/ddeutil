@@ -186,19 +186,29 @@ def freeze_args(func):  # no cove
         'Hello World'
     """
 
-    class HashDict(dict):
+    class HashMixin:
         def __hash__(self):
-            return hash(freeze(self.items()))
+            return hash(freeze(self))
+
+    class HashDict(HashMixin, dict): ...
+
+    class HashList(HashMixin, list): ...
+
+    class HashSet(HashMixin, set): ...
+
+    def map_hash(value: Any):
+        if isinstance(value, dict):
+            return HashDict(value)
+        elif isinstance(value, list):
+            return HashList(value)
+        elif isinstance(value, set):
+            return HashSet(value)
+        return value
 
     @wraps(func)
     def wrapped(*args, **kwargs):
-        args: tuple = tuple(
-            HashDict(arg) if isinstance(arg, dict) else arg for arg in args
-        )
-        kwargs: dict = {
-            k: HashDict(v) if isinstance(v, dict) else v
-            for k, v in kwargs.items()
-        }
+        args: tuple = tuple(map_hash(arg) for arg in args)
+        kwargs: dict = {k: map_hash(v) for k, v in kwargs.items()}
         return func(*args, **kwargs)
 
     return wrapped
