@@ -1,28 +1,37 @@
-# Data Utility Packages: _Core_
+# Core Data Utility
 
 [![test](https://github.com/korawica/ddeutil/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/korawica/ddeutil/actions/workflows/tests.yml)
+[![pypi version](https://img.shields.io/pypi/v/ddeutil)](https://pypi.org/project/ddeutil/)
+[![python support version](https://img.shields.io/pypi/pyversions/ddeutil)](https://pypi.org/project/ddeutil/)
 [![python support version](https://img.shields.io/pypi/pyversions/ddeutil)](https://pypi.org/project/ddeutil/)
 [![size](https://img.shields.io/github/languages/code-size/korawica/ddeutil)](https://github.com/korawica/ddeutil)
+[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-The **Core Utility** package implements the utility functions and objects
+The **Core Data Utility** package implements the data utility functions and objects
 that was created on sub-package namespace, `ddeutil`, design for independent
-installation. I make this package able to extend with any sub-extension with
-this namespace.
+installation.
 
-This namespace able to scale out the coding with folder structure design.
-You can add any extension features and import by `import ddeutil.{extension}`.
+I make this package able to extend with any sub-extension with this namespace.
+So, this namespace able to scale-out the requirement with folder level design.
+You can add any custom features and import it by `import ddeutil.{extension}`.
 
 > [!NOTE]
 > This package provide the Base Utility functions and objects for any sub-namespace
 > package that use for data function or application.
 
-## Installation
+## :round_pushpin: Installation
 
 ```shell
 pip install -U ddeutil
 ```
 
-## Features
+**Python version supported**:
+
+| Python Version | Installation                        | Support Fixed Bug  |
+|----------------|-------------------------------------|--------------------|
+| `>=3.9,<3.14`  | `pip install -U ddeutil`            | :heavy_check_mark: |
+
+## :dart: Features
 
 This Core package will implement all of reusable functions and objects that does
 not re-create again because it is basic code but has a lot of coding.
@@ -42,7 +51,7 @@ core
   - randomly
 ```
 
-## Usages
+## :beers: Usages
 
 ### OnlyOne
 
