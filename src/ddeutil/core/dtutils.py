@@ -15,7 +15,10 @@ from typing import (
 )
 from zoneinfo import ZoneInfo
 
-from dateutil.relativedelta import relativedelta
+try:
+    from dateutil.relativedelta import relativedelta
+except ImportError:
+    relativedelta = None
 
 from . import first
 
@@ -144,6 +147,11 @@ def next_date(
         >>> next_date(datetime(2023, 1, 31, 0, 0, 0), mode='year')
         datetime.datetime(2024, 1, 31, 0, 0)
     """
+    if relativedelta is None:
+        raise ImportError(
+            "This function require relativedelta from the dateutil package, "
+            "you should install with `pip install ddeutil[dateutil]`"
+        )
     assert mode in (
         "year",
         "month",
@@ -264,6 +272,11 @@ def next_date_with_freq(
         >>> next_date_with_freq(datetime(2024, 5, 31), freq='Y', prev=True)
         datetime.datetime(2023, 5, 31, 0, 0)
     """
+    if relativedelta is None:
+        raise ImportError(
+            "This function require relativedelta from the dateutil package, "
+            "you should install with `pip install ddeutil[dateutil]`"
+        )
     assert freq in ("D", "W", "M", "Q", "Y")
     operator: int = -1 if prev else 1
     if freq == "D":
@@ -309,6 +322,11 @@ def calc_data_date_with_freq(dt: datetime, freq: str) -> datetime:
             >>> calc_data_date_with_freq(datetime(2024, 5, 31), freq='Y')
             datetime.datetime(2023, 12, 31, 0, 0)
     """
+    if relativedelta is None:
+        raise ImportError(
+            "This function require relativedelta from the dateutil package, "
+            "you should install with `pip install ddeutil[dateutil]`"
+        )
     assert freq in ("D", "W", "M", "Q", "Y")
     if freq == "D" or freq == "W":
         return dt

@@ -16,7 +16,10 @@ from typing import (
     Optional,
 )
 
-import ujson
+try:
+    import ujson
+except ImportError:
+    ujson = None
 
 
 def checksum(value: dict[str, Any]) -> str:
@@ -28,6 +31,11 @@ def checksum(value: dict[str, Any]) -> str:
         >>> checksum({"foo": "bar", "baz": 1})
         '83788ce748a5899920673e5a4384979b'
     """
+    if ujson is None:
+        raise ImportError(
+            "This function want to use ujson package for dumps values, "
+            "`pip install ddeutil[checksum]`."
+        )
     return hashlib.md5(
         ujson.dumps(value, sort_keys=True).encode("utf-8")
     ).hexdigest()
