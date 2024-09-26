@@ -237,9 +237,7 @@ def last_doq(dt: datetime) -> datetime:
     return first(candidates, condition=lambda x: x >= dt)
 
 
-def next_date_with_freq(
-    dt: datetime, freq: str, prev: bool = False
-) -> datetime:
+def next_date_freq(dt: datetime, freq: str, prev: bool = False) -> datetime:
     """
     :param dt:
     :param freq:
@@ -247,29 +245,29 @@ def next_date_with_freq(
     :rtype: datetime
 
     Examples:
-        >>> next_date_with_freq(datetime(2024, 1, 3), freq='D')
+        >>> next_date_freq(datetime(2024, 1, 3), freq='D')
         datetime.datetime(2024, 1, 4, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 1, 3), freq='D', prev=True)
+        >>> next_date_freq(datetime(2024, 1, 3), freq='D', prev=True)
         datetime.datetime(2024, 1, 2, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 1, 3), freq='W')
+        >>> next_date_freq(datetime(2024, 1, 3), freq='W')
         datetime.datetime(2024, 1, 10, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 1, 3), freq='W', prev=True)
+        >>> next_date_freq(datetime(2024, 1, 3), freq='W', prev=True)
         datetime.datetime(2023, 12, 27, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 1, 3), freq='M')
+        >>> next_date_freq(datetime(2024, 1, 3), freq='M')
         datetime.datetime(2024, 2, 3, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 1, 31), freq='M')
+        >>> next_date_freq(datetime(2024, 1, 31), freq='M')
         datetime.datetime(2024, 2, 29, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 1, 17), freq='Q')
+        >>> next_date_freq(datetime(2024, 1, 17), freq='Q')
         datetime.datetime(2024, 4, 17, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 1, 31), freq='Q')
+        >>> next_date_freq(datetime(2024, 1, 31), freq='Q')
         datetime.datetime(2024, 4, 30, 0, 0)
-        >>> next_date_with_freq(datetime(2025, 12, 31), freq='Q')
+        >>> next_date_freq(datetime(2025, 12, 31), freq='Q')
         datetime.datetime(2026, 3, 31, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 5, 21), freq='Y')
+        >>> next_date_freq(datetime(2024, 5, 21), freq='Y')
         datetime.datetime(2025, 5, 21, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 5, 31), freq='Y')
+        >>> next_date_freq(datetime(2024, 5, 31), freq='Y')
         datetime.datetime(2025, 5, 31, 0, 0)
-        >>> next_date_with_freq(datetime(2024, 5, 31), freq='Y', prev=True)
+        >>> next_date_freq(datetime(2024, 5, 31), freq='Y', prev=True)
         datetime.datetime(2023, 5, 31, 0, 0)
     """
     if relativedelta is None:
@@ -298,28 +296,28 @@ def next_date_with_freq(
     raise ValueError(f"The date logic does not support for frequency: {freq}")
 
 
-def calc_data_date_with_freq(dt: datetime, freq: str) -> datetime:
+def calc_data_freq(dt: datetime, freq: str) -> datetime:
     """
     :param dt:
     :param freq:
     :rtype: datetime
 
         Examples:
-            >>> calc_data_date_with_freq(datetime(2024, 1, 13), freq='D')
+            >>> calc_data_freq(datetime(2024, 1, 13), freq='D')
             datetime.datetime(2024, 1, 13, 0, 0)
-            >>> calc_data_date_with_freq(datetime(2024, 1, 3), freq='W')
+            >>> calc_data_freq(datetime(2024, 1, 3), freq='W')
             datetime.datetime(2024, 1, 3, 0, 0)
-            >>> calc_data_date_with_freq(datetime(2024, 1, 3), freq='M')
+            >>> calc_data_freq(datetime(2024, 1, 3), freq='M')
             datetime.datetime(2023, 12, 31, 0, 0)
-            >>> calc_data_date_with_freq(datetime(2024, 1, 31), freq='M')
+            >>> calc_data_freq(datetime(2024, 1, 31), freq='M')
             datetime.datetime(2024, 1, 31, 0, 0)
-            >>> calc_data_date_with_freq(datetime(2024, 1, 31), freq='Q')
+            >>> calc_data_freq(datetime(2024, 1, 31), freq='Q')
             datetime.datetime(2023, 12, 31, 0, 0)
-            >>> calc_data_date_with_freq(datetime(2025, 12, 31), freq='Q')
+            >>> calc_data_freq(datetime(2025, 12, 31), freq='Q')
             datetime.datetime(2025, 12, 31, 0, 0)
-            >>> calc_data_date_with_freq(datetime(2024, 12, 31), freq='Y')
+            >>> calc_data_freq(datetime(2024, 12, 31), freq='Y')
             datetime.datetime(2024, 12, 31, 0, 0)
-            >>> calc_data_date_with_freq(datetime(2024, 5, 31), freq='Y')
+            >>> calc_data_freq(datetime(2024, 5, 31), freq='Y')
             datetime.datetime(2023, 12, 31, 0, 0)
     """
     if relativedelta is None:

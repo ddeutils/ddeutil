@@ -16,8 +16,8 @@ So, this namespace able to scale-out the requirement with folder level design.
 You can add any custom features and import it by `import ddeutil.{extension}`.
 
 > [!NOTE]
-> This package provide the Base Utility functions and objects for any sub-namespace
-> package that use for data function or application.
+> This package provide the base utility functions and objects for any sub-namespace
+> package.
 
 ## :round_pushpin: Installation
 
@@ -39,26 +39,31 @@ pip install -U ddeutil
 
 ## :dart: Features
 
-This Core package will implement all of reusable functions and objects that does
-not re-create again because it is basic code but has a lot of coding.
+This core data package will implement all of utility functions and objects that
+does not re-create again because it is basic code but has a lot of using require.
 
-| Module        | Function            | Import Syntax                                   | Description                                                                                                     |
-|---------------|---------------------|-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
-| base          | `isinstance_check`  | `from <package> import isinstance_check`        |                                                                                                                 |
-| base.cache    | `memorize`          | `from <package>.cache import memorize`          | Return a cachable function that keep all arguments and pass to string type for keeping it in the caching key.   |
-|               | `property_memorize` | `from <package>.cache import property_memorize` |                                                                                                                 |
-|               | `clear_cache`       | `from <package>.cache import clear_cache`       |                                                                                                                 |
-| base.checker  | `can_int`           | `from <package>.cache import can_int`           |                                                                                                                 |
-|               | `is_int`            | `from <package>.cache import is_int`            |                                                                                                                 |
-| base.convert  |                     |                                                 |                                                                                                                 |
-| base.hash     |                     |                                                 |                                                                                                                 |
-| base.merge    |                     |                                                 |                                                                                                                 |
-| base.sorting  |                     |                                                 |                                                                                                                 |
-| base.splitter |                     |                                                 |                                                                                                                 |
-| decorator     |                     |                                                 |                                                                                                                 |
-| dtutils       |                     |                                                 |                                                                                                                 |
-| threader      |                     |                                                 |                                                                                                                 |
-
+| Module        | Name                | Type      | Description                                                                                                   | Remark |
+|---------------|---------------------|-----------|---------------------------------------------------------------------------------------------------------------|--------|
+| base          | `isinstance_check`  | function  |                                                                                                               |        |
+| base.cache    | `memorize`          | function  | Return a cachable function that keep all arguments and pass to string type for keeping it in the caching key. |        |
+|               | `property_memorize` | function  |                                                                                                               |        |
+|               | `clear_cache`       | function  |                                                                                                               |        |
+| base.checker  | `can_int`           | function  |                                                                                                               |        |
+|               | `is_int`            | function  |                                                                                                               |        |
+| base.convert  |                     |           |                                                                                                               |        |
+| base.hash     |                     |           |                                                                                                               |        |
+| base.merge    |                     |           |                                                                                                               |        |
+| base.sorting  |                     |           |                                                                                                               |        |
+| base.splitter |                     |           |                                                                                                               |        |
+| decorator     |                     |           |                                                                                                               |        |
+| dtutils       | `replace_date`      | function  |                                                                                                               |        |
+|               | `next_date`         | function  |                                                                                                               |        |
+|               | `closest_quarter`   | function  |                                                                                                               |        |
+|               | `last_dom`          | function  |                                                                                                               |        |
+|               | `last_doq`          | function  |                                                                                                               |        |
+|               | `next_date_freq`    | function  |                                                                                                               |        |
+|               | `calc_data_freq`    | function  |                                                                                                               |        |
+| threader      | `ThreadWithControl` | object    | Threading object that can control maximum background agent and result after complete.                         |        |
 
 ## :beers: Usages
 

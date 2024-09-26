@@ -24,38 +24,44 @@ def _async_raise(tid, exc_type):
     if res == 0:
         raise ValueError("invalid thread id")
     elif res != 1:
-        """
-        if it returns a number greater than one, you're in trouble,
-        and you should call it again with exc=NULL to revert the effect
-            >> ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(tid), 0)
-        """
+        # NOTE: If it returns a number greater than one, you're in trouble,
+        #   and you should call it again with exc=NULL to revert the effect.
+        #
+        #   >>> ctypes.pythonapi.PyThreadState_SetAsyncExc(
+        #   ...     ctypes.c_long(tid), 0
+        #   ... )
+        #
         ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(tid), None)
         raise SystemError("PyThreadState_SetAsyncExc failed")
 
 
 class ThreadWithControl(threading.Thread):
-    """
-    We want to create threading class that can control maximum background
-    agent and result after complete
-    - Get return output from threading function
-    - A thread class that supports raising an exception in the thread from
-    another thread.
-    usage:
-        >> _thread = ThreadWithControl(target=lambda a: a * 2, args=(2, ))
-        >> _thread.daemon = True
-        >> _thread.start()
-        >> print(_thread.join())
+    """Threading object that can control maximum background agent and result
+    after complete.
+
+        -   Get return output from threading function
+        -   A thread class that supports raising an exception in the thread from
+            another thread.
+
+    Examples:
+        >>> _thread = ThreadWithControl(target=lambda a: a * 2, args=(2, ))
+        >>> _thread.daemon = True
+        >>> _thread.start()
+        >>> print(_thread.join())
         4
     """
 
     threadLimiter = threading.BoundedSemaphore(MAX_THREAD)
 
     def __init__(self, *args, **kwargs):
+        # NOTE: Create existing attrs that will create from parent class.
         self._return = None
         self._target = None
         self._args = None
         self._kwargs = None
         super().__init__(*args, **kwargs)
+
+        # NOTE: Create threading event.
         self._stop_event = threading.Event()
         self.check_count = 0
 
@@ -79,8 +85,7 @@ class ThreadWithControl(threading.Thread):
         return self._stop_event.is_set()
 
     def _get_my_tid(self):
-        """
-        determines this (self's) thread id
+        """Determines this (self's) thread id.
 
         CAREFUL: this function is executed in the context of the caller
         thread, to get the identity of the thread represented by this
