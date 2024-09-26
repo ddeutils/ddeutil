@@ -31,6 +31,12 @@ pip install -U ddeutil
 |----------------|-------------------------------------|--------------------|
 | `>=3.9,<3.14`  | `pip install -U ddeutil`            | :heavy_check_mark: |
 
+> [!NOTE]
+> If you want to install all optional dependencies for this package, you can use
+> `pip install -U ddeutil[all]`. I will install `ujson` and `python-dateutil`
+> packages for some functions in this project such as `hash.checksum`, 
+> `dtutils.next_date_with_freq`.
+
 ## :dart: Features
 
 This Core package will implement all of reusable functions and objects that does
