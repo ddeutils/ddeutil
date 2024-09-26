@@ -2,6 +2,27 @@
 
 ## Latest Changes
 
+## 0.4.0
+
+### :sparkles: Features
+
+- :dart: feat: change name of property caching func and move random string func loc. (_2024-09-26_)
+
+### :black_nib: Code Changes
+
+- :test_tube: tests: change name of pytest on pre-commit hook local. (_2024-09-22_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: update feature table on readme. (_2024-09-26_)
+- :page_facing_up: docs: update readme for notice about optional deps. (_2024-09-26_)
+- :page_facing_up: docs: update readme and create docs folder for mkdocs. (_2024-09-22_)
+
+### :postbox: Dependencies
+
+- :pushpin: deps: move all deps to optional deps. (_2024-09-26_)
+- :pushpin: deps: remove tzdata from project dependency. (_2024-09-26_)
+
 ## 0.3.8
 
 ### :bug: Fix Bugs
