@@ -10,7 +10,7 @@ from typing import Any
 
 
 class memoize:
-    """Return a cachable function that keep all argruments and pass to string
+    """Return a cachable function that keep all arguments and pass to string
     type for keeping it in the caching key.
 
     Examples:

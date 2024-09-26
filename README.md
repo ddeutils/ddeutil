@@ -36,20 +36,23 @@ pip install -U ddeutil
 This Core package will implement all of reusable functions and objects that does
 not re-create again because it is basic code but has a lot of coding.
 
-```text
-core
-  - base
-    - cache
-    - checker
-    - convert
-    - hash
-    - merge
-    - sorting
-    - splitter
-  - decorator
-  - dtutils
-  - randomly
-```
+| Module        | Function           | Import Syntax                                 | Description                                                                                                     |
+|---------------|--------------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| base          | isinstance_check   | from <package> import isinstance_check        |                                                                                                                 |
+| base.cache    | memorize           | from <package>.cache import memorize          | Return a cachable function that keep all arguments and pass to string type for keeping it in the caching key.   |
+|               | property_memorize  | from <package>.cache import property_memorize |                                                                                                                 |
+|               | clear_cache        | from <package>.cache import clear_cache       |                                                                                                                 |
+| base.checker  | can_int            | from <package>.cache import can_int           |                                                                                                                 |
+|               | is_int             | from <package>.cache import is_int            |                                                                                                                 |
+| base.convert  |                    |                                               |                                                                                                                 |
+| base.hash     |                    |                                               |                                                                                                                 |
+| base.merge    |                    |                                               |                                                                                                                 |
+| base.sorting  |                    |                                               |                                                                                                                 |
+| base.splitter |                    |                                               |                                                                                                                 |
+| decorator     |                    |                                               |                                                                                                                 |
+| dtutils       |                    |                                               |                                                                                                                 |
+| threader      |                    |                                               |                                                                                                                 |
+
 
 ## :beers: Usages
 

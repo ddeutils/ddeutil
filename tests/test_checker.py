@@ -1,4 +1,4 @@
-import ddeutil.core.__base.checker as ck
+from ddeutil.core import checker as ck
 
 
 def test_is_int():

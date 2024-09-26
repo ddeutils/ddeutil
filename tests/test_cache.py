@@ -1,4 +1,4 @@
-import ddeutil.core.__base.cache as cache
+from ddeutil.core import cache
 
 
 def test_memoize():
