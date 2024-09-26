@@ -12,7 +12,7 @@ import inspect
 import logging
 import time
 import warnings
-from collections.abc import Generator
+from collections.abc import Iterator
 from functools import wraps
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
@@ -95,28 +95,6 @@ def deepcopy_args(func: Callable[[object, P], T]) -> Callable[[object, P], T]:
     return func_get
 
 
-def timer(func: Callable[P, T]) -> Callable[P, T]:
-    """
-    Examples:
-        >>> import time
-        >>> @timer
-        ... def will_sleep():
-        ...     time.sleep(2)
-        ...     return
-        >>> will_sleep()
-        Execution time: 2.003119945526123 seconds
-    """
-
-    def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
-        start_time = time.monotonic()
-        result = func(*args, **kwargs)
-        execution_time = time.monotonic() - start_time
-        print(f"Execution time: {execution_time} seconds")
-        return result
-
-    return wrapper
-
-
 def timing(name: str) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """
     Examples:
@@ -145,11 +123,11 @@ def timing(name: str) -> Callable[[Callable[P, T]], Callable[P, T]]:
 
 
 @contextlib.contextmanager
-def timer_perf(title: str) -> Generator[None, None, None]:
+def timing_open(title: str) -> Iterator[None]:
     """
     Examples:
         >>> import time
-        >>> with timer_perf('Sleep'):
+        >>> with timing_open('Sleep'):
         ...     time.sleep(2)
         Sleep ....................................................... 2.00s
     """
@@ -187,12 +165,12 @@ def debug(func: Callable[P, T]) -> Callable[P, T]:  # no cove
     return wrapper
 
 
-def validate_input(
+def validate(
     *validations: tuple[Callable[[Any], bool]],
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """
     Examples:
-        >>> @validate_input(lambda x: x > 0, lambda y: isinstance(y, str))
+        >>> @validate(lambda x: x > 0, lambda y: isinstance(y, str))
         ... def divide_and_print(x: int, message: str):
         ...     print(message)
         ...     return 1 / x

@@ -42,30 +42,74 @@ pip install -U ddeutil
 This core data package will implement all of utility functions and objects that
 does not re-create again because it is basic code but has a lot of using require.
 
-| Module        | Name                | Type      | Description                                                                                                   | Remark |
-|---------------|---------------------|-----------|---------------------------------------------------------------------------------------------------------------|--------|
-| base          | `isinstance_check`  | function  |                                                                                                               |        |
-| base.cache    | `memorize`          | function  | Return a cachable function that keep all arguments and pass to string type for keeping it in the caching key. |        |
-|               | `property_memorize` | function  |                                                                                                               |        |
-|               | `clear_cache`       | function  |                                                                                                               |        |
-| base.checker  | `can_int`           | function  |                                                                                                               |        |
-|               | `is_int`            | function  |                                                                                                               |        |
-| base.convert  |                     |           |                                                                                                               |        |
-| base.hash     |                     |           |                                                                                                               |        |
-| base.merge    |                     |           |                                                                                                               |        |
-| base.sorting  |                     |           |                                                                                                               |        |
-| base.splitter |                     |           |                                                                                                               |        |
-| decorator     |                     |           |                                                                                                               |        |
-| dtutils       | `replace_date`      | function  |                                                                                                               |        |
-|               | `next_date`         | function  |                                                                                                               |        |
-|               | `closest_quarter`   | function  |                                                                                                               |        |
-|               | `last_dom`          | function  |                                                                                                               |        |
-|               | `last_doq`          | function  |                                                                                                               |        |
-|               | `next_date_freq`    | function  |                                                                                                               |        |
-|               | `calc_data_freq`    | function  |                                                                                                               |        |
-| threader      | `ThreadWithControl` | object    | Threading object that can control maximum background agent and result after complete.                         |        |
+| Module         | Name                | Type            | Description                                                                                                   | Remark |
+|----------------|---------------------|-----------------|---------------------------------------------------------------------------------------------------------------|--------|
+| base           | `isinstance_check`  | function        |                                                                                                               |        |
+|                | `import_string`     | function        |                                                                                                               |        |
+|                | `lazy`              | function        |                                                                                                               |        |
+|                | `round_up`          | function        |                                                                                                               |        |
+|                | `remove_pad`        | function        |                                                                                                               |        |
+|                | `first`             | function        |                                                                                                               |        |
+|                | `onlyone`           | function        |                                                                                                               |        |
+|                | `hasdot`            | function        |                                                                                                               |        |
+|                | `getdot`            | function        |                                                                                                               |        |
+|                | `setdot`            | function        |                                                                                                               |        |
+|                | `filter_dict`       | function        |                                                                                                               |        |
+|                | `random_str`        | function        |                                                                                                               |        |
+| base.cache     | `memorize`          | function        | Return a cachable function that keep all arguments and pass to string type for keeping it in the caching key. |        |
+|                | `property_memorize` | function        |                                                                                                               |        |
+|                | `clear_cache`       | function        |                                                                                                               |        |
+| base.checker   | `can_int`           | function        |                                                                                                               |        |
+|                | `is_int`            | function        |                                                                                                               |        |
+| base.convert   | `must_bool`         | function        |                                                                                                               |        |
+|                | `must_list`         | function        |                                                                                                               |        |
+|                | `str2any`           | function        |                                                                                                               |        |
+|                | `str2args`          | function        |                                                                                                               |        |
+|                | `str2bool`          | function        |                                                                                                               |        |
+|                | `str2dict`          | function        |                                                                                                               |        |
+|                | `str2int_float`     | function        |                                                                                                               |        |
+|                | `str2list`          | function        |                                                                                                               |        |
+| base.hash      | `checksum`          | function        |                                                                                                               |        |
+|                | `freeze`            | function        |                                                                                                               |        |
+|                | `freeze_args`       | function        |                                                                                                               |        |
+|                | `hash_all`          | function        |                                                                                                               |        |
+|                | `hash_pwd`          | function        |                                                                                                               |        |
+|                | `hash_str`          | function        |                                                                                                               |        |
+|                | `same_pwd`          | function        |                                                                                                               |        |
+|                | `tokenize`          | function        |                                                                                                               |        |
+| base.merge     | `merge_dict`        | function        |                                                                                                               |        |
+|                | `merge_dict_value`  | function        |                                                                                                               |        |
+|                | `merge_dict_values` | function        |                                                                                                               |        |
+|                | `merge_list`        | function        |                                                                                                               |        |
+|                | `merge_values`      | function        |                                                                                                               |        |
+|                | `zip_equal`         | function        |                                                                                                               |        |
+| base.sorting   | `ordered`           | function        |                                                                                                               |        |
+|                | `sort_priority`     | function        |                                                                                                               |        |
+| base.splitter  | `isplit`            | function        |                                                                                                               |        |
+|                | `must_rsplit`       | function        |                                                                                                               |        |
+|                | `must_split`        | function        |                                                                                                               |        |
+| decorator      | `deepcopy`          | decorator       |                                                                                                               |        |
+|                | `deepcopy_args`     | decorator func  |                                                                                                               |        |
+|                | `timing`            | decorator func  |                                                                                                               |        |
+|                | `timing_open`       | decorator func  |                                                                                                               |        |
+|                | `debug`             | decorator func  |                                                                                                               |        |
+|                | `validate`          | decorator func  |                                                                                                               |        |
+|                | `retry`             | decorator func  |                                                                                                               |        |
+|                | `deprecated`        | decorator func  |                                                                                                               |        |
+| dtutils        | `replace_date`      | function        |                                                                                                               |        |
+|                | `next_date`         | function        |                                                                                                               |        |
+|                | `closest_quarter`   | function        |                                                                                                               |        |
+|                | `last_dom`          | function        |                                                                                                               |        |
+|                | `last_doq`          | function        |                                                                                                               |        |
+|                | `next_date_freq`    | function        |                                                                                                               |        |
+|                | `calc_data_freq`    | function        |                                                                                                               |        |
+| threader       | `ThreadWithControl` | object          | Threading object that can control maximum background agent and result after complete.                         |        |
 
 ## :beers: Usages
+
+I will show some usage example of function in this package. If you want to use
+complex or adjust some parameter, please see doc-string or real source code
+(I think it do not complex and you can see how that function work).
 
 ### OnlyOne
 
