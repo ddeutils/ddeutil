@@ -7,12 +7,14 @@ from typing import (
     Optional,
     Union,
 )
+from unittest import mock
 
 import pytest
-from ddeutil.core.__base import (
+from ddeutil.core import (
     filter_dict,
     isinstance_check,
     onlyone,
+    random_str,
     remove_pad,
     round_up,
 )
@@ -88,3 +90,9 @@ def test_filter_dict():
         )
         == {}
     )
+
+
+@mock.patch("random.choices", return_value="AA145WQ2")
+def test_random_string(m):
+    assert m.mocked
+    assert random_str() == "AA145WQ2"

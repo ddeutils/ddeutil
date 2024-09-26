@@ -1,4 +1,4 @@
-import ddeutil.core.__base.convert as cc
+from ddeutil.core import convert as cc
 
 
 def test_convert_str2bool():

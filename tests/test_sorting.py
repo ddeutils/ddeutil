@@ -1,4 +1,4 @@
-import ddeutil.core.__base.sorting as sorting
+from ddeutil.core import sorting
 
 
 def test_ordered():

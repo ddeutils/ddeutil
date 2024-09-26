@@ -18,43 +18,11 @@ from math import ceil
 from . import (
     cache,
     checker,
-)
-from .convert import (
-    must_bool,
-    must_list,
-    str2any,
-    str2args,
-    str2bool,
-    str2dict,
-    str2int_float,
-    str2list,
-)
-from .hash import (
-    checksum,
-    freeze,
-    freeze_args,
-    hash_all,
-    hash_pwd,
-    hash_str,
-    same_pwd,
-    tokenize,
-)
-from .merge import (
-    merge_dict,
-    merge_dict_value,
-    merge_dict_values,
-    merge_list,
-    merge_values,
-    zip_equal,
-)
-from .sorting import (
-    ordered,
-    sort_priority,
-)
-from .splitter import (
-    isplit,
-    must_rsplit,
-    must_split,
+    convert,
+    hash,
+    merge,
+    sorting,
+    splitter,
 )
 
 T = typing.TypeVar("T")
@@ -128,7 +96,8 @@ def isinstance_check(check: typing.Any, instance) -> bool:
             return all(isinstance_check(i, _dict[0]) for i in iter(check))
         try:
             return all(
-                isinstance_check(i[0], i[1]) for i in zip_equal(check, _dict)
+                isinstance_check(i[0], i[1])
+                for i in merge.zip_equal(check, _dict)
             )
         except ValueError:
             return False
@@ -292,7 +261,7 @@ def hasdot(search: str, content: dict[typing.Any, typing.Any]) -> bool:
         >>> hasdot('item.value.key', {'data': {'value': 2}})
         False
     """
-    _search, _else = must_split(search, ".", maxsplit=1)
+    _search, _else = splitter.must_split(search, ".", maxsplit=1)
     if _search in content and isinstance(content, dict):
         if not _else:
             return True
@@ -333,7 +302,7 @@ def getdot(
         2
     """
     _ignore: bool = kwargs.get("ignore", False)
-    _search, _else = must_split(search, ".", maxsplit=1)
+    _search, _else = splitter.must_split(search, ".", maxsplit=1)
     if _search in content and isinstance(content, dict):
         if not _else:
             return content[_search]
@@ -358,7 +327,7 @@ def setdot(search: str, content: dict, value: typing.Any, **kwargs) -> dict:
         {'data': {'value': 1}}
     """
     _ignore: bool = kwargs.get("ignore", False)
-    _search, _else = must_split(search, ".", maxsplit=1)
+    _search, _else = splitter.must_split(search, ".", maxsplit=1)
     if _search in content and isinstance(content, dict):
         if not _else:
             content[_search] = value

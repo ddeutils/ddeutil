@@ -1,4 +1,4 @@
-import ddeutil.core.__base.merge as merge
+from ddeutil.core import merge
 
 try:
     import perfplot
