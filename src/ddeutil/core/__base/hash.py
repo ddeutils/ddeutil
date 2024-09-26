@@ -8,8 +8,6 @@ from __future__ import annotations
 import hashlib
 import hmac
 import os
-import random
-import string
 from base64 import b64encode
 from collections.abc import Collection
 from functools import wraps
@@ -21,8 +19,10 @@ from typing import (
 import ujson
 
 
-def checksum(value: Any) -> str:
+def checksum(value: dict[str, Any]) -> str:
     """Return a string of the hashing value by MD5 algorithm.
+
+    :param value: A value that want to generate hash with md5.
 
     Examples:
         >>> checksum({"foo": "bar", "baz": 1})
@@ -37,7 +37,7 @@ def hash_all(
     value: Any,
     exclude: Optional[Collection] = None,
 ) -> Any:
-    """Hash values in dictionary
+    """Hash all values in dictionary and all elements in collection.
 
     Examples:
         >>> hash_all({'foo': 'bar'})
@@ -212,10 +212,3 @@ def freeze_args(func):  # no cove
         return func(*args, **kwargs)
 
     return wrapped
-
-
-def random_str(num_length: int = 8) -> str:  # no cov
-    """Random string from uppercase ASCII and number 0-9"""
-    return "".join(
-        random.choices(string.ascii_uppercase + string.digits, k=num_length)
-    )

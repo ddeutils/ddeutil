@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 
-import ddeutil.core.__base.hash as _hash
+import ddeutil.core.__base as _hash
 
 
 class RandomTestCase(unittest.TestCase):

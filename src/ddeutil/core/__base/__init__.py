@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import importlib
 import operator
+import random
+import string
 import sys
 import typing
 from collections.abc import Callable, Collection, Sequence
@@ -16,7 +18,7 @@ from math import ceil
 from .cache import (
     clear_cache,
     memoize,
-    memoized_property,
+    property_memoized,
 )
 from .checker import (
     can_int,
@@ -39,7 +41,6 @@ from .hash import (
     hash_all,
     hash_pwd,
     hash_str,
-    random_str,
     same_pwd,
     tokenize,
 )
@@ -406,4 +407,11 @@ def filter_dict(
             in (v for v in (included or value.keys()) if v not in _exc),
             value.items(),
         )
+    )
+
+
+def random_str(num_length: int = 8) -> str:  # no cov
+    """Random string from uppercase ASCII and number 0-9"""
+    return "".join(
+        random.choices(string.ascii_uppercase + string.digits, k=num_length)
     )

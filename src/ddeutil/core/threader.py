@@ -11,7 +11,7 @@ import os
 import threading
 from typing import Any
 
-MAX_THREAD = os.getenv("MAX_THREAD", 10)
+MAX_THREAD: int = int(os.getenv("PY_MAX_THREAD", "10"))
 
 
 def _async_raise(tid, exc_type):

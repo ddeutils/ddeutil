@@ -13,7 +13,7 @@ class memoize:
     """Return a cachable function that keep all argruments and pass to string
     type for keeping it in the caching key.
 
-    :usage:
+    Examples:
         >>> @memoize
         ... def fib(n):
         ...     if n in (0, 1):
@@ -43,15 +43,15 @@ class memoize:
         return value
 
 
-def memoized_property(func_get):  # no cove
+def property_memoized(func_get):  # no cove
     """Return a property attribute for new-style classes that only calls its
     getter on the first access. The result is stored and on subsequent
     accesses is returned, preventing the need to call the getter anymore.
 
-    :usage:
+    Examples:
         >>> class C(object):
         ...     load_name_count = 0
-        ...     @memoized_property
+        ...     @property_memoized
         ...     def name(self) -> str:
         ...         "name's docstring"
         ...         self.load_name_count += 1
@@ -80,16 +80,18 @@ def memoized_property(func_get):  # no cove
 
 
 def clear_cache(attrs: tuple):  # no cove
-    """Clear or delete attribute value of the class that implement cache.
-    :usage:
+    """Clear cache or the another word is delete caching attribute value that
+    implement cache with target attribute property.
+
+    Examples:
         >>> class C(object):
         ...     load_name_count = 0
-        ...     @memoized_property
+        ...     @property_memoized
         ...     def name(self) -> str:
         ...         "name's docstring"
         ...         self.load_name_count += 1
         ...         return "the name"
-        ...     @clear_cache(attrs=('_name', ))
+        ...     @clear_cache(attrs=('name', ))
         ...     def reset(self) -> str:
         ...         return "reset cache"
         >>> c = C()
@@ -116,7 +118,7 @@ def clear_cache(attrs: tuple):  # no cove
         def func_clear_cache(self, *args, **kwargs):
             for attr in attrs:
                 if hasattr(self, attr):
-                    delattr(self, attr)
+                    delattr(self, f"_{attr}")
             return func_get(self, *args, **kwargs)
 
         return func_clear_cache

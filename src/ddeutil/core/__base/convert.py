@@ -17,7 +17,7 @@ import ujson
 try:
     from .checker import FalseStr, TrueStr
 except ImportError:
-    from checker import FalseStr, TrueStr
+    raise ImportError("This module need checker module.") from None
 
 
 def str2bool(
