@@ -19,6 +19,24 @@ def test_deepcopy():
     cc = {3: 4}
 
     assert foo(aa, bb, cc) == ({1: 3}, {2: 4}, {3: 5})
+    assert (aa, bb, cc) == ({1: 2}, {2: 3}, {3: 4})
+
+
+def test_deepcopy_args():
+
+    class Foo:
+        @decorator.deepcopy_args
+        def foo(self, a, b=None):
+            b = b or {}
+
+            a[1] = 4
+            b[2] = 5
+            return a, b
+
+    aa = {1: 2}
+    bb = {2: 3}
+    assert ({1: 4}, {2: 5}) == Foo().foo(aa, bb)
+    assert ({1: 2}, {2: 3}) == (aa, bb)
 
 
 def test_profile():

@@ -93,9 +93,7 @@ does not re-create again because it is basic code but has a lot of using require
 |                | `timing`            | decorator func |                                                                                                               |        |
 |                | `timing_open`       | decorator func |                                                                                                               |        |
 |                | `debug`             | decorator func |                                                                                                               |        |
-|                | `validate`          | decorator func |                                                                                                               |        |
 |                | `retry`             | decorator func |                                                                                                               |        |
-|                | `deprecated`        | decorator func |                                                                                                               |        |
 |                | `profile`           | decorator func | Profile the current memory and cpu usage while wrapped function running.                                      |        |
 | dtutils        | `replace_date`      | function       |                                                                                                               |        |
 |                | `next_date`         | function       |                                                                                                               |        |

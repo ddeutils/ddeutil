@@ -18,7 +18,7 @@ from typing import (
 
 try:
     import ujson
-except ImportError:
+except ImportError:  # pragma: no cove
     ujson = None
 
 

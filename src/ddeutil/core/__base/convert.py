@@ -16,7 +16,7 @@ import ujson
 
 try:
     from .checker import FalseStr, TrueStr
-except ImportError:
+except ImportError:  # pragma: no cove
     raise ImportError("This module need checker module.") from None
 
 
@@ -64,17 +64,24 @@ def str2list(
     """
     if value is None or value == "":
         return []
-    if value.startswith("[") and value.endswith("]"):
-        try:
-            # ISSUE: When we talk about performance;
-            # - ast.literal_eval(value) handler error SyntaxError (slower)
-            return ujson.loads(value)
-        except ujson.JSONDecodeError as err:
-            if force_raise:
-                raise ValueError(
-                    f"can not convert string value {value!r} to list object"
-                ) from err
-    return [value]
+
+    if not value.startswith("[") or not value.endswith("]"):
+        if force_raise:
+            raise ValueError(
+                f"can not convert string value {value!r} to list object"
+            )
+        return [value]
+
+    try:
+        # ISSUE: When we talk about performance;
+        # - ast.literal_eval(value) handler error SyntaxError (slower)
+        return ujson.loads(value)
+    except ujson.JSONDecodeError as err:
+        if force_raise:
+            raise ValueError(
+                f"can not convert string value {value!r} to list object"
+            ) from err
+        return [value]
 
 
 def str2dict(

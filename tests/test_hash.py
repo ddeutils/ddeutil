@@ -1,5 +1,7 @@
 from functools import lru_cache
+from unittest import mock
 
+import pytest
 from ddeutil.core.__base.hash import (
     checksum,
     freeze_args,
@@ -25,6 +27,13 @@ def test_pwd():
 def test_hash_str():
     assert "05751529" == hash_str("hello world")
     assert "105751529" == hash_str("hello world", n=9)
+    assert (
+        "838141983831025582197310782608927299322466180042657006854679"
+        "28187377105751529"
+    ) == hash_str("hello world", n=-1)
+
+    with pytest.raises(ValueError):
+        hash_str("hello world", n=-2)
 
 
 def test_hash_all():
@@ -64,6 +73,10 @@ def test_checksum():
     assert "83788ce748a5899920673e5a4384979b" == checksum(
         {"foo": "bar", "baz": 1}
     )
+
+    with mock.patch("ddeutil.core.hash.ujson", None):
+        with pytest.raises(ImportError):
+            checksum({"foo": "bar", "baz": 1})
 
 
 def test_freeze_args():

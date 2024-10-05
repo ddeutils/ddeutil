@@ -7,14 +7,11 @@ from __future__ import annotations
 
 import contextlib
 import copy
-import functools
-import inspect
 import logging
 import time
-import warnings
 from collections.abc import Iterator
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from typing import TYPE_CHECKING, Callable, TypeVar
 
 if TYPE_CHECKING:  # pragma: no cove
     import sys
@@ -95,7 +92,7 @@ def deepcopy_args(func: Callable[[object, P], T]) -> Callable[[object, P], T]:
     return func_get
 
 
-def timing(name: str) -> Callable[[Callable[P, T]], Callable[P, T]]:
+def timing(title: str) -> Callable[[Callable[P, T]], Callable[P, T]]:  # no cove
     """
     Examples:
         >>> import time
@@ -112,9 +109,12 @@ def timing(name: str) -> Callable[[Callable[P, T]], Callable[P, T]]:
         def wrap(*args: P.args, **kw: P.kwargs) -> T:
             ts = time.monotonic()
             result = func(*args, **kw)
-            padded_name: str = f"{name} ".ljust(60, ".")
+            padded_name: str = f"{title} ".ljust(60, ".")
             padded_time: str = f" {(time.monotonic() - ts):0.2f}".rjust(6, ".")
-            print(f"{padded_name}{padded_time}s", flush=True)
+            print(
+                f"{padded_name}{padded_time}s",
+                flush=True,
+            )
             return result
 
         return wrap
@@ -123,7 +123,7 @@ def timing(name: str) -> Callable[[Callable[P, T]], Callable[P, T]]:
 
 
 @contextlib.contextmanager
-def timing_open(title: str) -> Iterator[None]:
+def timing_open(title: str) -> Iterator[None]:  # no cove
     """
     Examples:
         >>> import time
@@ -165,37 +165,6 @@ def debug(func: Callable[P, T]) -> Callable[P, T]:  # no cove
     return wrapper
 
 
-def validate(
-    *validations: tuple[Callable[[Any], bool]],
-) -> Callable[[Callable[P, T]], Callable[P, T]]:
-    """
-    Examples:
-        >>> @validate(lambda x: x > 0, lambda y: isinstance(y, str))
-        ... def divide_and_print(x: int, message: str):
-        ...     print(message)
-        ...     return 1 / x
-        >>> divide_and_print(5, "Hello!")
-        Hello!
-        0.2
-    """
-
-    def decorator(func: Callable[P, T]) -> Callable[P, T]:
-        @wraps(func)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
-            for i, val in enumerate(args):
-                if i < len(validations) and not validations[i](val):
-                    raise ValueError(f"Invalid argument: {val}")
-            for key, val in kwargs.items():
-                la: int = len(args)
-                if key in validations[la:] and not validations[la:][key](val):
-                    raise ValueError(f"Invalid argument: {key}={val}")
-            return func(*args, **kwargs)
-
-        return wrapper
-
-    return decorator
-
-
 def retry(
     max_attempts: int,
     delay: int = 1,
@@ -235,79 +204,6 @@ def retry(
         return wrapper
 
     return decorator
-
-
-def deprecated(reason):
-    """
-    This is a decorator which can be used to mark functions
-    as deprecated. It will result in a warning being emitted
-    when the function is used.
-    """
-
-    if isinstance(reason, STR_TYPES):
-
-        # The @deprecated is used with a 'reason'.
-        #
-        # .. code-block:: python
-        #
-        #    @deprecated("please, use another function")
-        #    def old_function(x, y):
-        #      pass
-
-        def decorator(func1):
-
-            if inspect.isclass(func1):
-                fmt1 = "Call to deprecated class {name} ({reason})."
-            else:
-                fmt1 = "Call to deprecated function {name} ({reason})."
-
-            @functools.wraps(func1)
-            def new_func1(*args, **kwargs):
-                warnings.simplefilter("always", DeprecationWarning)
-                warnings.warn(
-                    fmt1.format(name=func1.__name__, reason=reason),
-                    category=DeprecationWarning,
-                    stacklevel=2,
-                )
-                warnings.simplefilter("default", DeprecationWarning)
-                return func1(*args, **kwargs)
-
-            return new_func1
-
-        return decorator
-
-    elif inspect.isclass(reason) or inspect.isfunction(reason):
-
-        # The @deprecated is used without any 'reason'.
-        #
-        # .. code-block:: python
-        #
-        #    @deprecated
-        #    def old_function(x, y):
-        #      pass
-
-        func2 = reason
-
-        if inspect.isclass(func2):
-            fmt2 = "Call to deprecated class {name}."
-        else:
-            fmt2 = "Call to deprecated function {name}."
-
-        @functools.wraps(func2)
-        def new_func2(*args, **kwargs):
-            warnings.simplefilter("always", DeprecationWarning)
-            warnings.warn(
-                fmt2.format(name=func2.__name__),
-                category=DeprecationWarning,
-                stacklevel=2,
-            )
-            warnings.simplefilter("default", DeprecationWarning)
-            return func2(*args, **kwargs)
-
-        return new_func2
-
-    else:
-        raise TypeError(repr(type(reason)))
 
 
 def profile(

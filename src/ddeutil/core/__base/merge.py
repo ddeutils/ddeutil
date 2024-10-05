@@ -68,9 +68,7 @@ def merge_dict(*dicts, **kwargs) -> dict:
         "update": partial(update_map, *dicts),
         "reduce": partial(reduce_map, *dicts),
     }
-
-    func = switcher.get(_mode, lambda: {})
-    return func()
+    return switcher.get(_mode, lambda: [*dicts])()
 
 
 def merge_list(*lists, **kwargs) -> list:
@@ -96,8 +94,7 @@ def merge_list(*lists, **kwargs) -> list:
         "reduce": partial(reduce_list, *lists),
     }
 
-    func = switcher.get(_mode, lambda: [])
-    return func()
+    return switcher.get(_mode, lambda: [*lists])()
 
 
 def merge_dict_value(*dicts, **kwargs) -> dict:
@@ -122,9 +119,7 @@ def merge_dict_value(*dicts, **kwargs) -> dict:
     switcher: dict = {
         "default": partial(default_map, _dup, *dicts),
     }
-
-    func = switcher.get(_mode, lambda: {})
-    return func()
+    return switcher.get(_mode, lambda: [*dicts])()
 
 
 def merge_dict_values(*dicts, **kwargs) -> dict:

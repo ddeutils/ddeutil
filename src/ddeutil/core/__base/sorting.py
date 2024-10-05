@@ -24,7 +24,7 @@ def ordered(value: T) -> T:
         [[1, 4], [2], [11]]
     """
     if isinstance(value, dict):
-        return sorted((k, ordered(v)) for k, v in value.items())
+        return dict(sorted((k, ordered(v)) for k, v in value.items()))
     elif isinstance(value, list):
         return sorted(ordered(x) for x in value)
     return value
@@ -74,5 +74,4 @@ def sort_priority(
         "enumerate": partial(_enumerate, values, priority, reverse),
     }
 
-    func = switcher.get(_mode, lambda: [])
-    return func()
+    return switcher.get(_mode, lambda: values)()
