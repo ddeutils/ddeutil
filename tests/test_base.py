@@ -34,6 +34,7 @@ def test_instance_check():
     assert isinstance_check(None, NoReturn)
     assert isinstance_check("A", Any)
     assert isinstance_check([1, [1, 2, 3]], list[Union[list[int], int]])
+    assert not isinstance_check([1], Union[str, int])
 
 
 def test_instance_generic():

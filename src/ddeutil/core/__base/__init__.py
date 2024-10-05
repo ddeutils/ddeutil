@@ -87,10 +87,7 @@ def isinstance_check(check: typing.Any, instance) -> bool:
             (isinstance_check(k, _dict[0]) and isinstance_check(v, _dict[1]))
             for k, v in check.items()
         )
-    elif origin in {
-        tuple,
-        list,
-    }:
+    elif origin in (tuple, list):
         _dict = typing.get_args(instance)
         if Ellipsis in _dict or (origin is not tuple):
             return all(isinstance_check(i, _dict[0]) for i in iter(check))
@@ -106,7 +103,7 @@ def isinstance_check(check: typing.Any, instance) -> bool:
     raise NotImplementedError("It can not check typing instance of this pair.")
 
 
-def cached_import(module_path, class_name):
+def cached_import(module_path, class_name):  # pragma: no cove
     """Cached import package"""
     modules = sys.modules
     if (
@@ -118,7 +115,7 @@ def cached_import(module_path, class_name):
     return getattr(modules[module_path], class_name)
 
 
-def import_string(dotted_path: str):
+def import_string(dotted_path: str):  # pragma: no cove
     """Import a dotted module path and return the attribute/class designated by
     the last name in the path. Raise ImportError if the import failed.
     """
@@ -138,7 +135,7 @@ def import_string(dotted_path: str):
         ) from err
 
 
-def lazy(module: str):
+def lazy(module: str):  # pragma: no cove
     """Lazy use import_string function that warpped with partial function."""
     return partial(import_string, module)
 
