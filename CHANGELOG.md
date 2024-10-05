@@ -2,6 +2,33 @@
 
 ## Latest Changes
 
+## 0.4.1
+
+### :sparkles: Features
+
+- :dart: feat: add monitoring thread and getdot support ? syntax. (_2024-10-05_)
+
+### :black_nib: Code Changes
+
+- :test_tube: tests: add testcase for dtutil module. (_2024-10-05_)
+- :test_tube: tests: add hasdot and setdot testcases. (_2024-10-05_)
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.10.0 to 1.10.2 (_2024-10-01_)
+- :construction: refactored: 📦 bump types-python-dateutil from 2.9.0.20240821 to 2.9.0.20240906 (_2024-10-01_)
+- :construction: refactored: change import of this package. (_2024-09-26_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: update duplicate info on readme. (_2024-09-26_)
+- :page_facing_up: docs: list all functions that provide from this package. (_2024-09-26_)
+
+### :package: Build & Workflow
+
+- :toolbox: build: add python 3.13 with nogil in test workflow. (_2024-10-05_)
+
+### :postbox: Dependencies
+
+- :pushpin: deps: add psutil==6.0.0 deps on all option. (_2024-10-05_)
+
 ## 0.4.0
 
 ### :sparkles: Features
