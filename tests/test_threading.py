@@ -1,6 +1,8 @@
 import time
 from functools import partial
+from unittest import mock
 
+import pytest
 from ddeutil.core.threader import MonitorThread
 
 
@@ -23,3 +25,12 @@ def test_monitoring_thread():
     thread.stop()
 
     assert 2 <= len(keeps) < 4
+
+
+def test_monitoring_thread_not_install():
+    with mock.patch("ddeutil.core.threader.psutil", None):
+        with pytest.raises(NotImplementedError):
+            MonitorThread(
+                log=partial(log_override, keeping=[]),
+                waiting=2,
+            )

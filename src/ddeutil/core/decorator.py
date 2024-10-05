@@ -16,7 +16,7 @@ from collections.abc import Iterator
 from functools import wraps
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cove
     import sys
 
     if sys.version_info >= (3, 10):
@@ -186,9 +186,8 @@ def validate(
                 if i < len(validations) and not validations[i](val):
                     raise ValueError(f"Invalid argument: {val}")
             for key, val in kwargs.items():
-                if key in validations[len(args) :] and not validations[
-                    len(args) :
-                ][key](val):
+                la: int = len(args)
+                if key in validations[la:] and not validations[la:][key](val):
                     raise ValueError(f"Invalid argument: {key}={val}")
             return func(*args, **kwargs)
 

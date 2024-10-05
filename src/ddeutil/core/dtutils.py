@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 
 try:
     from dateutil.relativedelta import relativedelta
-except ImportError:
+except ImportError:  # pragma: no cove
     relativedelta = None
 
 from . import first
@@ -277,9 +277,7 @@ def next_date_freq(dt: datetime, freq: str, prev: bool = False) -> datetime:
         )
     assert freq in ("D", "W", "M", "Q", "Y")
     operator: int = -1 if prev else 1
-    if freq == "D":
-        return dt + timedelta(days=1 * operator)
-    elif freq == "W":
+    if freq == "W":
         return dt + timedelta(days=7 * operator)
     elif freq == "M":
         if dt == last_dom(dt):
@@ -293,7 +291,7 @@ def next_date_freq(dt: datetime, freq: str, prev: bool = False) -> datetime:
         if dt == last_dom(dt):
             return last_dom(dt + relativedelta(years=1 * operator))
         return dt + relativedelta(years=1 * operator)
-    raise ValueError(f"The date logic does not support for frequency: {freq}")
+    return dt + timedelta(days=1 * operator)
 
 
 def calc_data_freq(dt: datetime, freq: str) -> datetime:
@@ -326,9 +324,7 @@ def calc_data_freq(dt: datetime, freq: str) -> datetime:
             "you should install with `pip install ddeutil[dateutil]`"
         )
     assert freq in ("D", "W", "M", "Q", "Y")
-    if freq == "D" or freq == "W":
-        return dt
-    elif freq == "M":
+    if freq == "M":
         if dt != last_dom(dt):
             return last_dom(dt) - relativedelta(months=1)
         return dt
@@ -340,6 +336,4 @@ def calc_data_freq(dt: datetime, freq: str) -> datetime:
         if dt != dt.replace(month=12, day=31):
             return dt.replace(month=12, day=31) - relativedelta(years=1)
         return dt
-    raise ValueError(
-        f"The calculate date logic does not support for frequency: {freq}"
-    )
+    return dt
