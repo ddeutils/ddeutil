@@ -1,4 +1,8 @@
+import time
+from functools import partial
+
 import ddeutil.core.decorator as decorator
+import pytest
 
 
 def test_deepcopy():
@@ -15,3 +19,39 @@ def test_deepcopy():
     cc = {3: 4}
 
     assert foo(aa, bb, cc) == ({1: 3}, {2: 4}, {3: 5})
+
+
+def test_profile():
+
+    def log_override(msg: str, keeping: list):
+        keeping.append(msg)
+        print(msg)
+
+    keeps: list[str] = []
+
+    @decorator.profile(log=partial(log_override, keeping=keeps), waiting=2)
+    def waiting():
+        time.sleep(5)
+
+    waiting()
+
+    assert 2 <= len(keeps) < 4
+
+
+def test_profile_raise():
+
+    def log_override(msg: str, keeping: list):
+        keeping.append(msg)
+        print(msg)
+
+    keeps: list[str] = []
+
+    @decorator.profile(log=partial(log_override, keeping=keeps), waiting=2)
+    def waiting():
+        time.sleep(5)
+        raise ValueError
+
+    with pytest.raises(ValueError):
+        waiting()
+
+    assert 2 <= len(keeps) < 4

@@ -309,3 +309,27 @@ def deprecated(reason):
 
     else:
         raise TypeError(repr(type(reason)))
+
+
+def profile(
+    prefix: str = None,
+    waiting: int = 10,
+    log=None,
+) -> Callable[[Callable[P, T]], Callable[P, T]]:
+    """Profile memory and cpu that use on the current state."""
+    from .threader import MonitorThread
+
+    thread = MonitorThread(prefix=prefix, waiting=waiting, log=log)
+    thread.start()
+
+    def decorator(func: Callable[P, T]) -> Callable[P, T]:
+        @wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+            try:
+                return func(*args, **kwargs)
+            finally:
+                thread.stop()
+
+        return wrapper
+
+    return decorator

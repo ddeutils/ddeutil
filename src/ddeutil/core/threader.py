@@ -9,7 +9,14 @@ import ctypes
 import inspect
 import os
 import threading
+import time
+from datetime import datetime
 from typing import Any
+
+try:
+    import psutil
+except ImportError:
+    psutil = None
 
 MAX_THREAD: int = int(os.getenv("PY_MAX_THREAD", "10"))
 
@@ -137,3 +144,45 @@ class ThreadWithControl(threading.Thread):
         due to a bug in PyThreadState_SetAsyncExc
         """
         self.raise_exc(SystemExit)
+
+
+class MonitorThread(threading.Thread):
+    """Thread class with a stop() method. The thread itself has to check
+    regularly for the stopped() condition."""
+
+    def __init__(
+        self,
+        *args,
+        prefix: str = None,
+        waiting: int = 10,
+        log=None,
+        **kwargs,
+    ):
+        if psutil is None:
+            raise NotImplementedError(
+                "Monitoring thread need the ``psutil`` package, you should "
+                "install it before running with: `pip install -U psutil`"
+            )
+        super().__init__(*args, **kwargs)
+        self._log = log or print
+        self._prefix: str = prefix or ""
+        self._waiting: int = waiting
+        self._stop = threading.Event()
+
+    def stop(self) -> None:
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.is_set()
+
+    def run(self) -> None:
+        """main control loop"""
+        while not self.stopped():
+            self._log(
+                f"{self._prefix}{datetime.now():%Y-%m-%d %H:%M:%S} "
+                f"CPU %: {psutil.cpu_percent()}, "
+                f"Mem %: {psutil.virtual_memory().percent}, "
+                f"Thread: {threading.active_count()}, "
+                f"Process: {len([*psutil.process_iter()])}"
+            )
+            time.sleep(self._waiting)

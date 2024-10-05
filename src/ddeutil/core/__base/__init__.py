@@ -274,6 +274,7 @@ def getdot(
     search: str,
     content: dict[typing.Any, typing.Any],
     *args,
+    ignore: bool = False,
     **kwargs,
 ) -> typing.Any:
     """Return the value if dot searching exists in content data.
@@ -301,21 +302,32 @@ def getdot(
         >>> getdot('foo.bar', {"foo": {"baz": 1}}, 2, 3, ignore=True)
         2
     """
-    _ignore: bool = kwargs.get("ignore", False)
+    # NOTE: Start search the first key.
     _search, _else = splitter.must_split(search, ".", maxsplit=1)
-    if _search in content and isinstance(content, dict):
-        if not _else:
-            return content[_search]
-        if isinstance((result := content[_search]), dict):
-            return getdot(_else, result, *args, **kwargs)
-        if _ignore:
+
+    if isinstance(content, dict):
+        is_optional: bool = _search.endswith("?")
+        _search: str = _search.rstrip("?")
+
+        if _search in content:
+            if not _else:
+                return content[_search]
+            if isinstance((sub_content := content[_search]), dict):
+                return getdot(
+                    _else, sub_content, *args, ignore=ignore, **kwargs
+                )
+            if ignore:
+                return None
+            raise ValueError(f"{_else!r} does not exists in {sub_content}")
+
+        elif is_optional:
             return None
-        raise ValueError(f"{_else!r} does not exists in {result}")
+
     if args:
         return args[0]
-    elif _ignore:
+    elif ignore:
         return None
-    raise ValueError(f"{_search} does not exists in {content}")
+    raise ValueError(f"{_search!r} does not exists in {content}")
 
 
 def setdot(search: str, content: dict, value: typing.Any, **kwargs) -> dict:

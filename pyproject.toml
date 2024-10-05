@@ -1,6 +1,6 @@
 [project]
 name = "ddeutil"
-description = "Data Developer & Engineer Core Utility Objects"
+description = "Core data utility functions and objects"
 readme = {file = "README.md", content-type = "text/markdown"}
 license = {text = "MIT"}
 authors = [{ name = "korawica", email = "korawich.anu@gmail.com" }]
@@ -34,6 +34,9 @@ checksum = [
 dateutil = [
     "python-dateutil==2.9.0.post0",
     "types-python-dateutil==2.9.0.20240906",
+]
+memory = [
+    "psutil==6.0.0",
 ]
 
 [project.urls]
