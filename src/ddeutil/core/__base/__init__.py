@@ -391,3 +391,8 @@ def random_str(num_length: int = 8) -> str:  # no cov
     return "".join(
         random.choices(string.ascii_uppercase + string.digits, k=num_length)
     )
+
+
+def coalesce(value: typing.Any, default: typing.Any) -> typing.Any:  # no cove
+    """Coalesce function that is a just naming define function."""
+    return default if value is None else value

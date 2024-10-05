@@ -34,6 +34,7 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
+          - "3.13-dev"
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -41,9 +42,17 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
+        if: "!endsWith(matrix.python-version, '-dev')"
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
+
+      - name: Set up Pre-release Python with no GIL
+        uses: deadsnakes/action@v3.1.0
+        if: endsWith(matrix.python-version, '-dev')
+        with:
+          python-version: ${{ matrix.python-version }}
+          nogil: true
 
       - uses: actions/cache@v4
         id: cache
@@ -59,6 +68,13 @@ jobs:
           uv pip install -U pip
           uv pip install -e .[all]
           uv pip install pytest
+
+      - name: Check GIL
+        run: |
+          python --version --version
+          which python
+          python -c "import sysconfig; print(sysconfig.get_config_var('Py_GIL_DISABLED'))"
+          python -c "import sys; print(sys._is_gil_enabled())"
 
       - name: Use Python virtual environment
         run: |

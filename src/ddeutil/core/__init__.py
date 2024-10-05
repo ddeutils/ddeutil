@@ -3,6 +3,7 @@ from .__about__ import __version__
 from .__base import (
     cache,
     checker,
+    coalesce,
     convert,
     filter_dict,
     first,
