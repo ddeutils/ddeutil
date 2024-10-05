@@ -47,7 +47,7 @@ repos:
     hooks:
     -   id: pytest-check
         name: pytest runner
-        stages: [commit, push]
+        stages: [push]
         types: [python]
         entry: venv/Scripts/pytest.exe -v
         language: system
