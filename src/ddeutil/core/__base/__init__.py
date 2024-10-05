@@ -330,7 +330,13 @@ def getdot(
     raise ValueError(f"{_search!r} does not exists in {content}")
 
 
-def setdot(search: str, content: dict, value: typing.Any, **kwargs) -> dict:
+def setdot(
+    search: str,
+    content: dict,
+    value: typing.Any,
+    ignore: bool = False,
+    **kwargs,
+) -> dict:
     """
     Examples:
         >>> setdot('data.value', {'data': {'value': 1}}, 2)
@@ -338,19 +344,20 @@ def setdot(search: str, content: dict, value: typing.Any, **kwargs) -> dict:
         >>> setdot('data.value.key', {'data': {'value': 1}}, 2, ignore=True)
         {'data': {'value': 1}}
     """
-    _ignore: bool = kwargs.get("ignore", False)
     _search, _else = splitter.must_split(search, ".", maxsplit=1)
     if _search in content and isinstance(content, dict):
         if not _else:
             content[_search] = value
             return content
         if isinstance((result := content[_search]), dict):
-            content[_search] = setdot(_else, result, value, **kwargs)
+            content[_search] = setdot(
+                _else, result, value, ignore=ignore, **kwargs
+            )
             return content
-        if _ignore:
+        if ignore:
             return content
         raise ValueError(f"{_else!r} does not exists in {result}")
-    if _ignore:
+    if ignore:
         return content
     raise ValueError(f"{_search} does not exists in {content}")
 

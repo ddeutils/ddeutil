@@ -1,5 +1,11 @@
 import pytest
-from ddeutil.core import getdot
+from ddeutil.core import getdot, hasdot, setdot
+
+
+def test_hasdot():
+    assert hasdot("data.value", {"data": {"value": 2}})
+    assert not hasdot("data.value.key", {"data": {"value": 2}})
+    assert not hasdot("item.value.key", {"data": {"value": 2}})
 
 
 def test_getdot():
@@ -26,3 +32,12 @@ def test_getdot():
 
     assert getdot("test?.error", {"foo": "bar"}) is None
     assert getdot("test.error?.message", {"test": {"bar": {}}}) is None
+
+
+def test_setdot():
+    assert setdot("data.value", {"data": {"value": 1}}, 2) == {
+        "data": {"value": 2}
+    }
+    assert setdot("data.value.key", {"data": {"value": 1}}, 2, ignore=True) == {
+        "data": {"value": 1}
+    }
