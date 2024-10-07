@@ -48,7 +48,7 @@ def not_generic(check: typing.Any, instance):
 
 
 def isinstance_check(check: typing.Any, instance) -> bool:
-    """Return True if check data is instance.
+    """Return True if a data is instance of the respect instance.
 
     Examples:
         >>> import typing as t
@@ -117,7 +117,9 @@ def cached_import(module_path, class_name):  # pragma: no cove
 
 def import_string(dotted_path: str):  # pragma: no cove
     """Import a dotted module path and return the attribute/class designated by
-    the last name in the path. Raise ImportError if the import failed.
+    the last name in the path.
+
+    :raise ImportError: if the import failed.
     """
     try:
         module_path, class_name = dotted_path.rsplit(".", 1)
@@ -136,12 +138,12 @@ def import_string(dotted_path: str):  # pragma: no cove
 
 
 def lazy(module: str):  # pragma: no cove
-    """Lazy use import_string function that warpped with partial function."""
+    """Lazy use import_string function that wrapped with partial function."""
     return partial(import_string, module)
 
 
-def round_up(number: float, decimals):
-    """
+def round_up(number: float, decimals: int):
+    """Round up the number with decimals precision size.
     Examples:
         >>> round_up(1.00406, 2)
         1.01
@@ -158,7 +160,7 @@ def round_up(number: float, decimals):
 
 
 def remove_pad(value: str) -> str:
-    """Remove zero padding of string
+    """Remove zero padding of zero prefix string.
     Examples:
         >>> remove_pad('000')
         '0'
@@ -166,6 +168,8 @@ def remove_pad(value: str) -> str:
         '123'
         >>> remove_pad('0000123')
         '123'
+        >>> remove_pad('0000123.12')
+        '123.12
     """
     return _last_char if (_last_char := value[-1]) == "0" else value.lstrip("0")
 
@@ -337,7 +341,7 @@ def setdot(
     ignore: bool = False,
     **kwargs,
 ) -> dict:
-    """
+    """Set the value if dot searching exists in content data.
     Examples:
         >>> setdot('data.value', {'data': {'value': 1}}, 2)
         {'data': {'value': 2}}
@@ -367,7 +371,7 @@ def filter_dict(
     included: Collection | None = None,
     excluded: Collection | None = None,
 ) -> T:
-    """
+    """Filter dict value with excluded and included collections.
     Examples:
         >>> filter_dict({"foo": "bar"}, included={}, excluded={"foo"})
         {}
@@ -394,7 +398,7 @@ def filter_dict(
 
 
 def random_str(num_length: int = 8) -> str:  # no cov
-    """Random string from uppercase ASCII and number 0-9"""
+    """Random string from uppercase ASCII and number 0-9."""
     return "".join(
         random.choices(string.ascii_uppercase + string.digits, k=num_length)
     )
