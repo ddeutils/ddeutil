@@ -15,7 +15,19 @@ def test_getdot():
     with pytest.raises(ValueError):
         getdot("data.value", {"data": "test"})
 
+    with pytest.raises(ValueError):
+        getdot("data.value", {"foo": "test"})
+
+    with pytest.raises(ValueError):
+        getdot("data.value.foo", {"data": {"value": [1, 2, 3]}})
+
+    assert getdot("data.value", {"foo": "test"}, 1) == 1
+    assert getdot("data.value", {"foo": "test"}, ignore=True) is None
     assert getdot("data.value", {"data": {"key": 1}}, None) is None
+    assert (
+        getdot("data.value.foo", {"data": {"value": [1, 2, 3]}}, ignore=True)
+        is None
+    )
 
     assert (
         getdot(
@@ -26,6 +38,7 @@ def test_getdot():
     )
 
     assert getdot("foo.bar", {"foo": {"baz": 1}}, ignore=True) is None
+    assert getdot("foo.bar", {"foo": {"bar": [1, 2, 3]}}) == [1, 2, 3]
 
     assert getdot("foo.bar", {"foo": {"baz": 1}}, 2, 3) == 2
     assert getdot("foo.bar", {"foo": {"baz": 1}}, 2, 3, ignore=True) == 2
@@ -33,11 +46,27 @@ def test_getdot():
     assert getdot("test?.error", {"foo": "bar"}) is None
     assert getdot("test.error?.message", {"test": {"bar": {}}}) is None
 
+    assert getdot("value", [1, 2, 3], ignore=True) is None
+    assert getdot("value", [1, 2, 3], 2) == 2
+
+    with pytest.raises(ValueError):
+        assert getdot("value", [1, 2, 3])
+
 
 def test_setdot():
     assert setdot("data.value", {"data": {"value": 1}}, 2) == {
         "data": {"value": 2}
     }
     assert setdot("data.value.key", {"data": {"value": 1}}, 2, ignore=True) == {
+        "data": {"value": 1}
+    }
+
+    with pytest.raises(ValueError):
+        setdot("data.foo", {"data": {"value": 1}}, 10)
+
+    with pytest.raises(ValueError):
+        setdot("data.value.foo", {"data": {"value": [1, 2, 3]}}, 1)
+
+    assert setdot("foo", {"data": {"value": 1}}, 10, ignore=True) == {
         "data": {"value": 1}
     }

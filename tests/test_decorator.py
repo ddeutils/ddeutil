@@ -48,10 +48,10 @@ def test_profile():
     keeps: list[str] = []
 
     @decorator.profile(log=partial(log_override, keeping=keeps), waiting=2)
-    def waiting():
+    def waiting():  # pragma: no cov
         time.sleep(5)
 
-    waiting()
+    waiting()  # pragma: no cov
 
     assert 2 <= len(keeps) < 4
 

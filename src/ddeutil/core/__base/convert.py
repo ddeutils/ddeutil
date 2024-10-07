@@ -94,7 +94,7 @@ def str2dict(
         >>> str2dict('{"a": 1, "b": 2, "c": 3}')
         {'a': 1, 'b': 2, 'c': 3}
         >>> str2dict('{"d""}', force_raise=False)
-        {1: '{"d""}'}
+        {0: '{"d""}'}
         >>> str2dict('{"d""}')
         Traceback (most recent call last):
         ...
@@ -102,22 +102,31 @@ def str2dict(
     """
     if value is None or value == "":
         return {}
-    if value.startswith("{") and value.endswith("}"):
-        try:
-            return ast.literal_eval(value)
-        except SyntaxError as err:
-            if not force_raise:
-                return {1: value}
+
+    if not value.startswith("{") or not value.endswith("}"):
+        if force_raise:
+            raise ValueError(
+                f"can not convert string value {value!r} to dict object"
+            )
+        return {0: value}
+
+    try:
+        rs = ast.literal_eval(value)
+        if isinstance(rs, set):
+            raise ValueError("Expect string of dict type result not set")
+        return rs
+    except (SyntaxError, ValueError) as err:
+        if force_raise:
             raise ValueError(
                 f"can not convert string value {value!r} to dict object"
             ) from err
-    return {1: value}
+        return {0: value}
 
 
 def str2int_float(
     value: Optional[str] = None,
     force_raise: bool = False,
-) -> Union[int, float]:
+) -> int | float | str:
     """
     :usage:
         >>> str2int_float('+3')
@@ -142,7 +151,7 @@ def str2int_float(
             return float(value)
         except ValueError as err:
             if not force_raise:
-                return 0
+                return value
             raise ValueError(
                 f"can not convert string value {value!r} to int or float"
             ) from err
@@ -206,14 +215,14 @@ def str2any(value: str) -> Any:
         >>> str2any('{"key": "value"}')
         {'key': 'value'}
         >>> str2any('1245.123')
-        '1245.123'
+        1245.123
         >>> str2any('True')
         True
     """
-    if value.startswith(('"', "'")) and value.endswith(('"', "'")):
+    if not isinstance(value, str):
+        return value
+    elif value.startswith(('"', "'")) and value.endswith(('"', "'")):
         return value.strip("\"'")
-    elif value.isdecimal():
-        return str2int_float(value)
     elif value.startswith("[") and value.endswith("]"):
         return str2list(value)
     elif value.startswith("{") and value.endswith("}"):
@@ -223,7 +232,11 @@ def str2any(value: str) -> Any:
         "False",
     }:
         return str2bool(value)
-    return value
+    else:
+        try:
+            return str2int_float(value, force_raise=True)
+        except ValueError:
+            return value
 
 
 def revert_args(*args, **kwargs) -> tuple[tuple[Any], dict[Any, Any]]:

@@ -12,6 +12,7 @@ from unittest import mock
 import pytest
 from ddeutil.core import (
     filter_dict,
+    first,
     isinstance_check,
     onlyone,
     random_str,
@@ -35,6 +36,7 @@ def test_instance_check():
     assert isinstance_check("A", Any)
     assert isinstance_check([1, [1, 2, 3]], list[Union[list[int], int]])
     assert not isinstance_check([1], Union[str, int])
+    assert isinstance_check((1, "foo", True), tuple[int, str, bool])
 
 
 def test_instance_generic():
@@ -49,6 +51,7 @@ def test_instance_generic():
 def test_round_up():
     assert round_up(1.00406, 2) == 1.01
     assert round_up(1.00001, 1) == 1.1
+    assert round_up(1.00001, 0) == 2
 
 
 def test_remove_pad():
@@ -83,14 +86,21 @@ def test_only_one_dynamic_type():
         onlyone({1, 4, 5}, (1, 2, 3))
 
 
+def test_first():
+    assert first((1, 2, 3), condition=lambda _: _ % 2 == 0) == 2
+    assert first(range(3, 100)) == 3
+
+    with pytest.raises(StopIteration):
+        first(())
+
+    with pytest.raises(StopIteration):
+        first([1, 3, 5], default=1, condition=lambda _: _ % 2 == 0)
+
+    assert first([1, 3, 5], default=2, condition=lambda _: _ % 2 == 0) == 2
+
+
 def test_filter_dict():
-    assert (
-        filter_dict(
-            {"foo": "bar"},
-            excluded={"foo"},
-        )
-        == {}
-    )
+    assert filter_dict({"foo": "bar"}, excluded={"foo"}) == {}
 
 
 @mock.patch("random.choices", return_value="AA145WQ2")

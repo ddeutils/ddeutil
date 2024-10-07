@@ -184,11 +184,11 @@ def first(iterable, default=None, condition=lambda x: True):
     and default is not given or doesn't satisfy the condition.
 
     Examples:
-        >>> first( (1,2,3), condition=lambda _: _ % 2 == 0)
+        >>> first((1, 2, 3), condition=lambda _: _ % 2 == 0)
         2
         >>> first(range(3, 100))
         3
-        >>> first( () )
+        >>> first(())
         Traceback (most recent call last):
         ...
         StopIteration
@@ -198,10 +198,12 @@ def first(iterable, default=None, condition=lambda x: True):
         Traceback (most recent call last):
         ...
         StopIteration
-        >>> first([1,3,5], default=1, condition=lambda _: _ % 2 == 0)
+        >>> first([1, 3, 5], default=1, condition=lambda _: _ % 2 == 0)
         Traceback (most recent call last):
         ...
         StopIteration
+        >>> first([1, 3, 5], default=2, condition=lambda _: _ % 2 == 0)
+        2
 
     References: https://stackoverflow.com/questions/2361426/ -
             get-the-first-item-from-an-iterable-that-matches-a-condition
@@ -309,10 +311,11 @@ def getdot(
         if _search in content:
             if not _else:
                 return content[_search]
-            if isinstance((sub_content := content[_search]), dict):
+            elif isinstance((sub_content := content[_search]), dict):
                 return getdot(
                     _else, sub_content, *args, ignore=ignore, **kwargs
                 )
+
             if ignore:
                 return None
             raise ValueError(f"{_else!r} does not exists in {sub_content}")
