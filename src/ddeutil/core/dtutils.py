@@ -84,7 +84,7 @@ def get_date(
     *,
     _tz: Optional[str] = None,
 ) -> Union[datetime, datetime.date, str]:
-    """
+    """Return the current datetime with custom string format.
     Examples:
         >>> get_date(fmt='%Y-%m-%d')
         '2023-01-01'
@@ -102,11 +102,11 @@ def replace_date(
     mode: DatetimeMode,
     reverse: bool = False,
 ) -> datetime:
-    """
+    """Replace datetime matrix that less than an input mode to origin value.
     Examples:
         >>> replace_date(datetime(2023, 1, 31, 13, 2, 47), mode='day')
         datetime.datetime(2023, 1, 31, 0, 0)
-        >>> replace_date(datetime(2023, 1, 31, 13, 2, 47), mode='year')
+        >>> replace_date(datetime(2023, 3, 25, 13, 2, 47), mode='year')
         datetime.datetime(2023, 1, 1, 0, 0)
     """
     assert mode in (
@@ -168,7 +168,7 @@ def next_date(
 
 
 def closest_quarter(dt: datetime) -> datetime:
-    """Return closest quarter datetime.
+    """Return closest quarter datetime of an input datetime.
 
     :param dt: A datetime value that want to convert.
     :rtype: datetime
@@ -194,7 +194,7 @@ def closest_quarter(dt: datetime) -> datetime:
 
 
 def last_dom(dt: datetime) -> datetime:
-    """
+    """Get the latest day of month that relate with an input datetime value.
     :param dt:
     :rtype: datetime
 
@@ -213,7 +213,7 @@ def last_dom(dt: datetime) -> datetime:
 
 
 def last_doq(dt: datetime) -> datetime:
-    """
+    """Get the latest day of quarter that relate with an input datetime value.
     :param dt:
     :return:
 
