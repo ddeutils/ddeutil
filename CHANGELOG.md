@@ -2,6 +2,28 @@
 
 ## Latest Changes
 
+## 0.4.2
+
+### :black_nib: Code Changes
+
+- :test_tube: tests: add testcases for cover coverage report 100%. (_2024-10-07_)
+- :art: styled: change in-condition from set to tuple. (_2024-10-05_)
+- :test_tube: tests: add testcase for increase coverage report. (_2024-10-05_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: update readme. (_2024-10-06_)
+- :page_facing_up: docs: update readme for new funcs and objs. (_2024-10-05_)
+
+### :bug: Fix Bugs
+
+- :gear: fixed: remove pre-commit call pytest on commit stage. (_2024-10-05_)
+
+### :package: Build & Workflow
+
+- :toolbox: build: add coverage workflow. (_2024-10-06_)
+- :toolbox: build: change version of cache file. (_2024-10-05_)
+
 ## 0.4.1
 
 ### :sparkles: Features
