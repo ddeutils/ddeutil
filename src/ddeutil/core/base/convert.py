@@ -28,6 +28,7 @@ __all__: tuple[str, ...] = (
     "str2any",
     "str2args",
     "str2int_float",
+    "revert_args",
 )
 
 

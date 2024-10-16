@@ -18,8 +18,8 @@ __all__: tuple[str, ...] = (
     "merge_dict",
     "merge_list",
     "merge_dict_value",
-    "merge_dict_values",
-    "merge_values",
+    "merge_dict_value_list",
+    "sum_values",
 )
 
 
@@ -131,10 +131,10 @@ def merge_dict_value(*dicts, **kwargs) -> dict:
     return switcher.get(_mode, lambda: [*dicts])()
 
 
-def merge_dict_values(*dicts, **kwargs) -> dict:
+def merge_dict_value_list(*dicts, **kwargs) -> dict:
     """
     Examples:
-        >>> merge_dict_values(
+        >>> merge_dict_value_list(
         ...     {'a': [1, 2], 'b': []}, {'a': [1, 3], 'b': [5, 6]}
         ... )
         {'a': [1, 2, 1, 3], 'b': [5, 6]}
@@ -152,20 +152,19 @@ def merge_dict_values(*dicts, **kwargs) -> dict:
     return dict(super_dict)
 
 
-def merge_values(
-    _dict: dict[int, Union[int, float]],
-    start: Optional[int] = None,
+def sum_values(
+    value: dict[int, Union[int, float]],
+    start: int = 0,
     end: Optional[int] = None,
 ) -> Union[int, float]:
-    """
-    :usage:
-        >>> merge_values(
+    """Sum all values in an input dict value with start and end index.
+
+    Examples:
+        >>> sum_values(
         ...     {1: 128, 2: 134, 3: 45, 4: 104, 5: 129},
         ...     start=3,
         ...     end=5,
         ... )
         278
     """
-    _start: int = start or 0
-    _end: int = (end or len(_dict)) + 1
-    return sum(map(_dict.get, range(_start, _end)))
+    return sum(map(value.get, range(start, (end or len(value)) + 1)))

@@ -20,7 +20,7 @@ def test_isplit():
 
 
 def test_must_split():
-    assert sp.must_split("asd|fasd", "|", maxsplit=2) == ["asd", "fasd", None]
+    assert sp.must_split("asd|foo", "|", maxsplit=2) == ["asd", "foo", None]
     assert sp.must_split("data") == ["data"]
     assert sp.must_split("data", "a", maxsplit=1, mustsplit=False) == [
         "d",

@@ -89,18 +89,18 @@ def test_merge_dict_value():
     ) == [{"a": 1, "b": 5}, {"a": 3, "b": 6}]
 
 
-def test_merge_dict_values():
-    assert merge.merge_dict_values(
+def test_merge_dict_value_list():
+    assert merge.merge_dict_value_list(
         {"a": [1, 2], "b": []}, {"a": [1, 3], "b": [5, 6]}
     ) == {"a": [1, 2, 1, 3], "b": [5, 6]}
-    assert merge.merge_dict_values(
+    assert merge.merge_dict_value_list(
         {"a": [1, 2]}, {"a": [1, 3], "b": [5, 6]}
     ) == {"a": [1, 2, 1, 3], "b": [5, 6]}
 
 
-def test_merge_values():
+def test_sum_values():
     assert (
-        merge.merge_values(
+        merge.sum_values(
             {1: 128, 2: 134, 3: 45, 4: 104, 5: 129},
             start=3,
             end=5,

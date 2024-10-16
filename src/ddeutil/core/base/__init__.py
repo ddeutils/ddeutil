@@ -55,9 +55,9 @@ from .hash import (
 from .merge import (
     merge_dict,
     merge_dict_value,
-    merge_dict_values,
+    merge_dict_value_list,
     merge_list,
-    merge_values,
+    sum_values,
     zip_equal,
 )
 from .sorting import (
