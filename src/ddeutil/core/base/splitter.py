@@ -9,6 +9,12 @@ import re
 from collections.abc import Iterator
 from typing import AnyStr
 
+__all__: tuple[str, ...] = (
+    "isplit",
+    "must_split",
+    "must_rsplit",
+)
+
 
 def isplit(source: AnyStr, sep=None, regex=False) -> Iterator[str]:
     """Generator of ``str.split()`` method.

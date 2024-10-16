@@ -13,6 +13,15 @@ from typing import (
     Union,
 )
 
+__all__: tuple[str, ...] = (
+    "zip_equal",
+    "merge_dict",
+    "merge_list",
+    "merge_dict_value",
+    "merge_dict_values",
+    "merge_values",
+)
+
 
 def zip_equal(*iterables):
     """

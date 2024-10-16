@@ -6,9 +6,6 @@
 from __future__ import annotations
 
 import hashlib
-import hmac
-import os
-from base64 import b64encode
 from collections.abc import Collection
 from functools import wraps
 from typing import (
@@ -20,6 +17,14 @@ try:
     import ujson
 except ImportError:  # pragma: no cove
     ujson = None
+
+__all__: tuple[str, ...] = (
+    "checksum",
+    "hash_all",
+    "hash_str",
+    "freeze",
+    "freeze_args",
+)
 
 
 def checksum(value: dict[str, Any]) -> str:
@@ -89,68 +94,6 @@ def hash_str(value: str, n: int = 8) -> str:
     if n == -1:
         return hasted
     return hasted[-n:]
-
-
-def hash_pwd(pwd: str) -> tuple[bytes, bytes]:
-    """Hash the provided password with a randomly-generated salt and return the
-    salt and hash to store in the database.
-
-    Warnings:
-        * The use of a 16-byte salt and 100000 iterations of PBKDF2 match
-            the minimum numbers recommended in the Python docs. Further increasing
-            the number of iterations will make your hashes slower to compute,
-            and therefore more secure.
-
-    References:
-        * https://stackoverflow.com/questions/9594125/ -
-            salt-and-hash-a-password-in-python/56915300#56915300
-    """
-    # Able use `uuid.uuid4().hex`
-    salt = b64encode(os.urandom(16))
-    hashed_password = hashlib.pbkdf2_hmac(
-        "sha256",
-        pwd.encode("utf-8"),
-        salt,
-        iterations=100000,
-    )
-    return salt, hashed_password
-
-
-def same_pwd(salt: bytes, pw_hash: bytes, password: str) -> bool:
-    """Given a previously-stored salt and hash, and a password provided by
-    a user trying to log in, check whether the password is correct.
-
-    Examples:
-        >>> s, pw = hash_pwd('P@ssW0rd')
-        >>> same_pwd(s, pw, 'P@ssW0rd')
-        True
-
-    References:
-        * https://stackoverflow.com/questions/9594125/ -
-            salt-and-hash-a-password-in-python/56915300#56915300
-    """
-    return hmac.compare_digest(
-        pw_hash, hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 100000)
-    )
-
-
-def tokenize(*args, **kwargs):
-    """Deterministic token (modified from dask.base).
-
-    Examples:
-        >>> tokenize([1, 2, '3'])
-        '9d71491b50023b06fc76928e6eddb952'
-        >>> tokenize('Hello') == tokenize('Hello')
-        True
-    """
-    if kwargs:
-        args += (kwargs,)
-    try:
-        rs = hashlib.md5(str(args).encode())
-    except ValueError:  # no cove
-        # FIPS systems: https://github.com/fsspec/filesystem_spec/issues/380
-        rs = hashlib.md5(str(args).encode(), usedforsecurity=False)
-    return rs.hexdigest()
 
 
 def freeze(value: Any) -> Any:  # no cove

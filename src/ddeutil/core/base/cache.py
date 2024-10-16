@@ -8,6 +8,12 @@ from __future__ import annotations
 from functools import wraps
 from typing import Any
 
+__all__: tuple[str, ...] = (
+    "memoize",
+    "property_memoized",
+    "clear_cache",
+)
+
 
 class memoize:
     """Return a cachable function that keep all arguments and pass to string

@@ -1,6 +1,6 @@
-from . import __base as base
+from . import base as base
 from .__about__ import __version__
-from .__base import (
+from .base import (
     cache,
     checker,
     coalesce,
@@ -22,16 +22,16 @@ from .__base import (
     sorting,
     splitter,
 )
-from .__base.cache import (
+from .base.cache import (
     clear_cache,
     memoize,
     property_memoized,
 )
-from .__base.checker import (
+from .base.checker import (
     can_int,
     is_int,
 )
-from .__base.convert import (
+from .base.convert import (
     must_bool,
     must_list,
     str2any,
@@ -41,17 +41,14 @@ from .__base.convert import (
     str2int_float,
     str2list,
 )
-from .__base.hash import (
+from .base.hash import (
     checksum,
     freeze,
     freeze_args,
     hash_all,
-    hash_pwd,
     hash_str,
-    same_pwd,
-    tokenize,
 )
-from .__base.merge import (
+from .base.merge import (
     merge_dict,
     merge_dict_value,
     merge_dict_values,
@@ -59,11 +56,11 @@ from .__base.merge import (
     merge_values,
     zip_equal,
 )
-from .__base.sorting import (
+from .base.sorting import (
     ordered,
     sort_priority,
 )
-from .__base.splitter import (
+from .base.splitter import (
     isplit,
     must_rsplit,
     must_split,

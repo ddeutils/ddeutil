@@ -2,26 +2,12 @@ from functools import lru_cache
 from unittest import mock
 
 import pytest
-from ddeutil.core.__base.hash import (
+from ddeutil.core.base.hash import (
     checksum,
     freeze_args,
     hash_all,
-    hash_pwd,
     hash_str,
-    same_pwd,
-    tokenize,
 )
-
-
-def test_tokenize():
-    assert tokenize("Hello") == tokenize("Hello")
-    assert "9d71491b50023b06fc76928e6eddb952" == tokenize([1, 2, "3"])
-    assert "1b94fd88ee7c12484422d1715818bf1f" == tokenize(1, 2, foo="bar")
-
-
-def test_pwd():
-    s, pw = hash_pwd("P@ssW0rd")
-    assert same_pwd(s, pw, "P@ssW0rd")
 
 
 def test_hash_str():

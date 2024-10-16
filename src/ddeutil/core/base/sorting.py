@@ -15,6 +15,11 @@ from typing import (
 
 T = TypeVar("T")
 
+__all__: tuple[str, ...] = (
+    "ordered",
+    "sort_priority",
+)
+
 
 def ordered(value: T) -> T:
     """Order an object by ``sorted``.
