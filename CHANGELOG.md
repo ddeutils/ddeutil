@@ -2,6 +2,23 @@
 
 ## Latest Changes
 
+## 0.4.3
+
+### :black_nib: Code Changes
+
+- :construction: refactored: list module to __all__ at the base module. (_2024-10-16_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: update usages content on readme. (_2024-10-16_)
+- :page_facing_up: docs: update docs-str on the convert module. (_2024-10-16_)
+- :page_facing_up: docs: update desc of features on readme. (_2024-10-07_)
+- :page_facing_up: docs: update readme for optional deps. (_2024-10-07_)
+
+### :bug: Fix Bugs
+
+- :gear: fixed: add import direct to function from __base. (_2024-10-07_)
+
 ## 0.4.2
 
 ### :black_nib: Code Changes
