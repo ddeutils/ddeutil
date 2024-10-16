@@ -37,7 +37,10 @@ FalseStr: tuple[str, ...] = (
 
 
 def is_int(value: Any) -> bool:
-    """Check value that be integer.
+    """Check an input value that be integer type or not.
+
+    :param value: An any value that want to check type.
+    :rtype: bool
 
     Examples:
         >>> is_int('')
@@ -73,8 +76,11 @@ def is_int(value: Any) -> bool:
 
 
 def can_int(value: Any) -> bool:
-    """Check value that able to integer (but some value does not use int() to
-    convert it such as 0.0 or 3.0).
+    """Check an input value that can be integer type or not (but some value does
+    not use int() to convert it such as 0.0 or 3.0).
+
+    :param value: An any value that want to check type.
+    :rtype: bool
 
     Examples:
         >>> can_int('0.0')

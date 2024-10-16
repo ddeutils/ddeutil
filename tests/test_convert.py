@@ -99,3 +99,4 @@ def test_str2args():
         ("value", 1, '[1, 3, "foo"]'),
         {},
     )
+    assert cc.str2args(None) == ((None,), {})

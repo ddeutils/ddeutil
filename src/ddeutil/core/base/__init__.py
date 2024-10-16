@@ -38,7 +38,6 @@ from .checker import (
 from .convert import (
     must_bool,
     must_list,
-    revert_args,
     str2any,
     str2args,
     str2bool,

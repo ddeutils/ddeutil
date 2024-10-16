@@ -28,7 +28,6 @@ __all__: tuple[str, ...] = (
     "str2any",
     "str2args",
     "str2int_float",
-    "revert_args",
 )
 
 
@@ -36,7 +35,7 @@ def str2bool(
     value: Optional[str] = None,
     force_raise: bool = True,
 ) -> bool:
-    """Convert string value to boolean value.
+    """Convert an input string value to boolean (True or False).
 
     Examples:
         >>> str2bool('yes')
@@ -62,7 +61,7 @@ def str2list(
     value: Optional[str] = None,
     force_raise: bool = True,
 ) -> list[Any]:
-    """Convert string to list value.
+    """Convert an input string value to list.
 
     Examples:
         >>> str2list('["a", "b", "c"]')
@@ -100,7 +99,7 @@ def str2dict(
     value: Optional[str] = None,
     force_raise: bool = True,
 ) -> dict[Any, Any]:
-    """Covert string value to dict value.
+    """Convert an input string value to dict.
 
     Examples:
         >>> str2dict('{"a": 1, "b": 2, "c": 3}')
@@ -139,8 +138,9 @@ def str2int_float(
     value: Optional[str] = None,
     force_raise: bool = False,
 ) -> int | float | str:
-    """
-    :usage:
+    """Convert an input string value to float.
+
+    Examples:
         >>> str2int_float('+3')
         3
         >>> str2int_float('-5.00')
@@ -215,7 +215,12 @@ def must_bool(
 
 
 def str2any(value: str) -> Any:
-    """Convert string value to the real type of that object.
+    """Convert an input string value to the real type of that object. Note that
+    this convert function do not force or try-hard to convert type such as a
+    boolean value should be 'True' or 'False' only.
+
+    :param value: An any string value that want to convert.
+    :rtype: Any
 
     Examples:
         >>> str2any('1245')
@@ -239,10 +244,7 @@ def str2any(value: str) -> Any:
         return str2list(value)
     elif value.startswith("{") and value.endswith("}"):
         return str2dict(value)
-    elif value in {
-        "True",
-        "False",
-    }:
+    elif value in ("True", "False"):
         return str2bool(value)
     else:
         try:
@@ -266,14 +268,14 @@ def revert_args(*args, **kwargs) -> tuple[tuple[Any], dict[Any, Any]]:
 
 
 def str2args(value: Optional[str]) -> tuple[tuple[Any], dict[Any, Any]]:
-    """Convert arguments string to args and kwargs.
+    """Convert an input arguments string to args and kwargs values.
 
     Examples:
         >>> str2args("'value', 1, name='demo'")
         (('value', 1), {'name': 'demo'})
-
         >>> str2args("'value', 1, '[1, 3, \\"foo\\"]'")
         (('value', 1, '[1, 3, "foo"]'), {})
-
+        >>> str2args()
+        ((None,), {})
     """
     return eval(f"revert_args({value})")
