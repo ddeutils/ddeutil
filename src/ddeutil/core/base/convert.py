@@ -12,7 +12,10 @@ from typing import (
     Union,
 )
 
-import ujson
+try:
+    import ujson
+except ImportError:  # pragma: no cove
+    ujson = None
 
 try:
     from .checker import FalseStr, TrueStr
@@ -84,6 +87,11 @@ def str2list(
             )
         return [value]
 
+    if ujson is None:
+        raise ImportError(
+            "This function want to use ujson package for dumps values, "
+            "`pip install ddeutil[all]`."
+        )
     try:
         # ISSUE: When we talk about performance;
         # - ast.literal_eval(value) handler error SyntaxError (slower)

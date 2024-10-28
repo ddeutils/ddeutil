@@ -1,3 +1,5 @@
+from unittest import mock
+
 import pytest
 from ddeutil.core import (
     must_bool,
@@ -40,6 +42,10 @@ def test_str2list():
 
     with pytest.raises(ValueError):
         str2list('"d""]')
+
+    with mock.patch("ddeutil.core.convert.ujson", None):
+        with pytest.raises(ImportError):
+            str2list('["d", "a"]')
 
 
 def test_str2dict():
