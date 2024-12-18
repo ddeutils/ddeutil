@@ -141,30 +141,6 @@ def timing_open(title: str) -> Iterator[None]:  # no cove
         logging.debug(f"{padded_name}{padded_time}s")
 
 
-def debug(func: Callable[P, T]) -> Callable[P, T]:  # no cove
-    """
-    Examples:
-        >>> @debug
-        ... def add_numbers(x, y):
-        ...     return x + y
-        >>> add_numbers(7, y=5, )
-        Calling add_numbers with args: (7,) kwargs: {'y': 5}
-        add_numbers returned: 12
-        12
-    """
-
-    @wraps(func)
-    def wrapper(*args: P.args, **kwargs: P.kwargs):
-        logging.debug(
-            f"Calling {func.__name__} with args: {args} kwargs: {kwargs}"
-        )
-        result = func(*args, **kwargs)
-        logging.debug(f"{func.__name__} returned: {result}")
-        return result
-
-    return wrapper
-
-
 def retry(
     max_attempts: int,
     delay: int = 1,
