@@ -16,18 +16,12 @@ from functools import partial
 from math import ceil
 
 from . import (
-    cache,
     checker,
     convert,
     hash,
     merge,
     sorting,
     splitter,
-)
-from .cache import (
-    clear_cache,
-    memoize,
-    property_memoized,
 )
 from .checker import (
     FalseStr,

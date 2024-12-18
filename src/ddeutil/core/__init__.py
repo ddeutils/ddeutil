@@ -1,7 +1,6 @@
 from . import base as base
 from .__about__ import __version__
 from .base import (
-    cache,
     checker,
     coalesce,
     convert,
@@ -21,11 +20,6 @@ from .base import (
     setdot,
     sorting,
     splitter,
-)
-from .base.cache import (
-    clear_cache,
-    memoize,
-    property_memoized,
 )
 from .base.checker import (
     can_int,
