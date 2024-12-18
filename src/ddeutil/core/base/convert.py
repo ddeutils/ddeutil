@@ -277,7 +277,7 @@ def revert_args(*args, **kwargs) -> tuple[tuple[Any], dict[Any, Any]]:
 
 
 def str2args(value: Optional[str]) -> tuple[tuple[Any], dict[Any, Any]]:
-    """Convert an input arguments string to args and kwargs values.
+    """Convert an input string to args and kwargs values.
 
     Examples:
         >>> str2args("'value', 1, name='demo'")
