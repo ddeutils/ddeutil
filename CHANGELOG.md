@@ -2,6 +2,23 @@
 
 ## Latest Changes
 
+## 0.4.4
+
+### :black_nib: Code Changes
+
+- :construction: refactored: remove debug decorator from this proj. (_2024-12-18_)
+- :construction: refactored: remove cache module from this proj. (_2024-12-18_)
+- :construction: refactored: ⬆ bump codecov/codecov-action from 4 to 5 (_2024-12-01_)
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.11.0 to 1.12.2 (_2024-12-01_)
+- :construction: refactored: 📦 bump types-python-dateutil from 2.9.0.20240906 to 2.9.0.20241003 (#58) (_2024-11-04_)
+- :construction: refactored: ⬆ bump deadsnakes/action from 3.1.0 to 3.2.0 (_2024-11-01_)
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.10.2 to 1.11.0 (_2024-11-01_)
+- :construction: refactored: 📦 bump psutil from 6.0.0 to 6.1.0 (_2024-11-01_)
+
+### :bug: Fix Bugs
+
+- :gear: fixed: add ujson handler on base.convert module. (_2024-10-28_)
+
 ## 0.4.3
 
 ### :black_nib: Code Changes
