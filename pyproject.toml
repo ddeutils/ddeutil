@@ -27,7 +27,7 @@ all = [
     "ujson==5.10.0",
     "python-dateutil==2.9.0.post0",
     "types-python-dateutil==2.9.0.20241003",
-    "psutil==6.1.0",
+    "psutil==6.1.1",
 ]
 checksum = [
     "ujson==5.10.0",
@@ -37,7 +37,7 @@ dateutil = [
     "types-python-dateutil==2.9.0.20241003",
 ]
 memory = [
-    "psutil==6.1.0",
+    "psutil==6.1.1",
 ]
 
 [project.urls]
