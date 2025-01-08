@@ -120,7 +120,10 @@ def retry(
                 except Exception as e:
                     _attempts += 1
                     logging.info(f"Attempt {_attempts} failed: {e}")
-                    time.sleep(delay)
+                    if _attempts > 3:
+                        time.sleep(delay + 2 ** (_attempts - 2))
+                    else:
+                        time.sleep(delay)
             logging.debug(
                 f"Function `{func.__name__}` failed after "
                 f"{max_attempts} attempts"
@@ -151,11 +154,11 @@ def profile(
                 padded_time: str = f" {(time.monotonic() - ts):0.2f}".rjust(
                     6, "."
                 )
-                print(
-                    f"{padded_name}{padded_time}s",
-                    flush=True,
-                )
+                print(f"{padded_name}{padded_time}s", flush=True)
+
                 thread.stop()
+                cpu, mem = thread.summarize
+                print(f"Summary CPU%: {cpu}, Mem%: {mem}")
 
         return wrapper
 

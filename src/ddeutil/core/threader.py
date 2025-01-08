@@ -168,6 +168,7 @@ class MonitorThread(threading.Thread):
         self._prefix: str = prefix or ""
         self._waiting: int = waiting
         self._stop = threading.Event()
+        self.profiles: dict[str, list[float]] = {"cpu": [], "mem": []}
 
     def stop(self) -> None:
         self._stop.set()
@@ -178,11 +179,23 @@ class MonitorThread(threading.Thread):
     def run(self) -> None:
         """main control loop"""
         while not self.stopped():
+            cpu: float = psutil.cpu_percent(interval=1)
+            mem: float = psutil.virtual_memory().percent
+
+            self.profiles["cpu"].append(cpu)
+            self.profiles["mem"].append(mem)
+
             self._log(
                 f"{self._prefix}{datetime.now():%Y-%m-%d %H:%M:%S} "
-                f"CPU %: {psutil.cpu_percent()}, "
-                f"Mem %: {psutil.virtual_memory().percent}, "
+                f"CPU %: {cpu}, Mem %: {mem}, "
                 f"Thread: {threading.active_count()}, "
                 f"Process: {len([*psutil.process_iter()])}"
             )
             time.sleep(self._waiting)
+
+    @property
+    def summarize(self) -> tuple[float, float]:
+        return (
+            round(sum(self.profiles["cpu"]) / len(self.profiles["cpu"]), 3),
+            round(sum(self.profiles["mem"]) / len(self.profiles["mem"]), 3),
+        )

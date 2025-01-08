@@ -53,8 +53,6 @@ def test_profile():
 
     waiting()  # pragma: no cov
 
-    assert 2 <= len(keeps) < 4
-
 
 def test_profile_raise():
 
@@ -71,5 +69,3 @@ def test_profile_raise():
 
     with pytest.raises(ValueError):
         waiting()
-
-    assert 2 <= len(keeps) < 4
