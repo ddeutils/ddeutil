@@ -5,11 +5,9 @@
 # ------------------------------------------------------------------------------
 from __future__ import annotations
 
-import contextlib
 import copy
 import logging
 import time
-from collections.abc import Iterator
 from functools import wraps
 from typing import TYPE_CHECKING, Callable, TypeVar
 
@@ -92,55 +90,6 @@ def deepcopy_args(func: Callable[[object, P], T]) -> Callable[[object, P], T]:
     return func_get
 
 
-def timing(title: str) -> Callable[[Callable[P, T]], Callable[P, T]]:  # no cove
-    """
-    Examples:
-        >>> import time
-        >>> @timing("Sleep")
-        ... def will_sleep():
-        ...     time.sleep(2)
-        ...     return
-        >>> will_sleep()
-        Sleep ....................................................... 2.01s
-    """
-
-    def timing_internal(func: Callable[P, T]) -> Callable[P, T]:
-        @wraps(func)
-        def wrap(*args: P.args, **kw: P.kwargs) -> T:
-            ts = time.monotonic()
-            result = func(*args, **kw)
-            padded_name: str = f"{title} ".ljust(60, ".")
-            padded_time: str = f" {(time.monotonic() - ts):0.2f}".rjust(6, ".")
-            print(
-                f"{padded_name}{padded_time}s",
-                flush=True,
-            )
-            return result
-
-        return wrap
-
-    return timing_internal
-
-
-@contextlib.contextmanager
-def timing_open(title: str) -> Iterator[None]:  # no cove
-    """
-    Examples:
-        >>> import time
-        >>> with timing_open('Sleep'):
-        ...     time.sleep(2)
-        Sleep ....................................................... 2.00s
-    """
-    ts = time.monotonic()
-    try:
-        yield
-    finally:
-        te = time.monotonic()
-        padded_name: str = f"{title} ".ljust(60, ".")
-        padded_time: str = f" {(te - ts):0.2f}".rjust(6, ".")
-        logging.debug(f"{padded_name}{padded_time}s")
-
-
 def retry(
     max_attempts: int,
     delay: int = 1,
@@ -183,13 +132,12 @@ def retry(
 
 
 def profile(
-    prefix: str = None,
-    waiting: int = 10,
-    log=None,
+    prefix: str = None, waiting: int = 10, log=None
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """Profile memory and cpu that use on the current state."""
     from .threader import MonitorThread
 
+    ts = time.monotonic()
     thread = MonitorThread(prefix=prefix, waiting=waiting, log=log)
     thread.start()
 
@@ -199,6 +147,14 @@ def profile(
             try:
                 return func(*args, **kwargs)
             finally:
+                padded_name: str = "Time execute ".ljust(60, ".")
+                padded_time: str = f" {(time.monotonic() - ts):0.2f}".rjust(
+                    6, "."
+                )
+                print(
+                    f"{padded_name}{padded_time}s",
+                    flush=True,
+                )
                 thread.stop()
 
         return wrapper
