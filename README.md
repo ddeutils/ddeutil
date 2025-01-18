@@ -164,5 +164,5 @@ assert str2any("1.232.1") == "1.232.1"
 
 I do not think this project will go around the world because it has specific propose,
 and you can create by your coding without this project dependency for long term
-solution. So, on this time, you can open [the GitHub issue on this project:raised_hands:](https://github.com/ddeutils/ddeutil/issues)
+solution. So, on this time, you can open [the GitHub issue on this project :raised_hands:](https://github.com/ddeutils/ddeutil/issues)
 for fix bug or request new feature if you want it.
