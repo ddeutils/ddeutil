@@ -411,6 +411,7 @@ def filter_dict(
     excluded: Collection | None = None,
 ) -> T:
     """Filter dict value with excluded and included collections.
+
     Examples:
         >>> filter_dict({"foo": "bar"}, included={}, excluded={"foo"})
         {}

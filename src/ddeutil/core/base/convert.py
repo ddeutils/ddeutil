@@ -147,9 +147,11 @@ def str2int_float(
     value: Optional[str] = None,
     force_raise: bool = False,
 ) -> int | float | str:
-    """Convert an input string value to float.
+    """Convert an input string value to int or float.
 
     Examples:
+        >>> str2int_float('12')
+        12
         >>> str2int_float('+3')
         3
         >>> str2int_float('-5.00')

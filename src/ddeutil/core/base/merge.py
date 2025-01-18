@@ -9,6 +9,8 @@ from collections import ChainMap, defaultdict
 from functools import partial, reduce
 from itertools import zip_longest
 from typing import (
+    Any,
+    Callable,
     Optional,
     Union,
 )
@@ -68,11 +70,11 @@ def merge_dict(*dicts, **kwargs) -> dict:
             result.update(_dict)
         return result
 
-    def reduce_map(*_dicts):
+    def reduce_map(*_dicts) -> dict:
         """:performance: 3"""
         return reduce(lambda x, y: dict(x, **y), _dicts)
 
-    switcher: dict = {
+    switcher: dict[str, Callable[[callable], dict]] = {
         "chain": partial(chain_map, *dicts),
         "update": partial(update_map, *dicts),
         "reduce": partial(reduce_map, *dicts),
@@ -80,8 +82,9 @@ def merge_dict(*dicts, **kwargs) -> dict:
     return switcher.get(_mode, lambda: [*dicts])()
 
 
-def merge_list(*lists, **kwargs) -> list:
-    """
+def merge_list(*lists, **kwargs) -> list[Any]:
+    """Merge lists together.
+
     Examples:
         >>> merge_list(['A', 'B', 'C'], ['C', 'D'])
         ['A', 'B', 'C', 'C', 'D']
@@ -98,7 +101,7 @@ def merge_list(*lists, **kwargs) -> list:
     def reduce_list(*_lists):
         return reduce(lambda x, y: x + y, _lists)
 
-    switcher: dict = {
+    switcher: dict[str, Callable[[callable], list]] = {
         "extend": partial(extend_list, *lists),
         "reduce": partial(reduce_list, *lists),
     }
@@ -106,8 +109,9 @@ def merge_list(*lists, **kwargs) -> list:
     return switcher.get(_mode, lambda: [*lists])()
 
 
-def merge_dict_value(*dicts, **kwargs) -> dict:
-    """
+def merge_dict_value(*dicts, **kwargs) -> dict[Any, list[Any]]:
+    """Merge value of dicts together if it has a same key.
+
     Examples:
         >>> merge_dict_value({'a': 1, 'b': 5}, {'a': 3, 'b': 6})
         {'a': [1, 3], 'b': [5, 6]}
@@ -125,14 +129,15 @@ def merge_dict_value(*dicts, **kwargs) -> dict:
                     super_dict[k].add(v)
         return dict(super_dict)
 
-    switcher: dict = {
+    switcher: dict[str, Callable[[callable], dict]] = {
         "default": partial(default_map, _dup, *dicts),
     }
     return switcher.get(_mode, lambda: [*dicts])()
 
 
-def merge_dict_value_list(*dicts, **kwargs) -> dict:
-    """
+def merge_dict_value_list(*dicts, **kwargs) -> dict[Any, list[Any]]:
+    """Merge value that be list type of dicts together if it has a same key.
+
     Examples:
         >>> merge_dict_value_list(
         ...     {'a': [1, 2], 'b': []}, {'a': [1, 3], 'b': [5, 6]}
