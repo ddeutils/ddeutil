@@ -5,13 +5,21 @@ import ddeutil.core.dtutils as dtutils
 import pytest
 from dateutil.relativedelta import relativedelta
 from ddeutil.core.dtutils import (
-    calc_data_freq,
+    DatetimeDim,
+    calc_date_freq,
     closest_quarter,
     last_dom,
     next_date,
     next_date_freq,
 )
 from freezegun import freeze_time
+
+
+def test_dt_dimension():
+    assert 6 == DatetimeDim.get_dim("year")
+
+    with pytest.raises(ValueError):
+        DatetimeDim.get_dim("date_of_month")
 
 
 def test_get_date():
@@ -122,31 +130,31 @@ def test_next_date_freq():
 
 
 def test_calc_data_freq():
-    assert calc_data_freq(datetime(2024, 1, 13), freq="D") == datetime(
+    assert calc_date_freq(datetime(2024, 1, 13), freq="D") == datetime(
         2024, 1, 13, 0, 0
     )
-    assert calc_data_freq(datetime(2024, 1, 3), freq="W") == datetime(
+    assert calc_date_freq(datetime(2024, 1, 3), freq="W") == datetime(
         2024, 1, 3, 0, 0
     )
-    assert calc_data_freq(datetime(2024, 1, 3), freq="M") == datetime(
+    assert calc_date_freq(datetime(2024, 1, 3), freq="M") == datetime(
         2023, 12, 31, 0, 0
     )
-    assert calc_data_freq(datetime(2024, 1, 31), freq="M") == datetime(
+    assert calc_date_freq(datetime(2024, 1, 31), freq="M") == datetime(
         2024, 1, 31, 0, 0
     )
-    assert calc_data_freq(datetime(2024, 1, 31), freq="Q") == datetime(
+    assert calc_date_freq(datetime(2024, 1, 31), freq="Q") == datetime(
         2023, 12, 31, 0, 0
     )
-    assert calc_data_freq(datetime(2025, 12, 31), freq="Q") == datetime(
+    assert calc_date_freq(datetime(2025, 12, 31), freq="Q") == datetime(
         2025, 12, 31, 0, 0
     )
-    assert calc_data_freq(datetime(2024, 12, 31), freq="Y") == datetime(
+    assert calc_date_freq(datetime(2024, 12, 31), freq="Y") == datetime(
         2024, 12, 31, 0, 0
     )
-    assert calc_data_freq(datetime(2024, 5, 31), freq="Y") == datetime(
+    assert calc_date_freq(datetime(2024, 5, 31), freq="Y") == datetime(
         2023, 12, 31, 0, 0
     )
 
     with mock.patch("ddeutil.core.dtutils.relativedelta", None):
         with pytest.raises(ImportError):
-            calc_data_freq(datetime(2024, 5, 31), freq="Y")
+            calc_date_freq(datetime(2024, 5, 31), freq="Y")

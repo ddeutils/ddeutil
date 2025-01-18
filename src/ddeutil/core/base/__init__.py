@@ -43,8 +43,8 @@ from .hash import (
     checksum,
     freeze,
     freeze_args,
-    hash_all,
     hash_str,
+    hash_value,
 )
 from .merge import (
     merge_dict,

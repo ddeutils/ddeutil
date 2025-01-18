@@ -5,8 +5,8 @@ import pytest
 from ddeutil.core.base.hash import (
     checksum,
     freeze_args,
-    hash_all,
     hash_str,
+    hash_value,
 )
 
 
@@ -38,7 +38,7 @@ def test_hash_all():
             "c81e728d9d4c2f636f067f89cc14862c",
             "eccbc87e4b5ce2fe28308fd9f2a7baf3",
         ),
-    } == hash_all(
+    } == hash_value(
         {
             "str": "foo",
             "bool": True,

@@ -63,33 +63,48 @@ def get_datetime_replace(
 
 
 class DatetimeDim(enum.IntEnum):
-    """Datetime dimension enumerations"""
+    """Datetime dimension enum object."""
 
-    MICROSECOND = 0
-    SECOND = 1
-    MINUTE = 2
-    HOUR = 3
-    DAY = 4
-    MONTH = 5
-    YEAR = 6
+    MICROSECOND: int = 0
+    SECOND: int = 1
+    MINUTE: int = 2
+    HOUR: int = 3
+    DAY: int = 4
+    MONTH: int = 5
+    YEAR: int = 6
 
+    @classmethod
+    def get_dim(cls, value: str) -> int:
+        """Get dimension value from a datetime mode.
 
-def now(_tz: Optional[str] = None):
-    _tz: ZoneInfo = ZoneInfo(_tz) if _tz and isinstance(_tz, str) else LOCAL_TZ
-    return datetime.now(_tz)
+        :rtype: int
+        """
+        if hasattr(cls, value.upper()):
+            return getattr(cls, value.upper())
+        raise ValueError(
+            f"Datetime dimension does not contain dimension for {value!r}"
+        )
 
 
 def get_date(
     fmt: str,
     *,
-    _tz: Optional[str] = None,
+    _tz: Optional[Union[str, ZoneInfo]] = None,
 ) -> Union[datetime, datetime.date, str]:
     """Return the current datetime with custom string format.
+
     Examples:
         >>> get_date(fmt='%Y-%m-%d')
         '2023-01-01'
     """
-    _datetime: datetime = now(_tz)
+    if _tz is None:
+        _tz: ZoneInfo = LOCAL_TZ
+    elif isinstance(_tz, str):
+        _tz: ZoneInfo = ZoneInfo(_tz)
+    else:
+        _tz: ZoneInfo = _tz
+
+    _datetime: datetime = datetime.now(_tz)
     if fmt == "datetime":
         return _datetime
     elif fmt == "date":
@@ -103,6 +118,11 @@ def replace_date(
     reverse: bool = False,
 ) -> datetime:
     """Replace datetime matrix that less than an input mode to origin value.
+
+    :param dt: A datetime value that want to replace.
+    :param mode: A mode to repalce datetime.
+    :param reverse: A reverse flag.
+
     Examples:
         >>> replace_date(datetime(2023, 1, 31, 13, 2, 47), mode='day')
         datetime.datetime(2023, 1, 31, 0, 0)
@@ -123,7 +143,7 @@ def replace_date(
         **{
             _.name.lower(): replace_mapping[_.name.lower()][int(reverse)]
             for _ in DatetimeDim
-            if _ < DatetimeDim[mode.upper()]
+            if _ < DatetimeDim.get_dim(mode)
         }
     )
 
@@ -238,7 +258,8 @@ def last_doq(dt: datetime) -> datetime:
 
 
 def next_date_freq(dt: datetime, freq: str, prev: bool = False) -> datetime:
-    """
+    """Prepare datetime to next datetime with frequency value.
+
     :param dt:
     :param freq:
     :param prev:
@@ -294,28 +315,29 @@ def next_date_freq(dt: datetime, freq: str, prev: bool = False) -> datetime:
     return dt + timedelta(days=1 * operator)
 
 
-def calc_data_freq(dt: datetime, freq: str) -> datetime:
-    """
+def calc_date_freq(dt: datetime, freq: str) -> datetime:
+    """Prepare datetime to calculate datetime with frequency value.
+
     :param dt:
     :param freq:
     :rtype: datetime
 
         Examples:
-            >>> calc_data_freq(datetime(2024, 1, 13), freq='D')
+            >>> calc_date_freq(datetime(2024, 1, 13), freq='D')
             datetime.datetime(2024, 1, 13, 0, 0)
-            >>> calc_data_freq(datetime(2024, 1, 3), freq='W')
+            >>> calc_date_freq(datetime(2024, 1, 3), freq='W')
             datetime.datetime(2024, 1, 3, 0, 0)
-            >>> calc_data_freq(datetime(2024, 1, 3), freq='M')
+            >>> calc_date_freq(datetime(2024, 1, 3), freq='M')
             datetime.datetime(2023, 12, 31, 0, 0)
-            >>> calc_data_freq(datetime(2024, 1, 31), freq='M')
+            >>> calc_date_freq(datetime(2024, 1, 31), freq='M')
             datetime.datetime(2024, 1, 31, 0, 0)
-            >>> calc_data_freq(datetime(2024, 1, 31), freq='Q')
+            >>> calc_date_freq(datetime(2024, 1, 31), freq='Q')
             datetime.datetime(2023, 12, 31, 0, 0)
-            >>> calc_data_freq(datetime(2025, 12, 31), freq='Q')
+            >>> calc_date_freq(datetime(2025, 12, 31), freq='Q')
             datetime.datetime(2025, 12, 31, 0, 0)
-            >>> calc_data_freq(datetime(2024, 12, 31), freq='Y')
+            >>> calc_date_freq(datetime(2024, 12, 31), freq='Y')
             datetime.datetime(2024, 12, 31, 0, 0)
-            >>> calc_data_freq(datetime(2024, 5, 31), freq='Y')
+            >>> calc_date_freq(datetime(2024, 5, 31), freq='Y')
             datetime.datetime(2023, 12, 31, 0, 0)
     """
     if relativedelta is None:

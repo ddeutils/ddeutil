@@ -20,7 +20,7 @@ except ImportError:  # pragma: no cove
 
 __all__: tuple[str, ...] = (
     "checksum",
-    "hash_all",
+    "hash_value",
     "hash_str",
     "freeze",
     "freeze_args",
@@ -46,24 +46,24 @@ def checksum(value: dict[str, Any]) -> str:
     ).hexdigest()
 
 
-def hash_all(
+def hash_value(
     value: Any,
     exclude: Optional[Collection] = None,
 ) -> Any:
     """Hash all values in dictionary and all elements in collection.
 
     Examples:
-        >>> hash_all({'foo': 'bar'})
+        >>> hash_value({'foo': 'bar'})
         {'foo': '37b51d194a7513e45b56f6524f2d51f2'}
     """
     _exclude_keys: Collection = exclude or set()
     if isinstance(value, dict):
         return {
-            k: hash_all(v) if k not in _exclude_keys else v
+            k: hash_value(v) if k not in _exclude_keys else v
             for k, v in value.items()
         }
     elif isinstance(value, (list, tuple)):
-        return type(value)([hash_all(i) for i in value])
+        return type(value)([hash_value(i) for i in value])
     elif isinstance(value, bool):
         return value
     elif isinstance(value, (int, float)):
