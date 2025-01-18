@@ -39,11 +39,11 @@ pip install -U ddeutil
 > `pip install -U ddeutil[all]`. For optional dependencies that use on this
 > package, it will list on below table;
 > 
-> | Optional deps     | Installation                       | Modules                                                 |
-> |-------------------|------------------------------------|---------------------------------------------------------|
-> | `ujson`           | `pip install -U ddeutil[checksum]` | `hash.checksum`                                         |
-> | `python-dateutil` | `pip install -U ddeutil[dateutil]` | `dtutils.next_date_with_freq`, `dtutils.calc_data_freq` | 
-> | `psutil`          | `pip install -U ddeutil[memory]`   | `threader.MonitorThread`.                               |
+> | Optional deps     | Installation         | Modules                                                 |
+> |-------------------|----------------------|---------------------------------------------------------|
+> | `ujson`           | `ddeutil[checksum]`  | `hash.checksum`                                         |
+> | `python-dateutil` | `ddeutil[dateutil]`  | `dtutils.next_date_with_freq`, `dtutils.calc_data_freq` | 
+> | `psutil`          | `ddeutil[memory]`    | `threader.MonitorThread`.                               |
 
 ## :dart: Features
 
