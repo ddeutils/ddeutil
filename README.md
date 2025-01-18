@@ -47,8 +47,9 @@ pip install -U ddeutil
 
 ## :dart: Features
 
-This core data package will implement all of utility functions and objects that
-does not re-create again because it is basic code but has a lot of using require.
+This data package implements all of utility functions and objects that does not
+re-create again when the sub-namespace package want it because it is a basic utility
+but has a lot of using require.
 
 | Module          |          Name           | Description                                                                                                                                                                                       | Remark      |
 |:----------------|:-----------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
@@ -91,9 +92,8 @@ does not re-create again because it is basic code but has a lot of using require
 | base.splitter   |        `isplit`         |                                                                                                                                                                                                   |             |
 |                 |      `must_rsplit`      |                                                                                                                                                                                                   |             |
 |                 |      `must_split`       |                                                                                                                                                                                                   |             |
-| decorator       |       `deepcopy`        |                                                                                                                                                                                                   |             |
-|                 |     `deepcopy_args`     |                                                                                                                                                                                                   |             |
-|                 |         `retry`         |                                                                                                                                                                                                   |             |
+| decorator       |       `deepcopy`        | Deep-copy any args and kwargs for func and method.                                                                                                                                                |             |
+|                 |         `retry`         | Retry decorator with sequential.                                                                                                                                                                  |             |
 |                 |        `profile`        | Profile the current memory and cpu usage while wrapped function running.                                                                                                                          |             |
 | dtutils         |     `replace_date`      | Replace datetime matrix that less than an input mode to origin value.                                                                                                                             |             |
 |                 |       `next_date`       | Return the next date with specific unit mode.                                                                                                                                                     |             |
@@ -107,7 +107,7 @@ does not re-create again because it is basic code but has a lot of using require
 
 ## :beers: Usages
 
-I will show some usage example of function in this package. If you want to use
+I will show some examples of function in this package. If you want to use
 complex or adjust some parameter, please see doc-string or real source code
 (I think it does not complex, and you can see how that function work).
 
@@ -164,5 +164,5 @@ assert str2any("1.232.1") == "1.232.1"
 
 I do not think this project will go around the world because it has specific propose,
 and you can create by your coding without this project dependency for long term
-solution. So, on this time, you can open [the GitHub issue on this project :raised_hands:](https://github.com/dde-labs/self-elasticsearch/issues)
+solution. So, on this time, you can open [the GitHub issue on this project:raised_hands:](https://github.com/ddeutils/ddeutil/issues)
 for fix bug or request new feature if you want it.

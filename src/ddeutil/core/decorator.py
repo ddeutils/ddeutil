@@ -9,6 +9,7 @@ import copy
 import logging
 import time
 from functools import wraps
+from inspect import ismethod
 from typing import TYPE_CHECKING, Callable, TypeVar
 
 if TYPE_CHECKING:  # pragma: no cove
@@ -27,7 +28,7 @@ STR_TYPES = (bytes, str)
 
 
 def deepcopy(func: Callable[P, T]) -> Callable[P, T]:
-    """Deep copy method
+    """Deep-copy decorator for deep copy on the args and kwargs.
 
     Examples:
         >>> @deepcopy
@@ -46,24 +47,9 @@ def deepcopy(func: Callable[P, T]) -> Callable[P, T]:
         >>> (aa, bb, cc)
         ({1: 2}, {2: 3}, {3: 4})
 
-    """
-
-    def func_get(*args: P.args, **kwargs: P.kwargs) -> T:
-        return func(
-            *(copy.deepcopy(x) for x in args),
-            **{k: copy.deepcopy(v) for k, v in kwargs.items()},
-        )
-
-    return func_get
-
-
-def deepcopy_args(func: Callable[[object, P], T]) -> Callable[[object, P], T]:
-    """Deep copy method
-
-    Examples:
         >>> class Foo:
         ...
-        ...     @deepcopy_args
+        ...     @deepcopy
         ...     def foo(self, a, b=None):
         ...         b = b or {}
         ...         a[1] = 4
@@ -77,12 +63,22 @@ def deepcopy_args(func: Callable[[object, P], T]) -> Callable[[object, P], T]:
 
         >>> (aa, bb)
         ({1: 2}, {2: 3})
-
     """
 
-    def func_get(self: object, *args: P.args, **kwargs: P.kwargs) -> T:
+    # NOTE: This condition use for a func that be method type.
+    if ismethod(func):
+
+        def func_get(self: object, *args: P.args, **kwargs: P.kwargs) -> T:
+            return func(
+                self,
+                *(copy.deepcopy(x) for x in args),
+                **{k: copy.deepcopy(v) for k, v in kwargs.items()},
+            )
+
+        return func_get
+
+    def func_get(*args: P.args, **kwargs: P.kwargs) -> T:
         return func(
-            self,
             *(copy.deepcopy(x) for x in args),
             **{k: copy.deepcopy(v) for k, v in kwargs.items()},
         )
@@ -94,7 +90,8 @@ def retry(
     max_attempts: int,
     delay: int = 1,
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:  # no cove
-    """Retry decorator with sequencial.
+    """Retry decorator with sequential.
+
     Examples:
         >>> @retry(max_attempts=3, delay=2)
         ... def fetch_data(url):

@@ -22,10 +22,10 @@ def test_deepcopy():
     assert (aa, bb, cc) == ({1: 2}, {2: 3}, {3: 4})
 
 
-def test_deepcopy_args():
+def test_deepcopy_method():
 
     class Foo:
-        @decorator.deepcopy_args
+        @decorator.deepcopy
         def foo(self, a, b=None):
             b = b or {}
 
