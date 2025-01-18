@@ -39,8 +39,8 @@ from .base.hash import (
     checksum,
     freeze,
     freeze_args,
-    hash_all,
     hash_str,
+    hash_value,
 )
 from .base.merge import (
     merge_dict,
