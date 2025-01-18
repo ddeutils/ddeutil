@@ -2,6 +2,17 @@
 
 ## Latest Changes
 
+## 0.4.6
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: update readme file. (_2025-01-18_)
+- :page_facing_up: docs: update docs-string on base func. (_2025-01-18_)
+
+### :bug: Fix Bugs
+
+- :gear: fixed: rename hash_all func to hash_value. (_2025-01-18_)
+
 ## 0.4.5
 
 ### :sparkles: Features
