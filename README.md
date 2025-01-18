@@ -1,19 +1,20 @@
 # Core Data Utility
 
-[![test](https://github.com/korawica/ddeutil/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/korawica/ddeutil/actions/workflows/tests.yml)
+[![test](https://github.com/ddeutils/ddeutil/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/ddeutils/ddeutil/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/ddeutils/ddeutil/graph/badge.svg?token=G3XGBSRKA6)](https://codecov.io/gh/ddeutils/ddeutil)
 [![pypi version](https://img.shields.io/pypi/v/ddeutil)](https://pypi.org/project/ddeutil/)
 [![python support version](https://img.shields.io/pypi/pyversions/ddeutil)](https://pypi.org/project/ddeutil/)
-[![size](https://img.shields.io/github/languages/code-size/korawica/ddeutil)](https://github.com/korawica/ddeutil)
+[![size](https://img.shields.io/github/languages/code-size/ddeutils/ddeutil)](https://github.com/ddeutils/ddeutil)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![type check: mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-The **Core Data utility** package implements the data utility functions and objects
-that was created on sub-package namespace, `ddeutil`, design for independent
-installation.
+A **core data utility** package, this package implements the data utility 
+functions and objects.
 
-I make this package able to extend with any sub-extension with this namespace.
+I was created this package base on sub-package namespace, `ddeutil` (This 
+feature use for independent installation). This package able to extend with 
+any sub-extension with this namespace.
 So, this namespace able to scale-out the requirement with folder level design.
 You can add any custom features and import it by `import ddeutil.{extension}`.
 
@@ -108,7 +109,7 @@ does not re-create again because it is basic code but has a lot of using require
 
 I will show some usage example of function in this package. If you want to use
 complex or adjust some parameter, please see doc-string or real source code
-(I think it do not complex and you can see how that function work).
+(I think it does not complex, and you can see how that function work).
 
 ### OnlyOne
 
@@ -148,7 +149,7 @@ assert isinstance_check((1, "foo", True), tuple[int, str, bool])
 ```python
 from ddeutil.core import str2any
 
-assert str2any(22) == 22
+assert str2any('22') == 22
 assert str2any("1245") == 1245
 assert str2any('"string"') == "string"
 assert str2any("[1, 2, 3]") == [1, 2, 3]
@@ -158,3 +159,10 @@ assert str2any("True")
 assert str2any("[1, 2") == "[1, 2"
 assert str2any("1.232.1") == "1.232.1"
 ```
+
+## :speech_balloon: Contribute
+
+I do not think this project will go around the world because it has specific propose,
+and you can create by your coding without this project dependency for long term
+solution. So, on this time, you can open [the GitHub issue on this project :raised_hands:](https://github.com/dde-labs/self-elasticsearch/issues)
+for fix bug or request new feature if you want it.
