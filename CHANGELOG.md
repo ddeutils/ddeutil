@@ -2,6 +2,26 @@
 
 ## Latest Changes
 
+## 0.4.5
+
+### :sparkles: Features
+
+- :dart: feat: rename hash_all func to hash_value. (_2025-01-18_)
+- :dart: feat: add cpu and mem summarize. (_2025-01-08_)
+
+### :black_nib: Code Changes
+
+- :construction: refactored: remove timing and time_open decorators. (_2025-01-08_)
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.12.2 to 1.12.3 (#65) (_2025-01-02_)
+- :construction: refactored: 📦 bump psutil from 6.1.0 to 6.1.1 (#64) (_2025-01-01_)
+- :construction: refactored: 📦 bump types-python-dateutil from 2.9.0.20241003 to 2.9.0.20241206 (_2025-01-01_)
+
+### :card_file_box: Documents
+
+- :page_facing_up: docs: remove docs dir and edit readme file. (_2025-01-18_)
+- :page_facing_up: docs: update readme file. (_2025-01-18_)
+- :page_facing_up: docs: update readme file. (_2024-12-18_)
+
 ## 0.4.4
 
 ### :black_nib: Code Changes
