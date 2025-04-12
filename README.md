@@ -9,7 +9,7 @@
 [![type check: mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-A **core data utility** package, this package implements the data utility 
+A **Core Data Utility** package, this package implements the data utility 
 functions and objects.
 
 I was created this package base on sub-package namespace, `ddeutil` (This 
@@ -20,7 +20,7 @@ You can add any custom features and import it by `import ddeutil.{extension}`.
 
 > [!NOTE]
 > This package provide the base utility functions and objects for any sub-namespace
-> package.
+> `ddeutil` package.
 
 ## :round_pushpin: Installation
 
@@ -45,7 +45,7 @@ pip install -U ddeutil
 > | `python-dateutil` | `ddeutil[dateutil]`  | `dtutils.next_date_with_freq`, `dtutils.calc_data_freq` | 
 > | `psutil`          | `ddeutil[memory]`    | `threader.MonitorThread`.                               |
 
-## :dart: Features
+## :star: Features
 
 This data package implements all of utility functions and objects that does not
 re-create again when the sub-namespace package want it because it is a basic utility
@@ -105,7 +105,7 @@ but has a lot of using require.
 | threader        |   `ThreadWithControl`   | Threading object that can control maximum background agent and result after complete.                                                                                                             |             |
 |                 |     `MonitorThread`     | Monitoring threading object that log the current memory and cpu usage.                                                                                                                            |             |
 
-## :beers: Usages
+## :dart: Usages
 
 I will show some examples of function in this package. If you want to use
 complex or adjust some parameter, please see doc-string or real source code
