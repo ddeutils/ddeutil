@@ -2,6 +2,21 @@
 
 ## Latest Changes
 
+## 0.4.7
+
+### :stars: Highlight Features
+
+- :star: hl: support get int key on getdot func. (_2025-04-12_)
+
+### :black_nib: Code Changes
+
+- :package: refactored: bump psutil from 6.1.1 to 7.0.0 (#67) (_2025-03-01_)
+- :construction: refactored: ⬆ bump pypa/gh-action-pypi-publish from 1.12.3 to 1.12.4 (#66) (_2025-02-02_)
+
+### :package: Build & Workflow
+
+- :toolbox: build: update shelf config for force fix commit message. (_2025-04-12_)
+
 ## 0.4.6
 
 ### :card_file_box: Documents
