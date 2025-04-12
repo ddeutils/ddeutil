@@ -146,7 +146,7 @@ def str2dict(
 def str2int_float(
     value: Optional[str] = None,
     force_raise: bool = False,
-) -> int | float | str:
+) -> Union[int, float, str]:
     """Convert an input string value to int or float.
 
     Examples:

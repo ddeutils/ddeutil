@@ -14,6 +14,7 @@ import typing
 from collections.abc import Callable, Collection, Sequence
 from functools import partial
 from math import ceil
+from typing import Any, Optional
 
 from . import (
     checker,
@@ -292,7 +293,7 @@ def onlyone(
     )
 
 
-def hasdot(search: str, content: dict[typing.Any, typing.Any]) -> bool:
+def hasdot(key: str, content: dict[Any, Any]) -> bool:
     """Return True value if dot searching exists in content data.
 
     Examples:
@@ -303,23 +304,24 @@ def hasdot(search: str, content: dict[typing.Any, typing.Any]) -> bool:
         >>> hasdot('item.value.key', {'data': {'value': 2}})
         False
     """
-    _search, _else = splitter.must_split(search, ".", maxsplit=1)
-    if _search in content and isinstance(content, dict):
-        if not _else:
-            return True
-        elif isinstance((result := content[_search]), dict):
-            return hasdot(_else, result)
-    return False
+    try:
+        getdot(key, content)
+        return True
+    except ValueError:
+        return False
 
 
 def getdot(
-    search: str,
-    content: dict[typing.Any, typing.Any],
+    key: str,
+    content: dict[Any, T],
     *args,
     ignore: bool = False,
-    **kwargs,
-) -> typing.Any:
+) -> T:
     """Return the value if dot searching exists in content data.
+
+    :param key: A search string that want to get data from dict context.
+    :param content:
+    :param ignore: (bool) A ignore flag for return None if it does not exists.
 
     Examples:
         >>> getdot('data.value', {'data': {'value': 1}})
@@ -345,27 +347,39 @@ def getdot(
         2
     """
     # NOTE: Start search the first key.
-    _search, _else = splitter.must_split(search, ".", maxsplit=1)
+    #   For example:
+    #       'first'             -> 'first', None
+    #       'first.foo.bar'     -> 'first', 'foo.bar'
+    #
+    _search, _else = splitter.must_split(key, ".", maxsplit=1)
+
+    def from_int(_first_key: str) -> Optional[int]:
+        """Try cast the search key to int or float."""
+        rs: Optional[int] = None
+        if can_int(_first_key):
+            try:
+                rs: int = int(_first_key)
+            except ValueError:
+                pass
+        return rs
 
     if isinstance(content, dict):
         is_optional: bool = _search.endswith("?")
         _search: str = _search.rstrip("?")
 
-        if _search in content:
+        if _search in content or ((_search := from_int(_search)) in content):
             if not _else:
                 return content[_search]
             elif isinstance((sub_content := content[_search]), dict):
-                return getdot(
-                    _else, sub_content, *args, ignore=ignore, **kwargs
-                )
-
-            if ignore:
+                return getdot(_else, sub_content, *args, ignore=ignore)
+            elif ignore:
                 return None
             raise ValueError(f"{_else!r} does not exists in {sub_content}")
 
         elif is_optional:
             return None
 
+    # NOTE: Use the first none-set argument to be default value
     if args:
         return args[0]
     elif ignore:
@@ -381,6 +395,10 @@ def setdot(
     **kwargs,
 ) -> dict:
     """Set the value if dot searching exists in content data.
+
+    Warnings:
+        This function allow to set only string key.
+
     Examples:
         >>> setdot('data.value', {'data': {'value': 1}}, 2)
         {'data': {'value': 2}}
@@ -407,8 +425,8 @@ def setdot(
 
 def filter_dict(
     value: T,
-    included: Collection | None = None,
-    excluded: Collection | None = None,
+    included: Optional[Collection] = None,
+    excluded: Optional[Collection] = None,
 ) -> T:
     """Filter dict value with excluded and included collections.
 

@@ -6,6 +6,7 @@ def test_hasdot():
     assert hasdot("data.value", {"data": {"value": 2}})
     assert not hasdot("data.value.key", {"data": {"value": 2}})
     assert not hasdot("item.value.key", {"data": {"value": 2}})
+    assert hasdot("1", {"1": True})
 
 
 def test_getdot():
@@ -51,6 +52,13 @@ def test_getdot():
 
     with pytest.raises(ValueError):
         assert getdot("value", [1, 2, 3])
+
+    assert getdot("value.1.foo", {"value": {1: {"foo": "bar"}}}) == "bar"
+    assert getdot("value.0", {"value": {0: {"foo": "bar"}}}) == {"foo": "bar"}
+    assert getdot("1", {"1": 100}) == 100
+    assert getdot("1", {1: 100}) == 100
+    assert getdot("1", {1.0: 100}, ignore=True) == 100
+    assert getdot("1", {1.1: 100}, ignore=True) is None
 
 
 def test_setdot():
