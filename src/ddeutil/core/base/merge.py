@@ -173,3 +173,26 @@ def sum_values(
         278
     """
     return sum(map(value.get, range(start, (end or len(value)) + 1)))
+
+
+def add_list_value(
+    mapping: dict[Union[str, int], list[Any]], key: Union[str, int], value: Any
+) -> dict[Union[str, int], list[Any]]:
+    """Add value to dict with an input specific key that should be appended or
+    make a new list of this value if key does not exist.
+
+    Examples:
+        >>> add_list_value({}, "test", "foo")
+        {'test': ['foo']}
+        >>> add_list_value({"test": ["bar"]}, "test", "foo")
+        {'test': ['bar', 'foo']}
+
+    :param mapping: (dict[Union[str, int], list[Any]])
+    :param key:
+    :param value:
+    """
+    if key in mapping:
+        mapping[key].append(value)
+    else:
+        mapping[key] = [value]
+    return mapping

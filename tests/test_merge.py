@@ -107,3 +107,10 @@ def test_sum_values():
         )
         == 278
     )
+
+
+def test_add_list_value():
+    assert merge.add_list_value({}, "test", "foo") == {"test": ["foo"]}
+    assert merge.add_list_value({"test": ["bar"]}, "test", "foo") == {
+        "test": ["bar", "foo"]
+    }

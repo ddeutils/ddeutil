@@ -1,4 +1,4 @@
-# Core Data Utility
+# Core Utility
 
 [![test](https://github.com/ddeutils/ddeutil/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/ddeutils/ddeutil/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/ddeutils/ddeutil/graph/badge.svg?token=G3XGBSRKA6)](https://codecov.io/gh/ddeutils/ddeutil)
@@ -9,8 +9,7 @@
 [![type check: mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-A **Core Data Utility** package, this package implements the data utility 
-functions and objects.
+A **Core Utility** package that implements the data utility functions and objects.
 
 I was created this package base on sub-package namespace, `ddeutil` (This 
 feature use for independent installation). This package able to extend with 
@@ -30,9 +29,9 @@ pip install -U ddeutil
 
 **Python version supported**:
 
-| Python Version | Installation                        | Support Fixed Bug  |
-|----------------|-------------------------------------|--------------------|
-| `>=3.9,<3.14`  | `pip install -U ddeutil`            | :heavy_check_mark: |
+| Python Version | Installation                        |  Support Fixed Bug  |
+|----------------|-------------------------------------|:-------------------:|
+| `>=3.9,<3.14`  | `pip install -U ddeutil`            | :heavy_check_mark:  |
 
 > [!NOTE]
 > If you want to install all optional dependencies for this package, you can use
@@ -45,7 +44,7 @@ pip install -U ddeutil
 > | `python-dateutil` | `ddeutil[dateutil]`  | `dtutils.next_date_with_freq`, `dtutils.calc_data_freq` | 
 > | `psutil`          | `ddeutil[memory]`    | `threader.MonitorThread`.                               |
 
-## :star: Features
+## :dart: Features
 
 This data package implements all of utility functions and objects that does not
 re-create again when the sub-namespace package want it because it is a basic utility
@@ -81,12 +80,13 @@ but has a lot of using require.
 |                 |      `freeze_args`      |                                                                                                                                                                                                   | no coverage |
 |                 |      `hash_value`       |                                                                                                                                                                                                   |             |
 |                 |       `hash_str`        |                                                                                                                                                                                                   |             |
-| base.merge      |      `merge_dict`       |                                                                                                                                                                                                   |             |
-|                 |   `merge_dict_value`    |                                                                                                                                                                                                   |             |
+| base.merge      |      `merge_dict`       | Given any number of dictionaries, shallow copy and merge into a new dict, precedence goes to key-value pairs in latter dictionaries.                                                              |             |
+|                 |   `merge_dict_value`    | Merge value of dicts together if it has a same key.                                                                                                                                               |             |
 |                 | `merge_dict_value_list` | Merge value that be list type of dicts together if it has a same key.                                                                                                                             |             |
 |                 |      `merge_list`       | Merge lists together.                                                                                                                                                                             |             |
 |                 |      `sum_values`       | Sum all values in an input dict value with start and end index.                                                                                                                                   |             |
 |                 |       `zip_equal`       |                                                                                                                                                                                                   |             |
+|                 |    `add_list_value`     | Add value to dict with an input specific key that should be appended or make a new list of this value if key does not exist.                                                                      |             |
 | base.sorting    |        `ordered`        |                                                                                                                                                                                                   |             |
 |                 |     `sort_priority`     |                                                                                                                                                                                                   |             |
 | base.splitter   |        `isplit`         |                                                                                                                                                                                                   |             |
@@ -105,7 +105,7 @@ but has a lot of using require.
 | threader        |   `ThreadWithControl`   | Threading object that can control maximum background agent and result after complete.                                                                                                             |             |
 |                 |     `MonitorThread`     | Monitoring threading object that log the current memory and cpu usage.                                                                                                                            |             |
 
-## :dart: Usages
+## :star: Usages
 
 I will show some examples of function in this package. If you want to use
 complex or adjust some parameter, please see doc-string or real source code
