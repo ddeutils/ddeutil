@@ -96,7 +96,7 @@ def hash_str(value: str, n: int = 8) -> str:
     return hasted[-n:]
 
 
-def freeze(value: Any) -> Any:  # no cove
+def freeze(value: Any) -> Any:  # pragma: no cove
     """Freeze a value to immutable object.
     Examples:
         >>> freeze({'foo': 'bar'})
@@ -115,7 +115,7 @@ def freeze(value: Any) -> Any:  # no cove
     return value
 
 
-def freeze_args(func):  # no cove
+def freeze_args(func):  # pragma: no cove
     """Transform mutable dictionary into immutable useful to be compatible with
     cache.
 

@@ -59,6 +59,7 @@ def test_getdot():
     assert getdot("1", {1: 100}) == 100
     assert getdot("1", {1.0: 100}, ignore=True) == 100
     assert getdot("1", {1.1: 100}, ignore=True) is None
+    assert getdot("1.1", {1.1: 100}, ignore=True) is None
 
 
 def test_setdot():

@@ -7,7 +7,7 @@ import pytest
 
 def test_deepcopy():
     @decorator.deepcopy
-    def foo(a, b, c=None):
+    def foo(a, b, c=None):  # pragma: no cov
         c = c or {}
         a[1] = 3
         b[2] = 4
@@ -23,8 +23,7 @@ def test_deepcopy():
 
 
 def test_deepcopy_method():
-
-    class Foo:
+    class Foo:  # pragma: no cov
         @decorator.deepcopy
         def foo(self, a, b=None):
             b = b or {}
@@ -41,7 +40,7 @@ def test_deepcopy_method():
 
 def test_profile():
 
-    def log_override(msg: str, keeping: list):
+    def log_override(msg: str, keeping: list):  # pragma: no cov
         keeping.append(msg)
         print(msg)
 

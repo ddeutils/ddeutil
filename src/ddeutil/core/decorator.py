@@ -27,7 +27,7 @@ if TYPE_CHECKING:  # pragma: no cove
 STR_TYPES = (bytes, str)
 
 
-def deepcopy(func: Callable[P, T]) -> Callable[P, T]:
+def deepcopy(func: Callable[P, T]) -> Callable[P, T]:  # pragma: no cov
     """Deep-copy decorator for deep copy on the args and kwargs.
 
     Examples:
@@ -66,16 +66,12 @@ def deepcopy(func: Callable[P, T]) -> Callable[P, T]:
     """
 
     # NOTE: This condition use for a func that be method type.
-    if ismethod(func):
-
-        def func_get(self: object, *args: P.args, **kwargs: P.kwargs) -> T:
-            return func(
-                self,
-                *(copy.deepcopy(x) for x in args),
-                **{k: copy.deepcopy(v) for k, v in kwargs.items()},
-            )
-
-        return func_get
+    def method_get(self: object, *args: P.args, **kwargs: P.kwargs) -> T:
+        return func(
+            self,
+            *(copy.deepcopy(x) for x in args),
+            **{k: copy.deepcopy(v) for k, v in kwargs.items()},
+        )
 
     def func_get(*args: P.args, **kwargs: P.kwargs) -> T:
         return func(
@@ -83,13 +79,13 @@ def deepcopy(func: Callable[P, T]) -> Callable[P, T]:
             **{k: copy.deepcopy(v) for k, v in kwargs.items()},
         )
 
-    return func_get
+    return method_get if ismethod(func) else func_get
 
 
 def retry(
     max_attempts: int,
     delay: int = 1,
-) -> Callable[[Callable[P, T]], Callable[P, T]]:  # no cove
+) -> Callable[[Callable[P, T]], Callable[P, T]]:  # pragma: no cove
     """Retry decorator with sequential.
 
     Examples:

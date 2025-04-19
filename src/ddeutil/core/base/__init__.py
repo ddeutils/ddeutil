@@ -70,7 +70,7 @@ T = typing.TypeVar("T")
 concat: typing.Callable[[typing.Any], str] = "".join
 
 
-def operate(x):  # no cove
+def operate(x):  # pragma: no cove
     return getattr(operator, x)
 
 
@@ -355,13 +355,12 @@ def getdot(
 
     def from_int(_first_key: str) -> Optional[int]:
         """Try cast the search key to int or float."""
-        rs: Optional[int] = None
         if can_int(_first_key):
             try:
-                rs: int = int(_first_key)
+                return int(_first_key)
             except ValueError:
                 pass
-        return rs
+        return _first_key
 
     if isinstance(content, dict):
         is_optional: bool = _search.endswith("?")
@@ -462,6 +461,8 @@ def random_str(num_length: int = 8) -> str:  # no cov
     )
 
 
-def coalesce(value: typing.Any, default: typing.Any) -> typing.Any:  # no cove
+def coalesce(
+    value: typing.Any, default: typing.Any
+) -> typing.Any:  # pragma: no cove
     """Coalesce function that is a just naming define function."""
     return default if value is None else value

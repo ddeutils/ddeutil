@@ -35,6 +35,15 @@ def test_get_date():
             tzinfo=dtutils.LOCAL_TZ
         ) == dtutils.get_date("datetime", _tz=dtutils.LOCAL_TZ)
 
+        assert datetime(
+            2024,
+            1,
+            1,
+            1,
+        ).replace(
+            tzinfo=dtutils.LOCAL_TZ
+        ) == dtutils.get_date("datetime", _tz="UTC")
+
         assert "20240101010000" == dtutils.get_date("%Y%m%d%H%M%S")
 
 
