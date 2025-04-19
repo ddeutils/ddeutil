@@ -2,6 +2,16 @@
 
 ## Latest Changes
 
+## 0.4.8
+
+### :sparkles: Features
+
+- :dart: feat: add add_list_value function support add value to dict of list. (_2025-04-19_)
+
+### :black_nib: Code Changes
+
+- :test_tube: tests: update testcase for improve coverage. (_2025-04-19_)
+
 ## 0.4.7
 
 ### :stars: Highlight Features
