@@ -70,7 +70,7 @@ T = typing.TypeVar("T")
 concat: typing.Callable[[typing.Any], str] = "".join
 
 
-def operate(x):  # pragma: no cove
+def operate(x):  # pragma: no cov
     return getattr(operator, x)
 
 
@@ -143,7 +143,7 @@ def isinstance_check(check: typing.Any, instance) -> bool:
     raise NotImplementedError("It can not check typing instance of this pair.")
 
 
-def cached_import(module_path, class_name):  # pragma: no cove
+def cached_import(module_path, class_name):  # pragma: no cov
     """Cached import package"""
     modules = sys.modules
     if (
@@ -155,7 +155,7 @@ def cached_import(module_path, class_name):  # pragma: no cove
     return getattr(modules[module_path], class_name)
 
 
-def import_string(dotted_path: str):  # pragma: no cove
+def import_string(dotted_path: str):  # pragma: no cov
     """Import a dotted module path and return the attribute/class designated by
     the last name in the path.
 
@@ -177,7 +177,7 @@ def import_string(dotted_path: str):  # pragma: no cove
         ) from err
 
 
-def lazy(module: str):  # pragma: no cove
+def lazy(module: str):  # pragma: no cov
     """Lazy use import_string function that wrapped with partial function."""
     return partial(import_string, module)
 
@@ -468,7 +468,7 @@ def random_str(num_length: int = 8) -> str:  # no cov
 
 def coalesce(
     value: typing.Any, default: typing.Any
-) -> typing.Any:  # pragma: no cove
+) -> typing.Any:  # pragma: no cov
     """Coalesce function that is a just naming define function."""
     return default if value is None else value
 

@@ -74,7 +74,7 @@ omit = [
 [tool.coverage.report]
 exclude_lines = [
     "raise NotImplementedError",
-    "pragma: no cove",
+    "pragma: no cov",
 ]
 
 [tool.pytest.ini_options]

@@ -15,13 +15,13 @@ from typing import Any
 
 try:
     import psutil
-except ImportError:  # pragma: no cove
+except ImportError:  # pragma: no cov
     psutil = None
 
 MAX_THREAD: int = int(os.getenv("PY_MAX_THREAD", "10"))
 
 
-def _async_raise(tid, exc_type) -> None:  # pragma: no cove
+def _async_raise(tid, exc_type) -> None:  # pragma: no cov
     """Raises an exception in the threads with id tid"""
     if not inspect.isclass(exc_type):
         raise TypeError("Only core can be raised (not instances)")
@@ -42,7 +42,7 @@ def _async_raise(tid, exc_type) -> None:  # pragma: no cove
         raise SystemError("PyThreadState_SetAsyncExc failed")
 
 
-class ThreadWithControl(threading.Thread):  # pragma: no cove
+class ThreadWithControl(threading.Thread):  # pragma: no cov
     """Threading object that can control maximum background agent and result
     after complete.
 

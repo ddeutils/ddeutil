@@ -19,7 +19,7 @@ from zoneinfo import ZoneInfo
 try:
     from dateutil.parser import parse
     from dateutil.relativedelta import relativedelta
-except ImportError:  # pragma: no cove
+except ImportError:  # pragma: no cov
     relativedelta = None
     parse = None
 
@@ -57,7 +57,7 @@ _DATETIME_PATTERN: re.Pattern[str] = re.compile(
 )
 
 
-def _get_timezone(offset_minutes: int) -> timezone:
+def _get_timezone(offset_minutes: int) -> timezone:  # pragma: no cov
     """Get timezone object from cache or create new one."""
     if offset_minutes not in _TIMEZONE_CACHE:
         _TIMEZONE_CACHE[offset_minutes] = timezone(
@@ -66,7 +66,7 @@ def _get_timezone(offset_minutes: int) -> timezone:
     return _TIMEZONE_CACHE[offset_minutes]
 
 
-def parse_dt_default(dt: Union[datetime, str]) -> datetime:
+def parse_dt_default(dt: Union[datetime, date, str]) -> datetime:
     """Parse datetime string using only Python built-in packages.
 
     Supports formats:
@@ -148,8 +148,8 @@ def parse_dt(dt: Union[datetime, str], **kwargs) -> datetime:
     try:
         return parse_dt_default(dt)
     except ValueError:
-        # Fallback to dateutil for complex formats
-        try:
+        # NOTE: Fallback to dateutil for complex formats
+        try:  # pragma: no cov
             from dateutil.parser import parse
             from dateutil.tz import tzoffset
         except ImportError as e:
@@ -541,14 +541,14 @@ def gen_date_range(
         return []
 
     dates: list[datetime] = []
-    current = start_dt
+    current: datetime = start_dt
 
-    if freq == "1D":
-        delta = timedelta(days=1)
-    elif freq == "1H":
-        delta = timedelta(hours=1)
-    elif freq == "1T":
-        delta = timedelta(minutes=1)
+    if freq.endswith("D"):
+        delta = timedelta(days=int(freq[:-1]))
+    elif freq.endswith("H"):
+        delta = timedelta(hours=int(freq[:-1]))
+    elif freq.endswith("T"):
+        delta = timedelta(minutes=int(freq[:-1]))
     else:
         raise ValueError(f"Unsupported frequency: {freq}")
 
@@ -565,6 +565,7 @@ def get_date_range(
     execution_step: int = 1,
     execution_offset: int = 0,
     freq: Optional[FrequencyMode] = None,
+    freq_step: int = 1,
     binding_days: bool = True,
 ) -> list[datetime]:
     """Get datetime range with date intervals
@@ -574,6 +575,7 @@ def get_date_range(
     :param execution_step: (int)
     :param execution_offset: (int)
     :param freq:
+    :param freq_step: (int)
     :param binding_days:
 
     Note:
@@ -596,23 +598,23 @@ def get_date_range(
     if time_unit is None:
         raise ValueError(f"Cannot find time difference between {start}, {end}")
     elif time_unit == "years":
-        freq = "1Y"
+        freq = f"{freq_step}Y"
         start_dt += relativedelta(years=time_value * execution_offset)
         end_dt = start_dt + relativedelta(years=time_value * execution_step)
     elif time_unit == "months":
-        freq = "1M"
+        freq = f"{freq_step}M"
         start_dt += relativedelta(months=time_value * execution_offset)
         end_dt = start_dt + relativedelta(months=time_value * execution_step)
     elif time_unit == "days":
-        freq = "1D"
+        freq = f"{freq_step}D"
         start_dt += relativedelta(days=time_value * execution_offset)
         end_dt = start_dt + relativedelta(days=time_value * execution_step)
     elif time_unit == "hours":
-        freq = "1H"
+        freq = f"{freq_step}H"
         start_dt += relativedelta(hours=time_value * execution_offset)
         end_dt = start_dt + relativedelta(hours=time_value * execution_step)
     elif time_unit == "minutes":
-        freq = "1T"
+        freq = f"{freq_step}T"
         start_dt += relativedelta(minutes=time_value * execution_offset)
         end_dt = start_dt + relativedelta(minutes=time_value * execution_step)
     else:
@@ -638,10 +640,10 @@ def get_date_interval(
 
     :param start: (str | datetime)
     :param end: (str | datetime)
-    :param execution_step:
-    :param execution_offset:
-    :param start_add_hours:
-    :param end_add_hours:
+    :param execution_step: (int)
+    :param execution_offset: (int)
+    :param start_add_hours: (int)
+    :param end_add_hours: (int)
     :param binding_days:
     """
     start_dt: datetime = parse_dt(start)

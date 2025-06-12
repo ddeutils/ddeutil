@@ -14,12 +14,12 @@ from typing import (
 
 try:
     import ujson
-except ImportError:  # pragma: no cove
+except ImportError:  # pragma: no cov
     ujson = None
 
 try:
     from .checker import FalseStr, TrueStr
-except ImportError:  # pragma: no cove
+except ImportError:  # pragma: no cov
     raise ImportError("This module need checker module.") from None
 
 __all__: tuple[str, ...] = (

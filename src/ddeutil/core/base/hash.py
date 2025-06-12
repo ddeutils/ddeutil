@@ -15,7 +15,7 @@ from typing import (
 
 try:
     import ujson
-except ImportError:  # pragma: no cove
+except ImportError:  # pragma: no cov
     ujson = None
 
 __all__: tuple[str, ...] = (
@@ -96,7 +96,7 @@ def hash_str(value: str, n: int = 8) -> str:
     return hasted[-n:]
 
 
-def freeze(value: Any) -> Any:  # pragma: no cove
+def freeze(value: Any) -> Any:  # pragma: no cov
     """Freeze a value to immutable object.
     Examples:
         >>> freeze({'foo': 'bar'})
@@ -115,7 +115,7 @@ def freeze(value: Any) -> Any:  # pragma: no cove
     return value
 
 
-def freeze_args(func):  # pragma: no cove
+def freeze_args(func):  # pragma: no cov
     """Transform mutable dictionary into immutable useful to be compatible with
     cache.
 

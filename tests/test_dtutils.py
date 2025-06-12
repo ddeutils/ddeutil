@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from unittest import mock
 from zoneinfo import ZoneInfo
 
@@ -10,6 +10,7 @@ from ddeutil.core.dtutils import (
     calc_date_freq,
     calc_time_units,
     closest_quarter,
+    gen_date_range,
     get_date_interval,
     get_date_range,
     last_dom,
@@ -22,8 +23,11 @@ from freezegun import freeze_time
 
 
 def test_parse_datetime_str():
+    assert parse_dt_default(date(2024, 1, 1)) == datetime(2024, 1, 1, 0)
+    assert parse_dt_default(datetime(2024, 1, 1)) == datetime(2024, 1, 1, 0)
     assert parse_dt_default("2024-01-01") == datetime(2024, 1, 1, 0)
     assert parse_dt_default("2024-01-01 00:00:00") == datetime(2024, 1, 1, 0)
+    assert parse_dt_default("2024-01-01 00:00:00.00") == datetime(2024, 1, 1, 0)
     assert parse_dt_default("2024-01-01T00:00:00Z") == datetime(
         2024, 1, 1, 0, tzinfo=timezone.utc
     )
@@ -33,6 +37,12 @@ def test_parse_datetime_str():
     assert parse_dt_default("2024-01-01T15:30:00-05:00") == datetime(
         2024, 1, 1, 15, 30, tzinfo=timezone(timedelta(seconds=-18000))
     )
+
+    with pytest.raises(ValueError):
+        parse_dt_default(123)
+
+    with pytest.raises(ValueError):
+        parse_dt_default("123")
 
 
 def test_parse_dt():
@@ -215,6 +225,12 @@ def test_get_date_interval():
     assert end == datetime(2024, 12, 26, 20)
 
 
+def test_gen_date_range():
+    assert (
+        gen_date_range(datetime(2024, 1, 2), datetime(2024, 1, 1), "1D") == []
+    )
+
+
 def test_get_date_range():
     assert get_date_range(
         datetime(2024, 1, 1), datetime(2024, 1, 8), binding_days=False
@@ -261,6 +277,17 @@ def test_get_date_range():
         for r in range(1, 32)
     ]
 
+    assert get_date_range(
+        datetime(2024, 1, 1, 7, 1), datetime(2024, 1, 1, 7, 5)
+    ) == [
+        datetime(2024, 1, 1, 7, 1),
+        datetime(2024, 1, 1, 7, 2),
+        datetime(2024, 1, 1, 7, 3),
+        datetime(2024, 1, 1, 7, 4),
+        datetime(2024, 1, 1, 7, 5),
+    ]
+
+    # NOTE: Raise because freq value does not support.
     with pytest.raises(ValueError):
         get_date_range(
             datetime(2024, 1, 1, 18), datetime(2024, 1, 2), freq="1Q"

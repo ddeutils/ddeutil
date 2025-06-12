@@ -12,7 +12,7 @@ from functools import wraps
 from inspect import ismethod
 from typing import TYPE_CHECKING, Callable, TypeVar
 
-if TYPE_CHECKING:  # pragma: no cove
+if TYPE_CHECKING:  # pragma: no cov
     import sys
 
     if sys.version_info >= (3, 10):
@@ -85,7 +85,7 @@ def deepcopy(func: Callable[P, T]) -> Callable[P, T]:  # pragma: no cov
 def retry(
     max_attempts: int,
     delay: int = 1,
-) -> Callable[[Callable[P, T]], Callable[P, T]]:  # pragma: no cove
+) -> Callable[[Callable[P, T]], Callable[P, T]]:  # pragma: no cov
     """Retry decorator with sequential.
 
     Examples:
@@ -107,10 +107,12 @@ def retry(
         @wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
             _attempts: int = 0
+            err: Exception = Exception("Default retry exception")
             while _attempts < max_attempts:
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
+                    err: Exception = e
                     _attempts += 1
                     logging.info(f"Attempt {_attempts} failed: {e}")
                     if _attempts > 3:
@@ -121,6 +123,7 @@ def retry(
                 f"Function `{func.__name__}` failed after "
                 f"{max_attempts} attempts"
             )
+            raise err
 
         return wrapper
 
