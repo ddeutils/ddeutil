@@ -20,6 +20,7 @@ from .base import (
     setdot,
     sorting,
     splitter,
+    check_and_remove_item,
 )
 from .base.checker import (
     can_int,

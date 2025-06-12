@@ -466,3 +466,10 @@ def coalesce(
 ) -> typing.Any:  # pragma: no cove
     """Coalesce function that is a just naming define function."""
     return default if value is None else value
+
+
+def check_and_remove_item(value: list[Any], item: Any) -> list[Any]:
+    """Check item before remove it in the target list."""
+    if item in value:
+        value.remove(item)
+    return value

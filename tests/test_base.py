@@ -18,6 +18,7 @@ from ddeutil.core import (
     random_str,
     remove_pad,
     round_up,
+    check_and_remove_item,
 )
 
 
@@ -107,3 +108,13 @@ def test_filter_dict():
 def test_random_string(m):
     assert m.mocked
     assert random_str() == "AA145WQ2"
+
+
+def test_check_and_remove_item():
+    value = [1, 2, 3, 4]
+    assert value == check_and_remove_item(value, 0)
+    assert check_and_remove_item(value, 4) == [1, 2, 3]
+
+    value = ["test", "foo", "bar"]
+    assert value == check_and_remove_item(value, "baz")
+    assert check_and_remove_item(value, "foo") == ["test", "bar"]
