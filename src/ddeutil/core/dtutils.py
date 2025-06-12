@@ -7,7 +7,8 @@ from __future__ import annotations
 
 import calendar
 import enum
-from datetime import datetime, timedelta
+import re
+from datetime import date, datetime, timedelta, timezone
 from typing import (
     Literal,
     Optional,
@@ -16,9 +17,11 @@ from typing import (
 from zoneinfo import ZoneInfo
 
 try:
+    from dateutil.parser import parse
     from dateutil.relativedelta import relativedelta
 except ImportError:  # pragma: no cove
     relativedelta = None
+    parse = None
 
 from . import first
 
@@ -43,6 +46,138 @@ DATETIME_SET: tuple[str, ...] = (
     "microsecond",
 )
 
+FrequencyMode = Literal["1T", "1H", "1D", "1M", "1Y"]
+FREQUENCY_SET: tuple[str, ...] = ("1T", "1H", "1D", "1M", "1Y")
+_TIMEZONE_CACHE: dict[int, timezone] = {0: timezone.utc}
+# Pre-compiled regex for better performance
+_DATETIME_PATTERN: re.Pattern[str] = re.compile(
+    r"^(\d{4})-(\d{2})-(\d{2})"  # YYYY-MM-DD
+    r"(?:[T\s](\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?)?"  # Optional time with microseconds
+    r"(?:(Z)|([+-])(\d{2}):?(\d{2}))?$"  # Optional timezone
+)
+
+
+def _get_timezone(offset_minutes: int) -> timezone:
+    """Get timezone object from cache or create new one."""
+    if offset_minutes not in _TIMEZONE_CACHE:
+        _TIMEZONE_CACHE[offset_minutes] = timezone(
+            timedelta(minutes=offset_minutes)
+        )
+    return _TIMEZONE_CACHE[offset_minutes]
+
+
+def parse_dt_default(dt: Union[datetime, str]) -> datetime:
+    """Parse datetime string using only Python built-in packages.
+
+    Supports formats:
+    - YYYY-MM-DD
+    - YYYY-MM-DD HH:MM:SS[.ffffff]
+    - YYYY-MM-DD HH:MM:SS[.ffffff]Z
+    - YYYY-MM-DD HH:MM:SS[.ffffff]±HH:MM
+
+    Args:
+        dt: A datetime object or string to parse
+
+    Returns:
+        datetime: Parsed datetime object with appropriate timezone
+
+    Raises:
+        ValueError: If the input cannot be parsed
+    """
+    # Handle datetime objects directly
+    if isinstance(dt, datetime):
+        return dt
+
+    # Handle date objects (convert to datetime at midnight)
+    if isinstance(dt, date):
+        return datetime(dt.year, dt.month, dt.day)
+
+    # Handle string parsing
+    if not isinstance(dt, str):
+        raise ValueError("Input must be datetime, date, or string")
+
+    match = _DATETIME_PATTERN.match(dt.strip())
+    if not match:
+        raise ValueError(f"Unable to parse datetime string: {dt}")
+
+    (
+        year,
+        month,
+        day,
+        hour,
+        minute,
+        second,
+        microsecond_str,
+        utc_z,
+        tz_sign,
+        tz_hour,
+        tz_minute,
+    ) = match.groups()
+
+    # Convert required components
+    year, month, day = int(year), int(month), int(day)
+    hour = int(hour) if hour else 0
+    minute = int(minute) if minute else 0
+    second = int(second) if second else 0
+
+    # Handle microseconds efficiently
+    microsecond = 0
+    if microsecond_str:
+        # Normalize to 6 digits and convert
+        microsecond_str = microsecond_str.ljust(6, "0")[:6]
+        microsecond = int(microsecond_str)
+
+    # Handle timezone
+    tz = None
+    if utc_z:
+        tz = timezone.utc
+    elif tz_sign and tz_hour and tz_minute:
+        offset_minutes = int(tz_hour) * 60 + int(tz_minute)
+        if tz_sign == "-":
+            offset_minutes = -offset_minutes
+        tz = _get_timezone(offset_minutes)
+
+    return datetime(year, month, day, hour, minute, second, microsecond, tz)
+
+
+def parse_dt(dt: Union[datetime, str], **kwargs) -> datetime:
+    """Parse datetime string using dateutil and return datetime object.
+
+    :param dt: A datetime value that want to parse.
+    """
+    try:
+        return parse_dt_default(dt)
+    except ValueError:
+        # Fallback to dateutil for complex formats
+        try:
+            from dateutil.parser import parse
+            from dateutil.tz import tzoffset
+        except ImportError as e:
+            raise ValueError(
+                f"Unable to parse '{dt}' with built-in parser. "
+                "Install `dateutil` for complex datetime parsing: pip install "
+                "`python-dateutil`."
+            ) from e
+
+        if isinstance(dt, str):
+            dt = parse(dt, **kwargs)
+
+        if isinstance(dt, date) and not isinstance(dt, datetime):
+            return datetime(dt.year, dt.month, dt.day)
+
+        if isinstance(dt, datetime):
+            # Convert dateutil timezone to built-in timezone
+            if dt.tzinfo and isinstance(dt.tzinfo, tzoffset):
+                offset_seconds = int(dt.utcoffset().total_seconds())
+                if offset_seconds == 0:
+                    return dt.replace(tzinfo=timezone.utc)
+                else:
+                    offset_minutes = offset_seconds // 60
+                    return dt.replace(tzinfo=_get_timezone(offset_minutes))
+            return dt
+
+        raise ValueError(f"Unable to parse datetime: {dt}") from None
+
 
 def get_datetime_replace(
     year: Optional[int] = None,
@@ -65,13 +200,13 @@ def get_datetime_replace(
 class DatetimeDim(enum.IntEnum):
     """Datetime dimension enum object."""
 
-    MICROSECOND: int = 0
-    SECOND: int = 1
-    MINUTE: int = 2
-    HOUR: int = 3
-    DAY: int = 4
-    MONTH: int = 5
-    YEAR: int = 6
+    MICROSECOND = 0
+    SECOND = 1
+    MINUTE = 2
+    HOUR = 3
+    DAY = 4
+    MONTH = 5
+    YEAR = 6
 
     @classmethod
     def get_dim(cls, value: str) -> int:
@@ -293,7 +428,7 @@ def next_date_freq(dt: datetime, freq: str, prev: bool = False) -> datetime:
     """
     if relativedelta is None:
         raise ImportError(
-            "This function require relativedelta from the dateutil package, "
+            "This function require `relativedelta` from the dateutil package, "
             "you should install with `pip install ddeutil[dateutil]`"
         )
     assert freq in ("D", "W", "M", "Q", "Y")
@@ -359,3 +494,183 @@ def calc_date_freq(dt: datetime, freq: str) -> datetime:
             return dt.replace(month=12, day=31) - relativedelta(years=1)
         return dt
     return dt
+
+
+def calc_time_units(
+    start_dt: datetime, end_dt: datetime, binding_days: bool = True
+) -> tuple[Optional[str], Union[float, int]]:
+    """Calculate time difference and return the primary unit type and value.
+
+    :param start_dt: (datetime)
+    :param end_dt: (datetime)
+    :param binding_days: (bool)
+    """
+    rdelta = relativedelta(end_dt, start_dt)
+
+    # NOTE: Check in order of precedence: years, months, hours, minutes
+    if rdelta.years != 0:
+        return "years", rdelta.years
+    elif rdelta.months != 0 or rdelta.years != 0:
+        return "months", rdelta.years * 12 + rdelta.months
+    else:
+        # NOTE: For days, hours and minutes, use total seconds for accuracy
+        total_seconds: float = (end_dt - start_dt).total_seconds()
+
+        # NOTE: 86400 seconds in a day
+        total_days = int(total_seconds // 86400)
+        total_hours = int(total_seconds // 3600)
+        total_minutes = int(total_seconds // 60)
+
+        if total_days != 0 and not binding_days:
+            return "days", total_days
+        elif total_hours != 0:
+            return "hours", total_hours
+        elif total_minutes != 0:
+            return "minutes", total_minutes
+        else:
+            return None, 0
+
+
+def gen_date_range(
+    start_dt: datetime,
+    end_dt: datetime,
+    freq: FrequencyMode,
+) -> list[datetime]:
+    """Generate a list of datetime objects between start and end with given frequency"""
+    if start_dt > end_dt:
+        return []
+
+    dates: list[datetime] = []
+    current = start_dt
+
+    if freq == "1D":
+        delta = timedelta(days=1)
+    elif freq == "1H":
+        delta = timedelta(hours=1)
+    elif freq == "1T":
+        delta = timedelta(minutes=1)
+    else:
+        raise ValueError(f"Unsupported frequency: {freq}")
+
+    while current <= end_dt:
+        dates.append(current)
+        current += delta
+
+    return dates
+
+
+def get_date_range(
+    start: Union[str, datetime],
+    end: Union[str, datetime],
+    execution_step: int = 1,
+    execution_offset: int = 0,
+    freq: Optional[FrequencyMode] = None,
+    binding_days: bool = True,
+) -> list[datetime]:
+    """Get datetime range with date intervals
+
+    :param start: (str | datetime)
+    :param end: (str | datetime)
+    :param execution_step: (int)
+    :param execution_offset: (int)
+    :param freq:
+    :param binding_days:
+
+    Note:
+        The date range will force to daily for the maximum generator.
+    """
+    start_dt: datetime = parse_dt(start)
+    end_dt: datetime = parse_dt(end)
+    if freq:
+        if freq not in FREQUENCY_SET:
+            raise ValueError(f"Frequency, {freq!r}, does not support.")
+
+        range_freq: FrequencyMode = "1D" if freq in ["1Y", "1M"] else freq
+        min_dt, max_dt = min(start_dt, end_dt), max(start_dt, end_dt)
+        return gen_date_range(min_dt, max_dt, range_freq)
+
+    # Calculate new start and end based on unit type
+    time_unit, time_value = calc_time_units(
+        start_dt, end_dt, binding_days=binding_days
+    )
+    if time_unit is None:
+        raise ValueError(f"Cannot find time difference between {start}, {end}")
+    elif time_unit == "years":
+        freq = "1Y"
+        start_dt += relativedelta(years=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(years=time_value * execution_step)
+    elif time_unit == "months":
+        freq = "1M"
+        start_dt += relativedelta(months=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(months=time_value * execution_step)
+    elif time_unit == "days":
+        freq = "1D"
+        start_dt += relativedelta(days=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(days=time_value * execution_step)
+    elif time_unit == "hours":
+        freq = "1H"
+        start_dt += relativedelta(hours=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(hours=time_value * execution_step)
+    elif time_unit == "minutes":
+        freq = "1T"
+        start_dt += relativedelta(minutes=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(minutes=time_value * execution_step)
+    else:
+        raise ValueError(f"Time unit, {time_unit!r} does not support.")
+
+    # NOTE: Convert frequency for date range generation
+    #   (years/months use daily frequency).
+    range_freq: FrequencyMode = "1D" if freq in ["1Y", "1M"] else freq
+    min_dt, max_dt = min(start_dt, end_dt), max(start_dt, end_dt)
+    return gen_date_range(min_dt, max_dt, range_freq)
+
+
+def get_date_interval(
+    start: Union[str, datetime],
+    end: Union[str, datetime],
+    execution_step: int = 1,
+    execution_offset: int = 0,
+    start_add_hours: int = 0,
+    end_add_hours: int = 0,
+    binding_days: bool = True,
+) -> tuple[datetime, datetime]:
+    """Get datetime interval with optional hour adjustments.
+
+    :param start: (str | datetime)
+    :param end: (str | datetime)
+    :param execution_step:
+    :param execution_offset:
+    :param start_add_hours:
+    :param end_add_hours:
+    :param binding_days:
+    """
+    start_dt: datetime = parse_dt(start)
+    end_dt: datetime = parse_dt(end)
+    time_unit, time_value = calc_time_units(
+        start_dt, end_dt, binding_days=binding_days
+    )
+
+    if time_unit is None:
+        raise ValueError(f"Cannot find time difference between {start}, {end}")
+
+    # NOTE: Calculate new start and end based on unit type
+    if time_unit == "years":
+        start_dt += relativedelta(years=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(years=time_value * execution_step)
+    elif time_unit == "months":
+        start_dt += relativedelta(months=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(months=time_value * execution_step)
+    elif time_unit == "days":
+        start_dt += relativedelta(days=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(days=time_value * execution_step)
+    elif time_unit == "hours":
+        start_dt += relativedelta(hours=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(hours=time_value * execution_step)
+    elif time_unit == "minutes":
+        start_dt += relativedelta(minutes=time_value * execution_offset)
+        end_dt = start_dt + relativedelta(minutes=time_value * execution_step)
+
+    # NOTE: Apply hour adjustments
+    start_dt += relativedelta(hours=start_add_hours)
+    end_dt += relativedelta(hours=end_add_hours)
+    return min(start_dt, end_dt), max(start_dt, end_dt)

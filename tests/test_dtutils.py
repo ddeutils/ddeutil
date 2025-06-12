@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from unittest import mock
+from zoneinfo import ZoneInfo
 
 import ddeutil.core.dtutils as dtutils
 import pytest
@@ -7,12 +8,43 @@ from dateutil.relativedelta import relativedelta
 from ddeutil.core.dtutils import (
     DatetimeDim,
     calc_date_freq,
+    calc_time_units,
     closest_quarter,
+    get_date_interval,
+    get_date_range,
     last_dom,
     next_date,
     next_date_freq,
+    parse_dt,
+    parse_dt_default,
 )
 from freezegun import freeze_time
+
+
+def test_parse_datetime_str():
+    assert parse_dt_default("2024-01-01") == datetime(2024, 1, 1, 0)
+    assert parse_dt_default("2024-01-01 00:00:00") == datetime(2024, 1, 1, 0)
+    assert parse_dt_default("2024-01-01T00:00:00Z") == datetime(
+        2024, 1, 1, 0, tzinfo=timezone.utc
+    )
+    assert parse_dt_default("2024-01-01 15:30:00+05:00") == datetime(
+        2024, 1, 1, 15, 30, tzinfo=timezone(timedelta(seconds=18000))
+    )
+    assert parse_dt_default("2024-01-01T15:30:00-05:00") == datetime(
+        2024, 1, 1, 15, 30, tzinfo=timezone(timedelta(seconds=-18000))
+    )
+
+
+def test_parse_dt():
+    assert parse_dt("2024-01-01") == datetime(2024, 1, 1, 0)
+    assert parse_dt("2024-01-01 00:00:00") == datetime(2024, 1, 1, 0)
+    assert parse_dt("2024-01-01 15:00:00 BKK") == datetime(2024, 1, 1, 15)
+    assert parse_dt(
+        "2024-01-01 15:00:00 BKK", tzinfos={"BKK": ZoneInfo("Asia/Bangkok")}
+    ) == datetime(2024, 1, 1, 15, tzinfo=ZoneInfo("Asia/Bangkok"))
+    assert parse_dt("2024-01-01 15:00:00 UTC") == datetime(
+        2024, 1, 1, 15, tzinfo=timezone.utc
+    )
 
 
 def test_dt_dimension():
@@ -167,3 +199,104 @@ def test_calc_data_freq():
     with mock.patch("ddeutil.core.dtutils.relativedelta", None):
         with pytest.raises(ImportError):
             calc_date_freq(datetime(2024, 5, 31), freq="Y")
+
+
+def test_get_date_interval():
+    start, end = get_date_interval(
+        "2024-12-25 20:00:00", "2024-12-26 20:00:00", 1, 1
+    )
+    assert start == datetime(2024, 12, 26, 20)
+    assert end == datetime(2024, 12, 27, 20)
+
+    start, end = get_date_interval(
+        "2024-12-25 20:00:00", "2024-12-26 20:00:00", -3, 1
+    )
+    assert start == datetime(2024, 12, 23, 20)
+    assert end == datetime(2024, 12, 26, 20)
+
+
+def test_get_date_range():
+    assert get_date_range(
+        datetime(2024, 1, 1), datetime(2024, 1, 8), binding_days=False
+    ) == [
+        datetime(2024, 1, 1),
+        datetime(2024, 1, 2),
+        datetime(2024, 1, 3),
+        datetime(2024, 1, 4),
+        datetime(2024, 1, 5),
+        datetime(2024, 1, 6),
+        datetime(2024, 1, 7),
+        datetime(2024, 1, 8),
+    ]
+    assert get_date_range(
+        datetime(2024, 1, 1, 18), datetime(2024, 1, 8), binding_days=False
+    ) == [
+        datetime(2024, 1, 1, 18),
+        datetime(2024, 1, 2, 18),
+        datetime(2024, 1, 3, 18),
+        datetime(2024, 1, 4, 18),
+        datetime(2024, 1, 5, 18),
+        datetime(2024, 1, 6, 18),
+        datetime(2024, 1, 7, 18),
+    ]
+    assert get_date_range(
+        datetime(2024, 1, 1, 18), datetime(2024, 1, 2), freq="1D"
+    ) == [datetime(2024, 1, 1, 18)]
+
+    assert get_date_range(datetime(2024, 1, 1, 18), datetime(2024, 1, 2)) == [
+        datetime(2024, 1, 1, 18),
+        datetime(2024, 1, 1, 19),
+        datetime(2024, 1, 1, 20),
+        datetime(2024, 1, 1, 21),
+        datetime(2024, 1, 1, 22),
+        datetime(2024, 1, 1, 23),
+        datetime(2024, 1, 2),
+    ]
+
+    assert get_date_range(
+        datetime(2024, 1, 1, 9), datetime(2024, 2, 1), binding_days=False
+    ) == [
+        # NOTE: Generate datetime from day 1 to day 31
+        datetime(2024, 1, r, 9)
+        for r in range(1, 32)
+    ]
+
+    with pytest.raises(ValueError):
+        get_date_range(
+            datetime(2024, 1, 1, 18), datetime(2024, 1, 2), freq="1Q"
+        )
+
+
+def test_calc_time_units():
+    """Test calculating year differences"""
+    unit, value = calc_time_units(datetime(2024, 1, 1), datetime(2026, 1, 1))
+    assert unit == "years"
+    assert value == 2
+
+    unit, value = calc_time_units(datetime(2024, 1, 1), datetime(2024, 4, 1))
+    assert unit == "months"
+    assert value == 3
+
+    unit, value = calc_time_units(
+        datetime(2024, 1, 1), datetime(2024, 1, 8), binding_days=False
+    )
+    assert unit == "days"
+    assert value == 7
+
+    unit, value = calc_time_units(
+        datetime(2024, 1, 1, 10, 0), datetime(2024, 1, 1, 15, 0)
+    )
+    assert unit == "hours"
+    assert value == 5
+
+    unit, value = calc_time_units(
+        datetime(2024, 1, 1, 10, 0), datetime(2024, 1, 1, 10, 30)
+    )
+    assert unit == "minutes"
+    assert value == 30
+
+    unit, value = calc_time_units(
+        datetime(2024, 1, 1, 10, 0), datetime(2024, 1, 1, 10, 0)
+    )
+    assert unit is None
+    assert value == 0
