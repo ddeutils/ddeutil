@@ -2,6 +2,23 @@
 
 ## Latest Changes
 
+## 0.4.9
+
+### :stars: Highlight Features
+
+- :star: hl: add get date interval and range funcs. (_2025-06-12_)
+- :star: hl: add check_and_remove_item func (_2025-06-12_)
+
+### :black_nib: Code Changes
+
+- :test_tube: tests: add testcase for make coverage. (_2025-06-12_)
+- :art: format: add type-hint for base funcs (_2025-06-12_)
+- :package: refactored: bump types-python-dateutil from 2.9.0.20241206 to 2.9.0.20250516 (#68) (_2025-06-03_)
+
+### :package: Build & Workflow
+
+- :toolbox: build: upgrade pre-commit config file style. (_2025-06-12_)
+
 ## 0.4.8
 
 ### :sparkles: Features
