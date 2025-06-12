@@ -14,7 +14,7 @@ import typing
 from collections.abc import Callable, Collection, Sequence
 from functools import partial
 from math import ceil
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from . import (
     checker,
@@ -266,7 +266,7 @@ def onlyone(
     value: Sequence[T],
     *,
     default: bool = True,
-) -> T | None:
+) -> Optional[T]:
     """Get only one element from check list that exists in match list.
 
     :param check: A sequence of value to check if it exists only one.
@@ -320,8 +320,8 @@ def getdot(
     """Return the value if dot searching exists in content data.
 
     :param key: A search string that want to get data from dict context.
-    :param content:
-    :param ignore: (bool) A ignore flag for return None if it does not exists.
+    :param content: A mapping content.
+    :param ignore: (bool) A ignore flag for return None if it does not exist.
 
     Examples:
         >>> getdot('data.value', {'data': {'value': 1}})
@@ -353,8 +353,13 @@ def getdot(
     #
     _search, _else = splitter.must_split(key, ".", maxsplit=1)
 
-    def from_int(_first_key: str) -> Optional[int]:
-        """Try cast the search key to int or float."""
+    def from_int(_first_key: str) -> Optional[Union[int, str]]:
+        """Try cast the search key to int or float.
+
+        :param _first_key: (str) The first key that try to convert.
+
+        :rtype: int | str | None
+        """
         if can_int(_first_key):
             try:
                 return int(_first_key)
