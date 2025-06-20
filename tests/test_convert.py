@@ -121,10 +121,20 @@ def test_str2args():
 
 
 def test_int2base():
-    print(int2base("20240101081330000000"))
-    print(int2base("20240101081330000000", base=12))
-    print(int2base("20240101081330000000", base=16))
-    print(int2base("20240101081330000000", base=24))
-    print(int2base("20240101081330000000", base=32))
-    print(int2base("20240101081330000000", base=36))
-    print(int("49rw515zw7r0g", 36))
+    assert int2base("20240101081330000000") == "2143432213114253120200"
+    assert int2base("20240101081330000000", base=12) == "91583a043573a55314"
+    assert int2base("20240101081330000000", base=16) == "118e348b262aca080"
+    assert int2base("20240101081330000000", base=24) == "n253b89lemk3ig"
+    assert int2base("20240101081330000000", base=32) == "hhoq8m9hap840"
+    assert int2base("20240101081330000000", base=36) == "49rw515zw7r0g"
+    assert int("49rw515zw7r0g", 36) == 20240101081330000000
+
+    with pytest.raises(ValueError):
+        int2base("20240101081330000000", base=40)
+
+    with pytest.raises(ValueError):
+        int2base("20240101081330000000", base=-1)
+
+    assert int2base("-20240101081330000000", base=36) == "-49rw515zw7r0g"
+    assert int2base("0", base=36) == "0"
+    assert int2base(20240101081330000000, base=36) == "49rw515zw7r0g"

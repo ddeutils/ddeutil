@@ -9,11 +9,7 @@ import calendar
 import enum
 import re
 from datetime import date, datetime, timedelta, timezone
-from typing import (
-    Literal,
-    Optional,
-    Union,
-)
+from typing import Any, Literal, Optional, Union
 from zoneinfo import ZoneInfo
 
 try:
@@ -49,11 +45,11 @@ DATETIME_SET: tuple[str, ...] = (
 FrequencyMode = Literal["1T", "1H", "1D", "1M", "1Y"]
 FREQUENCY_SET: tuple[str, ...] = ("1T", "1H", "1D", "1M", "1Y")
 _TIMEZONE_CACHE: dict[int, timezone] = {0: timezone.utc}
-# Pre-compiled regex for better performance
+# NOTE: Pre-compiled regex for better performance
 _DATETIME_PATTERN: re.Pattern[str] = re.compile(
-    r"^(\d{4})-(\d{2})-(\d{2})"  # YYYY-MM-DD
-    r"(?:[T\s](\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?)?"  # Optional time with microseconds
-    r"(?:(Z)|([+-])(\d{2}):?(\d{2}))?$"  # Optional timezone
+    r"^(\d{4})-(\d{2})-(\d{2})"  # NOTE: YYYY-MM-DD
+    r"(?:[T\s](\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?)?"  # NOTE: Optional time with microseconds
+    r"(?:(Z)|([+-])(\d{2}):?(\d{2}))?$"  # NOTE: Optional timezone
 )
 
 
@@ -152,37 +148,41 @@ def parse_dt(dt: Union[datetime, str], **kwargs) -> datetime:
         try:  # pragma: no cov
             from dateutil.parser import parse
             from dateutil.tz import tzoffset
-        except ImportError as e:
+        except ImportError as e:  # pragma: no cov
             raise ValueError(
                 f"Unable to parse '{dt}' with built-in parser. "
                 "Install `dateutil` for complex datetime parsing: pip install "
                 "`python-dateutil`."
             ) from e
 
-        if isinstance(dt, str):
-            dt = parse(dt, **kwargs)
-
-        if isinstance(dt, date) and not isinstance(dt, datetime):
+        dt: Union[datetime, date, Any] = parse(dt, **kwargs)
+        if isinstance(dt, date) and not isinstance(
+            dt, datetime
+        ):  # pragma: no cov
             return datetime(dt.year, dt.month, dt.day)
 
         if isinstance(dt, datetime):
-            # Convert dateutil timezone to built-in timezone
+            # NOTE: Convert dateutil timezone to built-in timezone
             if dt.tzinfo and isinstance(dt.tzinfo, tzoffset):
+
                 offset_seconds = int(dt.utcoffset().total_seconds())
-                if offset_seconds == 0:
+                if offset_seconds == 0:  # pragma: no cov
                     return dt.replace(tzinfo=timezone.utc)
                 else:
                     offset_minutes = offset_seconds // 60
                     return dt.replace(tzinfo=_get_timezone(offset_minutes))
             return dt
 
-        raise ValueError(f"Unable to parse datetime: {dt}") from None
+        raise ValueError(
+            f"Unable to parse datetime: {dt}"
+        ) from None  # pragma: no cov
 
 
 def get_datetime_replace(
     year: Optional[int] = None,
     month: Optional[int] = None,
 ) -> dict[str, tuple]:
+    """Get mapping of replace datetime object."""
     return {
         "year": (1990, 9999),
         "month": (1, 12),
@@ -597,6 +597,11 @@ def get_date_range(
         if freq not in FREQUENCY_SET:
             raise ValueError(f"Frequency, {freq!r}, does not support.")
 
+        if start_dt == end_dt:
+            raise ValueError(
+                f"Cannot find time difference between {start}, {end}"
+            )
+
         range_freq: FrequencyMode = "1D" if freq in ["1Y", "1M"] else freq
         min_dt, max_dt = min(start_dt, end_dt), max(start_dt, end_dt)
         return gen_date_range(min_dt, max_dt, range_freq)
@@ -627,7 +632,7 @@ def get_date_range(
         freq = f"{freq_step}T"
         start_dt += relativedelta(minutes=time_value * execution_offset)
         end_dt = start_dt + relativedelta(minutes=time_value * execution_step)
-    else:
+    else:  # pragma: no cov
         raise ValueError(f"Time unit, {time_unit!r} does not support.")
 
     # NOTE: Convert frequency for date range generation
@@ -664,9 +669,7 @@ def get_date_interval(
 
     if time_unit is None:
         raise ValueError(f"Cannot find time difference between {start}, {end}")
-
-    # NOTE: Calculate new start and end based on unit type
-    if time_unit == "years":
+    elif time_unit == "years":
         start_dt += relativedelta(years=time_value * execution_offset)
         end_dt = start_dt + relativedelta(years=time_value * execution_step)
     elif time_unit == "months":
@@ -681,6 +684,8 @@ def get_date_interval(
     elif time_unit == "minutes":
         start_dt += relativedelta(minutes=time_value * execution_offset)
         end_dt = start_dt + relativedelta(minutes=time_value * execution_step)
+    else:  # pragma: no cov
+        raise ValueError(f"Time unit, {time_unit!r} does not support.")
 
     # NOTE: Apply hour adjustments
     start_dt += relativedelta(hours=start_add_hours)

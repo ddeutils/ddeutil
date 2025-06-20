@@ -46,13 +46,27 @@ def test_parse_datetime_str():
 
 
 def test_parse_dt():
+    assert parse_dt_default(date(2024, 1, 1)) == datetime(2024, 1, 1, 0)
+    assert parse_dt_default(datetime(2024, 1, 1)) == datetime(2024, 1, 1, 0)
     assert parse_dt("2024-01-01") == datetime(2024, 1, 1, 0)
+    assert parse_dt("01 Jan 2024") == datetime(2024, 1, 1, 0)
+    assert parse_dt("20240101") == datetime(2024, 1, 1, 0)
+    assert parse_dt("2024 Jan Monday") == datetime(2024, 1, 22, 0)
     assert parse_dt("2024-01-01 00:00:00") == datetime(2024, 1, 1, 0)
     assert parse_dt("2024-01-01 15:00:00 BKK") == datetime(2024, 1, 1, 15)
     assert parse_dt(
         "2024-01-01 15:00:00 BKK", tzinfos={"BKK": ZoneInfo("Asia/Bangkok")}
     ) == datetime(2024, 1, 1, 15, tzinfo=ZoneInfo("Asia/Bangkok"))
     assert parse_dt("2024-01-01 15:00:00 UTC") == datetime(
+        2024, 1, 1, 15, tzinfo=timezone.utc
+    )
+    assert parse_dt("2024-01-01 15:00:00 +07:00") == datetime(
+        2024, 1, 1, 15, tzinfo=timezone(timedelta(seconds=25200))
+    )
+    assert parse_dt("2024-01-01 15:00:00 +00:00") == datetime(
+        2024, 1, 1, 15, tzinfo=timezone.utc
+    )
+    assert parse_dt("01 Jan 2024 15:00:00 +00") == datetime(
         2024, 1, 1, 15, tzinfo=timezone.utc
     )
 
@@ -224,11 +238,36 @@ def test_get_date_interval():
     assert start == datetime(2024, 12, 23, 20)
     assert end == datetime(2024, 12, 26, 20)
 
+    with pytest.raises(ValueError):
+        get_date_interval(datetime(2024, 1, 1), datetime(2024, 1, 1))
+
+    assert get_date_interval(
+        datetime(2024, 1, 1), datetime(2025, 1, 1), 1, 1
+    ) == (datetime(2025, 1, 1, 0, 0), datetime(2026, 1, 1, 0, 0))
+    assert get_date_interval(
+        datetime(2024, 1, 1), datetime(2024, 2, 12), 1, 1
+    ) == (datetime(2024, 2, 1, 0, 0), datetime(2024, 3, 1, 0, 0))
+
+    assert get_date_interval(
+        "2024-12-25 20:00:00", "2024-12-25 20:15:00", 1, 1
+    ) == (datetime(2024, 12, 25, 20, 15), datetime(2024, 12, 25, 20, 30))
+
+    assert get_date_interval(
+        "2024-12-01 00:00:00", "2024-12-15 00:00:00", 1, 1, binding_days=False
+    ) == (datetime(2024, 12, 15, 00, 0), datetime(2024, 12, 29, 00, 0))
+
+    assert get_date_interval(
+        "2024-11-01 00:00:00", "2024-12-15 00:00:00", 1, 0
+    ) == (datetime(2024, 11, 1, 00, 0), datetime(2024, 12, 1, 00, 0))
+
 
 def test_gen_date_range():
     assert (
         gen_date_range(datetime(2024, 1, 2), datetime(2024, 1, 1), "1D") == []
     )
+
+    with pytest.raises(ValueError):
+        gen_date_range(datetime(2024, 1, 1), datetime(2024, 1, 4), "1Q")
 
 
 def test_get_date_range():
@@ -287,11 +326,24 @@ def test_get_date_range():
         datetime(2024, 1, 1, 7, 5),
     ]
 
+    assert (
+        len(get_date_range(datetime(2024, 1, 1), datetime(2025, 1, 1))) == 367
+    )
+    assert (
+        len(get_date_range(datetime(2024, 1, 1), datetime(2024, 2, 12))) == 32
+    )
+
     # NOTE: Raise because freq value does not support.
     with pytest.raises(ValueError):
         get_date_range(
             datetime(2024, 1, 1, 18), datetime(2024, 1, 2), freq="1Q"
         )
+
+    with pytest.raises(ValueError):
+        get_date_range(datetime(2024, 1, 1), datetime(2024, 1, 1), freq="1D")
+
+    with pytest.raises(ValueError):
+        get_date_range(datetime(2024, 1, 1), datetime(2024, 1, 1))
 
 
 def test_calc_time_units():

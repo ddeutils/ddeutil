@@ -362,10 +362,7 @@ def getdot(
         :rtype: int | str | None
         """
         if can_int(_first_key):
-            try:
-                return int(_first_key)
-            except ValueError:
-                pass
+            return int(_first_key)
         return _first_key
 
     if isinstance(content, dict):
