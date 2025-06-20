@@ -31,6 +31,7 @@ from .checker import (
     is_int,
 )
 from .convert import (
+    int2base,
     must_bool,
     must_list,
     str2any,

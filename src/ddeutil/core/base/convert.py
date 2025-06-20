@@ -6,11 +6,8 @@
 from __future__ import annotations
 
 import ast
-from typing import (
-    Any,
-    Optional,
-    Union,
-)
+import string
+from typing import Any, Optional, Union
 
 try:
     import ujson
@@ -32,7 +29,10 @@ __all__: tuple[str, ...] = (
     "str2args",
     "str2int_float",
     "revert_args",
+    "int2base",
 )
+
+DIGS = string.digits + string.ascii_letters
 
 
 def str2bool(
@@ -264,7 +264,7 @@ def str2any(value: str) -> Any:
             return value
 
 
-def revert_args(*args, **kwargs) -> tuple[tuple[Any], dict[Any, Any]]:
+def revert_args(*args, **kwargs) -> tuple[tuple[Any, ...], dict[Any, Any]]:
     """Return arguments and key-word arguments.
 
     Examples:
@@ -290,3 +290,32 @@ def str2args(value: Optional[str]) -> tuple[tuple[Any], dict[Any, Any]]:
         ((None,), {})
     """
     return eval(f"revert_args({value})")
+
+
+def int2base(value: Union[str, int], base: int = 8):
+    if base <= 1 or base > 36:
+        raise ValueError("The base value should be value between 1 to 36.")
+
+    if isinstance(value, str):
+        value: int = int(value)
+
+    if value < 0:
+        sign = -1
+    elif value == 0:
+        return DIGS[0]
+    else:
+        sign = 1
+
+    value *= sign
+    digits: list[str] = []
+
+    while value:
+        digits.append(DIGS[value % base])
+        value = value // base
+
+    if sign < 0:
+        digits.append("-")
+
+    digits.reverse()
+
+    return "".join(digits)

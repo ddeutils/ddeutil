@@ -1,6 +1,7 @@
 from . import base as base
 from .__about__ import __version__
 from .base import (
+    check_and_remove_item,
     checker,
     coalesce,
     convert,
@@ -10,6 +11,7 @@ from .base import (
     hasdot,
     hash,
     import_string,
+    int2base,
     isinstance_check,
     lazy,
     merge,
@@ -20,7 +22,6 @@ from .base import (
     setdot,
     sorting,
     splitter,
-    check_and_remove_item,
 )
 from .base.checker import (
     can_int,

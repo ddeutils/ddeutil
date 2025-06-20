@@ -536,7 +536,17 @@ def gen_date_range(
     end_dt: datetime,
     freq: FrequencyMode,
 ) -> list[datetime]:
-    """Generate a list of datetime objects between start and end with given frequency"""
+    """Generate a list of datetime objects between start and end with given
+    frequency
+
+    Args:
+        start_dt: (datetime)
+        end_dt:
+        freq:
+
+    Returns:
+        list[datetime]: ...
+    """
     if start_dt > end_dt:
         return []
 

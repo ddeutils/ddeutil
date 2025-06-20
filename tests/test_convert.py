@@ -2,6 +2,7 @@ from unittest import mock
 
 import pytest
 from ddeutil.core import (
+    int2base,
     must_bool,
     must_list,
     str2any,
@@ -87,6 +88,7 @@ def test_must_bool():
 
 
 def test_str2any():
+    # noinspection PyTypeChecker
     assert str2any(22) == 22
     assert str2any("1245") == 1245
     assert str2any('"string"') == "string"
@@ -116,3 +118,13 @@ def test_str2args():
         {},
     )
     assert str2args(None) == ((None,), {})
+
+
+def test_int2base():
+    print(int2base("20240101081330000000"))
+    print(int2base("20240101081330000000", base=12))
+    print(int2base("20240101081330000000", base=16))
+    print(int2base("20240101081330000000", base=24))
+    print(int2base("20240101081330000000", base=32))
+    print(int2base("20240101081330000000", base=36))
+    print(int("49rw515zw7r0g", 36))
