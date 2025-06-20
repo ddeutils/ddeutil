@@ -2,6 +2,16 @@
 
 ## Latest Changes
 
+## 0.4.10
+
+### :sparkles: Features
+
+- :dart: feat: add int2base function. (_2025-06-20_)
+
+### :black_nib: Code Changes
+
+- :test_tube: tests: update testcase for making coverage. (_2025-06-20_)
+
 ## 0.4.9
 
 ### :stars: Highlight Features
