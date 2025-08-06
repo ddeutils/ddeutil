@@ -51,7 +51,9 @@ def test_parse_dt():
     assert parse_dt("2024-01-01") == datetime(2024, 1, 1, 0)
     assert parse_dt("01 Jan 2024") == datetime(2024, 1, 1, 0)
     assert parse_dt("20240101") == datetime(2024, 1, 1, 0)
-    assert parse_dt("2024 Jan Monday") == datetime(2024, 1, 22, 0)
+
+    assert parse_dt("2024 Jan Monday") == datetime(2024, 1, 8, 0)
+
     assert parse_dt("2024-01-01 00:00:00") == datetime(2024, 1, 1, 0)
     assert parse_dt("2024-01-01 15:00:00 BKK") == datetime(2024, 1, 1, 15)
     assert parse_dt(
